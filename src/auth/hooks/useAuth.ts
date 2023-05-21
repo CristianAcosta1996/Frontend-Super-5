@@ -3,17 +3,9 @@ import {
   startEmailAndPasswordLogin,
   startGoogleSignIn,
   startLogout,
+  startRegistrarUsuario
 } from "../../store/auth/thunks";
 import { useMemo } from "react";
-
-interface HandleRegistrarUsuarioProps {
-  nombre: string;
-  apellido: string;
-  username: string;
-  email: string;
-  fechaNacimiento: string;
-  password: string;
-}
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();
@@ -33,27 +25,32 @@ export const useAuth = () => {
     dispatch(startGoogleSignIn());
   };
 
-  const handleRegistrarUsuario = ({
-    nombre,
-    apellido,
-    username,
-    email,
-    fechaNacimiento,
-    password,
-  }: HandleRegistrarUsuarioProps) => {
+  const handleRegistrarUsuario = (
+    username: string,
+    password: string,
+    email: string,
+    nombre: string,
+    apellido: string,
+    phone: string,
+    fechaNacimiento: string
+  ) => {
     dispatch(
-      startRegistroUsuario(
-        nombre,
-        apellido,
-        username,
-        email,
-        fechaNacimiento,
-        password
+      startRegistrarUsuario(
+        {
+          username,
+          password,
+          email,
+          nombre,
+          apellido,
+          phone,
+          fechaNacimiento
+        }
       )
     );
   };
 
   return {
+    handleRegistrarUsuario,
     handleLogin,
     handleLogout,
     handleGoogleLogin,

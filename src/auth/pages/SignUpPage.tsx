@@ -4,11 +4,12 @@ import { useForm } from "../../hooks/useForm";
 import brandLogo from "../../assets/super5Balnco2.png";
 import { SyntheticEvent } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 const initialStateForm = {
-  user: "",
-  email: "",
+  username: "",
   password: "",
+  email: "",
   name: "",
   surname: "",
   phone: "",
@@ -17,20 +18,27 @@ const initialStateForm = {
 
 export const SignUpPage = () => {
   const navigate = useNavigate();
-
+  const { handleRegistrarUsuario } = useAuth();
   /* react query: custom hook mutation*/
 
   const {
-    values: { email, password, name, surname, phone, birthDate, user },
+    username,
+    password,
+    email,
+    name,
+    surname,
+    phone,
+    birthDate,
     handleInputChange,
     reset,
   } = useForm(initialStateForm);
 
   const handleFormSubmit = (event: SyntheticEvent): void => {
     event.preventDefault();
+    //checkear que datos son obligatorios
     if (!email || !password || !name || !surname) return;
-    /* Manejar login submit */
-    console.log({ email, password, name, surname, phone, birthDate });
+
+    handleRegistrarUsuario(username, email, password, name, surname, phone, birthDate)
     reset();
   };
 
@@ -55,25 +63,11 @@ export const SignUpPage = () => {
               label="Usuario"
               type="text"
               sx={{ backgroundColor: "#fff", borderRadius: 2 }}
-              name="user"
-              value={user}
+              name="username"
+              value={username}
               onChange={handleInputChange}
             />
           </Grid>
-
-          <Grid item xs={12} mb={3}>
-            <TextField
-              variant="filled"
-              fullWidth
-              label="Email"
-              type="email"
-              sx={{ backgroundColor: "#fff", borderRadius: 2 }}
-              name="email"
-              value={email}
-              onChange={handleInputChange}
-            />
-          </Grid>
-
           <Grid item xs={12} mb={3}>
             <TextField
               variant="filled"
@@ -90,10 +84,22 @@ export const SignUpPage = () => {
             <TextField
               variant="filled"
               fullWidth
+              label="Email"
+              type="email"
+              sx={{ backgroundColor: "#fff", borderRadius: 2 }}
+              name="email"
+              value={email}
+              onChange={handleInputChange}
+            />
+          </Grid>
+          <Grid item xs={12} mb={3}>
+            <TextField
+              variant="filled"
+              fullWidth
               label="Nombre"
               type="text"
               sx={{ backgroundColor: "#fff", borderRadius: 2 }}
-              name="email"
+              name="name"
               value={name}
               onChange={handleInputChange}
             />
@@ -128,7 +134,7 @@ export const SignUpPage = () => {
               variant="filled"
               fullWidth
               label="Fecha de Nacimiento"
-              type="  "
+              type="date"
               sx={{ backgroundColor: "#fff", borderRadius: 2 }}
               name="birthDate"
               value={birthDate}
