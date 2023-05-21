@@ -31,7 +31,6 @@ export const SignUpPage = () => {
     if (!email || !password || !name || !surname) return;
     /* Manejar login submit */
     console.log({ email, password, name, surname, phone, birthDate });
-
     reset();
   };
 
@@ -129,7 +128,7 @@ export const SignUpPage = () => {
               variant="filled"
               fullWidth
               label="Fecha de Nacimiento"
-              type="date"
+              type="  "
               sx={{ backgroundColor: "#fff", borderRadius: 2 }}
               name="birthDate"
               value={birthDate}

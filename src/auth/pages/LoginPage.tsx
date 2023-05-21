@@ -1,6 +1,5 @@
-import { SyntheticEvent, useEffect } from "react";
+import { SyntheticEvent } from "react";
 
-import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -10,13 +9,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Google } from "@mui/icons-material";
+import { FcGoogle } from "react-icons/fc";
 
 import { FormLayout } from "../layout/FormLayout";
 import { useForm } from "../../hooks/useForm";
 import brandLogo from "../../assets/super5Balnco2.png";
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
-import { startGoogleSignIn } from "../../store/auth/thunks";
+import { useAuth } from "../hooks/useAuth";
 
 const initialStateForm = {
   username: "",
@@ -24,32 +22,16 @@ const initialStateForm = {
 };
 
 export const LoginPage = () => {
-  const dispatch = useAppDispatch();
+  const { handleGoogleLogin, handleLogin, isAuthenticating } = useAuth();
 
-  const navigate = useNavigate();
-  const {
-    values: { username, password },
-    handleInputChange,
-    reset,
-  } = useForm(initialStateForm);
-  const { status } = useAppSelector((state) => state.auth);
-
-  useEffect(() => {
-    if (status !== "authenticated") return;
-    navigate("/");
-  }, [status]);
-
-  const onGoogleSignIn = () => {
-    dispatch(startGoogleSignIn());
-  };
+  const { username, password, handleInputChange, reset } =
+    useForm(initialStateForm);
 
   const handleFormSubmit = (event: SyntheticEvent): void => {
     event.preventDefault();
-
     if (!username || !password) return;
-    /* Manejar login submit */
-    console.log({ username, password });
 
+    handleLogin(username, password);
     reset();
   };
 
@@ -77,6 +59,7 @@ export const LoginPage = () => {
               name="username"
               value={username}
               onChange={handleInputChange}
+              disabled={isAuthenticating}
             />
           </Grid>
           <Grid item xs={12} mb={3}>
@@ -89,11 +72,16 @@ export const LoginPage = () => {
               name="password"
               value={password}
               onChange={handleInputChange}
+              disabled={isAuthenticating}
             />
           </Grid>
           <Grid container mb={3} justifyContent="space-between">
             <Grid item xs={12}>
-              <LoginButton titulo="Iniciar sesion" type="submit" />
+              <LoginButton
+                titulo="Iniciar sesion"
+                type="submit"
+                disabled={isAuthenticating}
+              />
             </Grid>
 
             <Grid container justifyContent="center" alignItems="center">
@@ -104,11 +92,26 @@ export const LoginPage = () => {
                 variant="text"
                 color="primary"
                 sx={{ textTransform: "capitalize", fontSize: 18 }}
-                onClick={() => {
-                  navigate("/auth/signup");
-                }}
+                disabled={isAuthenticating}
               >
                 Regístrate.
+              </Button>
+            </Grid>
+            <Grid container justifyContent="center" alignItems="center">
+              <Typography color="#fff" sx={{ fontSize: 14 }}>
+                ¿Olvidaste tu contraseña?
+              </Typography>
+              <Button
+                variant="text"
+                sx={{
+                  textTransform: "capitalize",
+                  fontSize: 14,
+                  textDecoration: "underline",
+                  color: "#fff",
+                }}
+                disabled={isAuthenticating}
+              >
+                recuperar contraseña
               </Button>
             </Grid>
           </Grid>
@@ -116,20 +119,20 @@ export const LoginPage = () => {
             <SocialMediaLoginLabel />
             <Grid container justifyContent="center">
               <IconButton
-                onClick={onGoogleSignIn}
+                onClick={() => handleGoogleLogin()}
                 sx={{
                   backgroundColor: "#fff",
                   color: "rgb(0,130,255)",
                   "&:hover": { backgroundColor: "#ddd" },
                 }}
               >
-                <Google />
+                <FcGoogle />
               </IconButton>
             </Grid>
           </Grid>
         </Grid>
       </form>
-      {status === "checking" && (
+      {isAuthenticating && (
         <Box
           sx={{
             width: "100%",
@@ -187,14 +190,21 @@ interface LoginButtonProps {
   titulo: string;
   handleOnClick?: () => void;
   type?: "submit" | "button" | "reset";
+  disabled: boolean;
 }
-const LoginButton = ({ titulo, handleOnClick, type }: LoginButtonProps) => (
+const LoginButton = ({
+  titulo,
+  handleOnClick,
+  type,
+  disabled,
+}: LoginButtonProps) => (
   <Button
     fullWidth
     variant="contained"
     sx={{ mb: 2 }}
     onClick={handleOnClick}
     type={type}
+    disabled={disabled}
   >
     {titulo}
   </Button>

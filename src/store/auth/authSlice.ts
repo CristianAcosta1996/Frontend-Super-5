@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { getToken } from "../../utils/localstorage";
 
 interface AuthSliceState {
   status?: "not-authenticated" | "checking" | "authenticated";
@@ -11,20 +12,45 @@ interface AuthSliceState {
   uid?: string | null | undefined;
   token?: string | null | undefined;
   errorMessage?: string | null | undefined;
+  googleUser?: boolean | null | undefined;
 }
 
-const initialState: AuthSliceState = {
-  status: "not-authenticated",
-  imageUrl: null,
-  usuario: null,
-  nombre: null,
-  apellido: null,
-  email: null,
-  uid: null,
-  token: null,
-  errorMessage: null,
-  tipoUsuario: "invitado",
+const initialState = (): AuthSliceState => {
+  const tokenInfo = getToken();
+  const state: AuthSliceState = !tokenInfo
+    ? {
+        status: "not-authenticated",
+        imageUrl: null,
+        usuario: null,
+        nombre: null,
+        apellido: null,
+        email: null,
+        uid: null,
+        token: null,
+        errorMessage: null,
+        tipoUsuario: "invitado",
+      }
+    : {
+        status: "authenticated",
+        imageUrl: tokenInfo.imageUrlUsuario,
+        usuario: tokenInfo.usuario,
+        nombre: tokenInfo.nombreUsuario,
+        apellido: tokenInfo.apellidoUsuario,
+        email: tokenInfo.emailUsuario,
+        uid: tokenInfo.uid,
+        token: tokenInfo.token,
+        errorMessage: null,
+        tipoUsuario: tokenInfo.tipoUsuario,
+      };
+
+  return state;
 };
+
+/*
+  validar usuario respecto a las rutas, el tipo de usuario se deberia guardar en el localstorage? o solo el id,
+  cuando el usuario inicia sesion el servidor deberia enviar todos los datos del usuario para poder mostrar las rutas protegidas?, porque asi podemos sacar el tipo de usuario y no seria necesario 
+  persistirlo en el localstorage.
+*/
 
 export const authSlice = createSlice({
   name: "auth",
@@ -39,7 +65,7 @@ export const authSlice = createSlice({
       state.tipoUsuario = "comprador";
       state.uid = payload.uid;
       state.usuario = null;
-      state.token = null;
+      state.token = payload.token;
     },
     logout: (state, action) => {
       state.status = "not-authenticated";
