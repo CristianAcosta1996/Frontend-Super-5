@@ -19,8 +19,9 @@ import { useAppSelector } from "../hooks/hooks";
 import brandLogo from "../assets/super5Balnco2.png";
 
 export const Super5Appbar = () => {
-  const { status, handleLogout } = useAuth();
-  const { imageUrl } = useAppSelector((state) => state.auth);
+  const { handleLogout } = useAuth();
+
+  const { imageUrl, status } = useAppSelector((state) => state.auth);
 
   const navigate = useNavigate();
 

@@ -8,7 +8,6 @@ export const useForm = <T>(initialState: T) => {
       ...values,
       [event.target.name]: event.target.value,
     });
-    console.log(values)
   };
 
   const reset = (): void => {

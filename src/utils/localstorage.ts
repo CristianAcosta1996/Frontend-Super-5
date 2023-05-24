@@ -1,42 +1,16 @@
 import jwt_decode from "jwt-decode";
-
-interface TokenInfo {
-  token: string;
-  infoToken: {
-    tipoUsuario: "admin" | "sucursal" | "comprador";
-    nombreUsuario: string;
-    apellidoUsuario: string;
-    emailUsuario: string;
-    imageUrlUsuario: string;
-    usuario: string;
-    uid: string;
-  };
-}
+import { Token } from "../interfaces/interfaces";
 
 export const getToken = () => {
   try {
     const token = JSON.parse(localStorage.getItem("token") || "");
-    const decoded: any = jwt_decode(token);
     if (!token) return;
-    const {
-      tipoUsuario,
-      nombre: nombreUsuario,
-      apellido: apellidoUsuario,
-      email: emailUsuario,
-      imagenUrl: imageUrlUsuario,
-      usuario,
-      uid,
-    } = decoded;
+    const decoded: Token = jwt_decode(token);
 
+    const { sub, iat, exp, ...rest } = decoded;
     return {
+      ...rest,
       token,
-      tipoUsuario,
-      nombreUsuario,
-      apellidoUsuario,
-      emailUsuario,
-      imageUrlUsuario,
-      usuario,
-      uid,
     };
   } catch (error) {
     return;
@@ -54,3 +28,5 @@ export const setToken = (token: string) => {
 export const limpiarStorage = () => {
   localStorage.clear();
 };
+
+export const guardarSucursal = (sucursalID: string) => {};

@@ -1,52 +1,65 @@
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch } from "../../hooks/hooks";
+import {
+  useLoginMutation,
+  useSignupMutation,
+} from "../../store/auth/super5Api";
 import {
   startEmailAndPasswordLogin,
   startGoogleSignIn,
   startLogout,
-  startRegistrarUsuario
 } from "../../store/auth/thunks";
-import { useMemo } from "react";
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();
 
-  const { status } = useAppSelector((state) => state.auth);
-  const isAuthenticating = useMemo(() => status === "checking", [status]);
+  const [
+    startLogin,
+    { isLoading: isAuthenticatingLogin, status: statusLogin },
+  ] = useLoginMutation();
+
+  const [
+    startRegistrarUsuario,
+    { isLoading: isAuthenticatingRegistro, status: statusRegistro },
+  ] = useSignupMutation();
 
   const handleLogout = () => {
     dispatch(startLogout());
   };
 
-  const handleLogin = (email: string, password: string) => {
-    dispatch(startEmailAndPasswordLogin(email, password));
+  const handleLogin = async (email: string, password: string) => {
+    /* dispatch(startEmailAndPasswordLogin(email, password)); */
+    const resp: any = await startLogin({
+      usuarioOCorreo: email,
+      contrasenia: password,
+    });
+    const token: string = resp.data.token;
+    dispatch(startEmailAndPasswordLogin(token));
   };
 
   const handleGoogleLogin = () => {
     dispatch(startGoogleSignIn());
   };
 
-  const handleRegistrarUsuario = (
+  const handleRegistrarUsuario = async (
     username: string,
     password: string,
     email: string,
     nombre: string,
     apellido: string,
-    phone: string,
-    fechaNacimiento: string
+    phone: number
   ) => {
-    dispatch(
-      startRegistrarUsuario(
-        {
-          username,
-          password,
-          email,
-          nombre,
-          apellido,
-          phone,
-          fechaNacimiento
-        }
-      )
-    );
+    const resp = await startRegistrarUsuario({
+      nombre,
+      correo: email,
+      usuario: username,
+      contrasenia: password,
+      apellido,
+      telefono: phone,
+      bloqueado: 0,
+      eliminado: 0,
+      rol: 1,
+    });
+    console.log(resp);
   };
 
   return {
@@ -54,7 +67,9 @@ export const useAuth = () => {
     handleLogin,
     handleLogout,
     handleGoogleLogin,
-    isAuthenticating,
-    status,
+    isAuthenticatingLogin,
+    statusLogin,
+    isAuthenticatingRegistro,
+    statusRegistro,
   };
 };

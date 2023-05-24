@@ -32,15 +32,15 @@ const initialState = (): AuthSliceState => {
       }
     : {
         status: "authenticated",
-        imageUrl: tokenInfo.imageUrlUsuario,
+        imageUrl: tokenInfo.imagenUrl,
         usuario: tokenInfo.usuario,
-        nombre: tokenInfo.nombreUsuario,
-        apellido: tokenInfo.apellidoUsuario,
-        email: tokenInfo.emailUsuario,
+        nombre: tokenInfo.nombre,
+        apellido: tokenInfo.apellido,
+        email: tokenInfo.correo,
         uid: tokenInfo.uid,
         token: tokenInfo.token,
         errorMessage: null,
-        tipoUsuario: tokenInfo.tipoUsuario,
+        tipoUsuario: tokenInfo.rol,
       };
 
   return state;
@@ -64,7 +64,7 @@ export const authSlice = createSlice({
       state.imageUrl = payload.imageUrl;
       state.tipoUsuario = "comprador";
       state.uid = payload.uid;
-      state.usuario = null;
+      state.usuario = payload.usuario;
       state.token = payload.token;
     },
     logout: (state, action) => {

@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { Super5Appbar } from "../components/Super5Appbar";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
 import slide1 from "../assets/1.svg";
@@ -18,12 +18,15 @@ import "swiper/css/scrollbar";
 export const HomePage = () => {
   return (
     <>
-      <Box>
+      <Grid container>
         <Super5Appbar />
-        <Box>
+        <Grid item xs={12}>
           <Slider imagenes={imagenes} />
-        </Box>
-      </Box>
+        </Grid>
+        <Grid item xs={12} mt={1}>
+          <SliderProductos />
+        </Grid>
+      </Grid>
     </>
   );
 };
@@ -35,7 +38,6 @@ interface SliderProps {
 const Slider = ({ imagenes }: SliderProps) => {
   return (
     <Swiper
-      height={200}
       watchOverflow={true}
       modules={[Navigation, Pagination, Scrollbar, A11y]}
       spaceBetween={50}
@@ -43,8 +45,12 @@ const Slider = ({ imagenes }: SliderProps) => {
       navigation
       pagination={{ clickable: true }}
       scrollbar={{ draggable: true }}
-      onSwiper={(swiper) => console.log(swiper)}
-      onSlideChange={() => console.log("slide change")}
+      onSwiper={(swiper) => {
+        /* console.log(swiper) */
+      }}
+      onSlideChange={() => {
+        /* console.log("slide change") */
+      }}
     >
       {imagenes.map((imagen) => (
         <SwiperSlide key={imagen}>
@@ -52,10 +58,6 @@ const Slider = ({ imagenes }: SliderProps) => {
             sx={{
               width: "100%",
               height: 350,
-              /* backgroundImage: `url("${imagen}")`,
-              backgroundPosition: "50% 30%",
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "fill", */
               background: "#333",
             }}
           >
@@ -66,6 +68,23 @@ const Slider = ({ imagenes }: SliderProps) => {
           </Box>
         </SwiperSlide>
       ))}
+    </Swiper>
+  );
+};
+
+const SliderProductos = () => {
+  return (
+    <Swiper
+      spaceBetween={1}
+      slidesPerView={3}
+      onSlideChange={() => console.log("slide change")}
+      onSwiper={(swiper) => console.log(swiper)}
+    >
+      <SwiperSlide>Slide 1</SwiperSlide>
+      <SwiperSlide>Slide 2</SwiperSlide>
+      <SwiperSlide>Slide 3</SwiperSlide>
+      <SwiperSlide>Slide 4</SwiperSlide>
+      ...
     </Swiper>
   );
 };

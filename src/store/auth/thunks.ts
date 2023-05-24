@@ -2,39 +2,30 @@ import { AnyAction, ThunkAction } from "@reduxjs/toolkit";
 import { checkingCredentials, login, logout } from "./authSlice";
 import { RootState } from "../store";
 import { signInWithGoogle } from "../../firebase/firebase.providers";
-import { limpiarStorage, setToken } from "../../utils/localstorage";
+import { getToken, limpiarStorage, setToken } from "../../utils/localstorage";
 
 export const startEmailAndPasswordLogin = (
-  email: string,
-  password: string
+  token: string
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     dispatch(checkingCredentials());
-    console.log("dentro del thunk startemail: ", email, password);
-    //Aca va la peticion de login al backend;
-    const user = true;
-    if (!user) return dispatch(logout({ errorMessage: "algo salio mal" }));
+
+    setToken(token);
+    const decoded = getToken();
 
     dispatch(
       login({
-        email,
-        nombre: "testnombre",
-        apellido: "testapellido",
+        email: decoded?.correo,
+        apellido: decoded?.apellido,
+        nombre: decoded?.nombre,
         googleUser: false,
-        imageUrl: "",
-        tipoUsuario: "comprador",
-        usuario: "testuser",
-        uid: "testuid",
-        token: "testtoken",
-        errorMessage: null,
+        tipoUsuario: decoded?.rol,
+        usuario: decoded?.usuario,
+        token,
+        uid: decoded?.uid,
+        imageUrl: decoded?.imagenUrl,
       })
     );
-    //TODO: guardar token en el localstorage
-    /* 
-      1- Se valida si existe el usuario contra el backend y si la validacion es exitosa se espera el jwt del backend.
-      2- Una vez obtenido el jwt se guarda en el localstorage y se hace el decode el jwt.
-      3- Se guardan los datos obtenidos del jwt en el redux store.
-    */
   };
 };
 
@@ -44,7 +35,7 @@ export const startGoogleSignIn = (): ThunkAction<
   unknown,
   AnyAction
 > => {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     dispatch(checkingCredentials()); // status === 'checking'
     const result = await signInWithGoogle();
     if (!result.ok) {
@@ -89,7 +80,7 @@ export const startLogout = (): ThunkAction<
   unknown,
   AnyAction
 > => {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     dispatch(logout({ errorMessage: null }));
     limpiarStorage();
     /* si esta logueado con google llamar a firbease.auth.signout */
@@ -104,7 +95,7 @@ export const startRegistrarUsuario = ({
   nombre,
   apellido,
   phone,
-  fechaNacimiento
+  fechaNacimiento,
 }): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch) => {
     dispatch(checkingCredentials());
@@ -112,13 +103,13 @@ export const startRegistrarUsuario = ({
       Peticion de registro al back, si todo ok guardo el token en el localstorage
       luego login con los datos enviados al back
     */
-    window.localStorage.setItem('nombre', nombre)
-    window.localStorage.setItem('apellido', apellido)
-    window.localStorage.setItem('username', username)
-    window.localStorage.setItem('email', email)
-    window.localStorage.setItem('fechaNacimiento', fechaNacimiento)
-    window.localStorage.setItem('password', password)
-    window.localStorage.setItem('phone', phone)
+    window.localStorage.setItem("nombre", nombre);
+    window.localStorage.setItem("apellido", apellido);
+    window.localStorage.setItem("username", username);
+    window.localStorage.setItem("email", email);
+    window.localStorage.setItem("fechaNacimiento", fechaNacimiento);
+    window.localStorage.setItem("password", password);
+    window.localStorage.setItem("phone", phone);
 
     /* dispatch(login(nombre, apellido, username, email)) */
     // en caso de error hacer un dispatch(logout)
