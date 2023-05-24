@@ -2,7 +2,7 @@ import { Button, Grid, TextField, Typography } from "@mui/material";
 import { FormLayout } from "../layout/FormLayout";
 import { useForm } from "../../hooks/useForm";
 import brandLogo from "../../assets/super5Balnco2.png";
-import { SyntheticEvent } from "react";
+import { SyntheticEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
@@ -17,6 +17,7 @@ const initialStateForm = {
 };
 
 export const SignUpPage = () => {
+  const [isFirstStep, setIsFirstStep] = useState<boolean>(true);
   const navigate = useNavigate();
   const { handleRegistrarUsuario } = useAuth();
   /* react query: custom hook mutation*/
@@ -28,7 +29,7 @@ export const SignUpPage = () => {
     name,
     surname,
     phone,
-    birthDate,
+
     handleInputChange,
     reset,
   } = useForm(initialStateForm);
@@ -38,122 +39,157 @@ export const SignUpPage = () => {
     //checkear que datos son obligatorios
     if (!email || !password || !name || !surname) return;
 
-    handleRegistrarUsuario(username, email, password, name, surname, phone, birthDate)
+    handleRegistrarUsuario(username, email, password, name, surname, +phone);
     reset();
   };
 
   return (
+    // TODO: agregar un stepper para indicar que estan en el paso 1 o 2
     <FormLayout>
       <form onSubmit={handleFormSubmit}>
         <Grid container alignItems="center">
-          <Grid container justifyContent="center" my={3}>
+          <Grid container justifyContent="center">
             <img
               src={brandLogo}
               alt="brand logo"
-              style={{ height: 150, width: 600, objectFit: "cover" }}
-            />
-          </Grid>
-          <Grid item xs={12} mb={3}>
-            <Typography variant="h6" color="primary" mb={3}>
-              Crea tu cuenta
-            </Typography>
-            <TextField
-              variant="filled"
-              fullWidth
-              label="Usuario"
-              type="text"
-              sx={{ backgroundColor: "#fff", borderRadius: 2 }}
-              name="username"
-              value={username}
-              onChange={handleInputChange}
-            />
-          </Grid>
-          <Grid item xs={12} mb={3}>
-            <TextField
-              variant="filled"
-              fullWidth
-              label="Contraseña"
-              type="password"
-              sx={{ backgroundColor: "#fff", borderRadius: 2 }}
-              name="password"
-              value={password}
-              onChange={handleInputChange}
-            />
-          </Grid>
-          <Grid item xs={12} mb={3}>
-            <TextField
-              variant="filled"
-              fullWidth
-              label="Email"
-              type="email"
-              sx={{ backgroundColor: "#fff", borderRadius: 2 }}
-              name="email"
-              value={email}
-              onChange={handleInputChange}
-            />
-          </Grid>
-          <Grid item xs={12} mb={3}>
-            <TextField
-              variant="filled"
-              fullWidth
-              label="Nombre"
-              type="text"
-              sx={{ backgroundColor: "#fff", borderRadius: 2 }}
-              name="name"
-              value={name}
-              onChange={handleInputChange}
-            />
-          </Grid>
-          <Grid item xs={12} mb={3}>
-            <TextField
-              variant="filled"
-              fullWidth
-              label="Apellido"
-              type="text"
-              sx={{ backgroundColor: "#fff", borderRadius: 2 }}
-              name="surname"
-              value={surname}
-              onChange={handleInputChange}
+              style={{ height: 100, width: 300, objectFit: "cover" }}
             />
           </Grid>
 
-          <Grid item xs={12} mb={3}>
-            <TextField
-              variant="filled"
-              fullWidth
-              label="Telefono"
-              type="text"
-              sx={{ backgroundColor: "#fff", borderRadius: 2 }}
-              name="phone"
-              value={phone}
-              onChange={handleInputChange}
-            />
+          <Grid item xs={12} mb={1}>
+            <Typography variant="subtitle2" color="primary" mb={1}>
+              Crea tu cuenta
+            </Typography>
           </Grid>
-          <Grid item xs={12} mb={3}>
-            <TextField
-              variant="filled"
-              fullWidth
-              label="Fecha de Nacimiento"
-              type="date"
-              sx={{ backgroundColor: "#fff", borderRadius: 2 }}
-              name="birthDate"
-              value={birthDate}
-              onChange={handleInputChange}
-              InputLabelProps={{ shrink: true }}
-            />
-          </Grid>
+          {isFirstStep ? (
+            <>
+              <Grid item xs={12} mb={1}>
+                <TextField
+                  size="small"
+                  variant="filled"
+                  fullWidth
+                  label="Usuario"
+                  type="text"
+                  sx={{ backgroundColor: "#fff", borderRadius: 2 }}
+                  name="username"
+                  value={username}
+                  onChange={handleInputChange}
+                />
+              </Grid>
+              <Grid item xs={12} mb={1}>
+                <TextField
+                  size="small"
+                  variant="filled"
+                  fullWidth
+                  label="Email"
+                  type="email"
+                  sx={{ backgroundColor: "#fff", borderRadius: 2 }}
+                  name="email"
+                  value={email}
+                  onChange={handleInputChange}
+                />
+              </Grid>
+              <Grid item xs={12} mb={3}>
+                <TextField
+                  size="small"
+                  variant="filled"
+                  fullWidth
+                  label="Contraseña"
+                  type="password"
+                  sx={{ backgroundColor: "#fff", borderRadius: 2 }}
+                  name="password"
+                  value={password}
+                  onChange={handleInputChange}
+                />
+              </Grid>
+            </>
+          ) : (
+            <>
+              <Grid item xs={12} mb={1}>
+                <TextField
+                  size="small"
+                  variant="filled"
+                  fullWidth
+                  label="Nombre"
+                  type="text"
+                  sx={{ backgroundColor: "#fff", borderRadius: 2 }}
+                  name="name"
+                  value={name}
+                  onChange={handleInputChange}
+                />
+              </Grid>
+              <Grid item xs={12} mb={1}>
+                <TextField
+                  size="small"
+                  variant="filled"
+                  fullWidth
+                  label="Apellido"
+                  type="text"
+                  sx={{ backgroundColor: "#fff", borderRadius: 2 }}
+                  name="surname"
+                  value={surname}
+                  onChange={handleInputChange}
+                />
+              </Grid>
+
+              <Grid item xs={12} mb={3}>
+                <TextField
+                  size="small"
+                  variant="filled"
+                  fullWidth
+                  label="Telefono"
+                  type="text"
+                  sx={{ backgroundColor: "#fff", borderRadius: 2 }}
+                  name="phone"
+                  value={phone}
+                  onChange={handleInputChange}
+                />
+              </Grid>
+            </>
+          )}
+
           <Grid container justifyContent="center">
-            <Grid item xs={12} sm={5}>
-              <SignupButton titulo="Registrar" type="submit" />
+            <Grid container justifyContent="space-between">
+              <Grid item xs={12} sm={5}>
+                {!isFirstStep && (
+                  <Button
+                    variant="contained"
+                    size="small"
+                    fullWidth
+                    onClick={() => {
+                      setIsFirstStep(true);
+                    }}
+                  >
+                    Atras
+                  </Button>
+                )}
+              </Grid>
+              <Grid item xs={12} sm={5}>
+                {isFirstStep ? (
+                  <Button
+                    variant="contained"
+                    size="small"
+                    fullWidth
+                    onClick={() => {
+                      setIsFirstStep(false);
+                    }}
+                  >
+                    Siguiente
+                  </Button>
+                ) : (
+                  <SignupButton titulo="Registrar" type="submit" />
+                )}
+              </Grid>
             </Grid>
-            <Grid container justifyContent="center" alignItems="center">
-              <Typography color="#fff" sx={{ fontSize: 18 }}>
+            <Grid container justifyContent="center" alignItems="center" mt={2}>
+              <Typography color="#fff" sx={{ fontSize: 12 }}>
                 ¿Tienes una cuenta?
               </Typography>
               <Button
+                size="small"
                 variant="text"
                 color="primary"
-                sx={{ textTransform: "capitalize", fontSize: 18 }}
+                sx={{ textTransform: "capitalize", fontSize: 12 }}
                 onClick={() => {
                   navigate("/auth/login");
                 }}
@@ -176,8 +212,8 @@ interface SignupButtonProps {
 const SignupButton = ({ titulo, handleOnClick, type }: SignupButtonProps) => (
   <Button
     fullWidth
+    size="small"
     variant="contained"
-    sx={{ mb: 2 }}
     onClick={handleOnClick}
     type={type}
   >

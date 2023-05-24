@@ -1,4 +1,4 @@
-import { SyntheticEvent } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 
 import {
   Box,
@@ -15,6 +15,7 @@ import { FormLayout } from "../layout/FormLayout";
 import { useForm } from "../../hooks/useForm";
 import brandLogo from "../../assets/super5Balnco2.png";
 import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const initialStateForm = {
   username: "",
@@ -22,14 +23,21 @@ const initialStateForm = {
 };
 
 export const LoginPage = () => {
-  const { handleGoogleLogin, handleLogin, isAuthenticating } = useAuth();
+  const { handleGoogleLogin, handleLogin, isAuthenticatingLogin } = useAuth();
+  const navigate = useNavigate();
 
   const { username, password, handleInputChange, reset } =
     useForm(initialStateForm);
 
-  const handleFormSubmit = (event: SyntheticEvent): void => {
+  const handleFormSubmit = async (event: SyntheticEvent) => {
     event.preventDefault();
     if (!username || !password) return;
+
+    /* login({ usuarioOCorreo: username, contrasenia: password }).then(
+      (resp: any) => {
+        setToken(resp.data.token);
+      }
+    ); */
 
     handleLogin(username, password);
     reset();
@@ -39,18 +47,19 @@ export const LoginPage = () => {
     <FormLayout>
       <form onSubmit={handleFormSubmit}>
         <Grid container alignItems="center">
-          <Grid container justifyContent="center" my={3}>
+          <Grid container justifyContent="center">
             <img
               src={brandLogo}
               alt="brand logo"
-              style={{ height: 150, width: 600, objectFit: "cover" }}
+              style={{ height: 100, width: 300, objectFit: "cover" }}
             />
           </Grid>
-          <Grid item xs={12} mb={3}>
-            <Typography variant="h6" mb={3} color="primary">
+          <Grid item xs={12} mb={2}>
+            <Typography variant="subtitle2" mb={1} color="primary">
               Acceso
             </Typography>
             <TextField
+              size="small"
               variant="filled"
               fullWidth
               label="Email/Usuario"
@@ -59,11 +68,12 @@ export const LoginPage = () => {
               name="username"
               value={username}
               onChange={handleInputChange}
-              disabled={isAuthenticating}
+              disabled={isAuthenticatingLogin}
             />
           </Grid>
           <Grid item xs={12} mb={3}>
             <TextField
+              size="small"
               variant="filled"
               fullWidth
               label="Contraseña"
@@ -72,50 +82,54 @@ export const LoginPage = () => {
               name="password"
               value={password}
               onChange={handleInputChange}
-              disabled={isAuthenticating}
+              disabled={isAuthenticatingLogin}
             />
           </Grid>
-          <Grid container mb={3} justifyContent="space-between">
+          <Grid container mb={1} justifyContent="space-between">
             <Grid item xs={12}>
               <LoginButton
                 titulo="Iniciar sesion"
                 type="submit"
-                disabled={isAuthenticating}
+                disabled={isAuthenticatingLogin}
               />
             </Grid>
 
             <Grid container justifyContent="center" alignItems="center">
-              <Typography color="#fff" sx={{ fontSize: 18 }}>
+              <Typography color="#fff" sx={{ fontSize: 12 }}>
                 ¿No tienes una cuenta?
               </Typography>
               <Button
                 variant="text"
                 color="primary"
-                sx={{ textTransform: "capitalize", fontSize: 18 }}
-                disabled={isAuthenticating}
+                sx={{ textTransform: "capitalize", fontSize: 12 }}
+                disabled={isAuthenticatingLogin}
+                onClick={() => {
+                  navigate("/auth/signup");
+                }}
               >
                 Regístrate.
               </Button>
             </Grid>
             <Grid container justifyContent="center" alignItems="center">
-              <Typography color="#fff" sx={{ fontSize: 14 }}>
+              <Typography color="#fff" sx={{ fontSize: 12 }}>
                 ¿Olvidaste tu contraseña?
               </Typography>
               <Button
+                size="small"
                 variant="text"
                 sx={{
                   textTransform: "capitalize",
-                  fontSize: 14,
+                  fontSize: 12,
                   textDecoration: "underline",
                   color: "#fff",
                 }}
-                disabled={isAuthenticating}
+                disabled={isAuthenticatingLogin}
               >
                 recuperar contraseña
               </Button>
             </Grid>
           </Grid>
-          <Grid item xs={12} mb={3} sx={{ position: "relative" }}>
+          <Grid item xs={12} mb={1} sx={{ position: "relative" }}>
             <SocialMediaLoginLabel />
             <Grid container justifyContent="center">
               <IconButton
@@ -132,7 +146,7 @@ export const LoginPage = () => {
           </Grid>
         </Grid>
       </form>
-      {isAuthenticating && (
+      {isAuthenticatingLogin && (
         <Box
           sx={{
             width: "100%",
@@ -166,7 +180,7 @@ const SocialMediaLoginLabel = () => (
     }}
   >
     <Typography
-      variant="h6"
+      variant="subtitle2"
       component="span"
       color="#fff"
       bgcolor="#333"
@@ -199,9 +213,10 @@ const LoginButton = ({
   disabled,
 }: LoginButtonProps) => (
   <Button
+    size="small"
     fullWidth
     variant="contained"
-    sx={{ mb: 2 }}
+    sx={{ mb: 1 }}
     onClick={handleOnClick}
     type={type}
     disabled={disabled}

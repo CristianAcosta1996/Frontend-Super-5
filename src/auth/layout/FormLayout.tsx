@@ -13,7 +13,7 @@ export const FormLayout = ({ children }: any) => {
       <Box
         sx={{
           position: "relative",
-          width: 650,
+          width: 550,
           backgroundColor: "#333",
           py: 2,
           px: 5,
