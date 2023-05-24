@@ -15,7 +15,9 @@
     "@fontsource/roboto": "^4.5.8",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.13.0",
+    "@react-google-maps/api": "^2.18.1",
     "@reduxjs/toolkit": "^1.9.5",
+    "autosuggest-highlight": "^3.3.4",
     "firebase": "^9.22.0",
     "jwt-decode": "^3.1.2",
     "localforage": "^1.10.0",
@@ -25,7 +27,8 @@
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.11.1",
     "sort-by": "^1.2.0",
-    "swiper": "^9.3.2"
+    "swiper": "^9.3.2",
+    "use-places-autocomplete": "^4.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",
