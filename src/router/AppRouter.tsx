@@ -3,6 +3,7 @@ import { HomePage } from "../pages/HomePage";
 import { AuthRoutes } from "../auth/routes/AuthRoutes";
 import { CssBaseline } from "@mui/material";
 import { useAppSelector } from "../hooks/hooks";
+import { RoutesUsuarios } from "../usuarios/routes/RoutesUsuarios";
 
 export const AppRouter = () => {
   const { status } = useAppSelector((state) => state.auth);
@@ -14,6 +15,7 @@ export const AppRouter = () => {
         {status !== "authenticated" && (
           <Route path="auth/*" element={<AuthRoutes />} />
         )}
+        <Route path="user/*" element={<RoutesUsuarios />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </>
