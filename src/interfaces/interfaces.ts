@@ -10,3 +10,12 @@ export interface Token {
   exp: number;
   sub: string;
 }
+
+export interface Sucursal {
+  sucursalID: string;
+  nombreSucursal: string;
+  direccionSucursal: string;
+}
+export interface Producto {
+  nombre: string;
+}

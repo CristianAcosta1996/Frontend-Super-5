@@ -33,12 +33,6 @@ export const LoginPage = () => {
     event.preventDefault();
     if (!username || !password) return;
 
-    /* login({ usuarioOCorreo: username, contrasenia: password }).then(
-      (resp: any) => {
-        setToken(resp.data.token);
-      }
-    ); */
-
     handleLogin(username, password);
     reset();
   };

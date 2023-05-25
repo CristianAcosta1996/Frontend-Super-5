@@ -2,7 +2,7 @@ import { useAppDispatch } from "../../hooks/hooks";
 import {
   useLoginMutation,
   useSignupMutation,
-} from "../../store/auth/super5Api";
+} from "../../store/super5/super5Api";
 import {
   startEmailAndPasswordLogin,
   startGoogleSignIn,
@@ -27,7 +27,6 @@ export const useAuth = () => {
   };
 
   const handleLogin = async (email: string, password: string) => {
-    /* dispatch(startEmailAndPasswordLogin(email, password)); */
     const resp: any = await startLogin({
       usuarioOCorreo: email,
       contrasenia: password,
