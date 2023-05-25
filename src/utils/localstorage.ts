@@ -1,5 +1,5 @@
 import jwt_decode from "jwt-decode";
-import { Token } from "../interfaces/interfaces";
+import { Sucursal, Token } from "../interfaces/interfaces";
 
 export const getToken = () => {
   try {
@@ -29,4 +29,15 @@ export const limpiarStorage = () => {
   localStorage.clear();
 };
 
-export const guardarSucursal = (sucursalID: string) => {};
+export const guardarSucursal = (sucursal: Sucursal): void => {
+  localStorage.setItem("sucursal", JSON.stringify(sucursal));
+};
+
+export const obtenerSucursalStorage = (): Sucursal | undefined => {
+  try {
+    const sucursal = JSON.parse(localStorage.getItem("sucursal") || "");
+    return sucursal;
+  } catch (error) {
+    return;
+  }
+};

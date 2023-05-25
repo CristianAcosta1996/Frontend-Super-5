@@ -1,6 +1,6 @@
 import { Box, Grid } from "@mui/material";
 import { Super5Appbar } from "../components/Super5Appbar";
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
+import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from "swiper";
 import slide1 from "../assets/1.svg";
 import slide2 from "../assets/2.svg";
 import slide3 from "../assets/3.svg";
@@ -14,17 +14,22 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import { ProductoCard } from "../productos/components/ProductoCard";
+import { SelectorSucursales } from "../sucursales/components/SelectorSucursales";
+import { useAppSelector } from "../hooks/hooks";
 
 export const HomePage = () => {
+  const { sucursal } = useAppSelector((state) => state.super5);
   return (
     <>
-      <Grid container>
+      <Grid container paddingBottom={2}>
         <Super5Appbar />
         <Grid item xs={12}>
           <Slider imagenes={imagenes} />
         </Grid>
         <Grid item xs={12} mt={1}>
-          <SliderProductos />
+          {/* <SliderProductos /> */}
+          {!sucursal.nombreSucursal && <SelectorSucursales openDialog={true} />}
         </Grid>
       </Grid>
     </>
@@ -38,8 +43,9 @@ interface SliderProps {
 const Slider = ({ imagenes }: SliderProps) => {
   return (
     <Swiper
+      autoplay={{ delay: 5000, disableOnInteraction: false }}
       watchOverflow={true}
-      modules={[Navigation, Pagination, Scrollbar, A11y]}
+      modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
       spaceBetween={50}
       slidesPerView={1}
       navigation
@@ -75,16 +81,48 @@ const Slider = ({ imagenes }: SliderProps) => {
 const SliderProductos = () => {
   return (
     <Swiper
-      spaceBetween={1}
-      slidesPerView={3}
+      style={{ backgroundColor: "red", height: 200 }}
+      spaceBetween={10}
+      slidesPerView={6}
       onSlideChange={() => console.log("slide change")}
       onSwiper={(swiper) => console.log(swiper)}
     >
-      <SwiperSlide>Slide 1</SwiperSlide>
-      <SwiperSlide>Slide 2</SwiperSlide>
-      <SwiperSlide>Slide 3</SwiperSlide>
-      <SwiperSlide>Slide 4</SwiperSlide>
-      ...
+      <SwiperSlide style={{ backgroundColor: "orange" }}>
+        <ProductoCard />
+      </SwiperSlide>
+      <SwiperSlide>
+        <ProductoCard />
+      </SwiperSlide>
+      <SwiperSlide>
+        <ProductoCard />
+      </SwiperSlide>
+      <SwiperSlide>
+        <ProductoCard />
+      </SwiperSlide>
+      <SwiperSlide style={{ backgroundColor: "orange" }}>
+        <ProductoCard />
+      </SwiperSlide>
+      <SwiperSlide>
+        <ProductoCard />
+      </SwiperSlide>
+      <SwiperSlide>
+        <ProductoCard />
+      </SwiperSlide>
+      <SwiperSlide>
+        <ProductoCard />
+      </SwiperSlide>
+      <SwiperSlide style={{ backgroundColor: "orange" }}>
+        <ProductoCard />
+      </SwiperSlide>
+      <SwiperSlide>
+        <ProductoCard />
+      </SwiperSlide>
+      <SwiperSlide>
+        <ProductoCard />
+      </SwiperSlide>
+      <SwiperSlide>
+        <ProductoCard />
+      </SwiperSlide>
     </Swiper>
   );
 };

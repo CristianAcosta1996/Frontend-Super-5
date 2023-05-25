@@ -12,7 +12,12 @@ import IconButton from "@mui/material/IconButton";
 
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { Logout, ShoppingCart } from "@mui/icons-material";
+import {
+  Edit,
+  LocationOnOutlined,
+  Logout,
+  ShoppingCart,
+} from "@mui/icons-material";
 
 import { useAuth } from "../auth/hooks/useAuth";
 import { useAppSelector } from "../hooks/hooks";
@@ -21,7 +26,11 @@ import brandLogo from "../assets/super5Balnco2.png";
 export const Super5Appbar = () => {
   const { handleLogout } = useAuth();
 
-  const { imageUrl, status } = useAppSelector((state) => state.auth);
+  const {
+    imageUrl,
+    status,
+    sucursal: { nombreSucursal },
+  } = useAppSelector((state) => ({ ...state.auth, ...state.super5 }));
 
   const navigate = useNavigate();
 
@@ -42,7 +51,7 @@ export const Super5Appbar = () => {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
-        <Toolbar>
+        <Toolbar variant="dense">
           <Button color="inherit" aria-label="menu" sx={{ mr: 2 }}>
             <MenuIcon />
             <Typography>Categorias</Typography>
@@ -104,6 +113,22 @@ export const Super5Appbar = () => {
           >
             <ShoppingCart />
           </IconButton>
+        </Toolbar>
+        <Toolbar variant="dense">
+          <Button
+            variant="text"
+            color="inherit"
+            size="small"
+            onClick={() => {
+              /* //TODO: hacer que pueda cambiar la sucursal.*/
+            }}
+          >
+            <LocationOnOutlined fontSize="inherit" />
+            <Typography variant="caption" mx={1}>
+              Estas comprando en {nombreSucursal}
+            </Typography>
+            <Edit fontSize="inherit" />
+          </Button>
         </Toolbar>
       </AppBar>
     </Box>
