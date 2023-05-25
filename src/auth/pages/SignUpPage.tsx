@@ -39,7 +39,7 @@ export const SignUpPage = () => {
     //checkear que datos son obligatorios
     if (!email || !password || !name || !surname) return;
 
-    handleRegistrarUsuario(username, email, password, name, surname, +phone);
+    handleRegistrarUsuario(username, password, email, name, surname, phone);
     reset();
   };
 

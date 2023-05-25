@@ -11,7 +11,7 @@ interface SignupProps {
   apellido: string;
   correo: string;
   contrasenia: string;
-  telefono: number;
+  telefono: string;
   rol: 0 | 1;
   eliminado: 0 | 1;
   bloqueado: 0 | 1;

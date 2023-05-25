@@ -35,6 +35,10 @@ export const Super5Appbar = () => {
     setAnchorEl(null);
   };
 
+  const handleProfile = () => {
+    navigate("/user/profile")
+  }
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -74,7 +78,7 @@ export const Super5Appbar = () => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={handleProfile}>Perfil</MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
               </Menu>
               <IconButton color="inherit" onClick={() => handleLogout()}>
