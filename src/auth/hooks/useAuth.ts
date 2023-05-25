@@ -45,7 +45,7 @@ export const useAuth = () => {
     email: string,
     nombre: string,
     apellido: string,
-    phone: number
+    phone: string
   ) => {
     const resp = await startRegistrarUsuario({
       nombre,

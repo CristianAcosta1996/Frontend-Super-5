@@ -56,9 +56,6 @@ export const startGoogleSignIn = (): ThunkAction<
     const nombreCompleto = result.displayName?.split(" ");
     const nombre = nombreCompleto ? nombreCompleto[0] : "";
     const apellido = nombreCompleto ? nombreCompleto[1] : "";
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aXBvVXN1YXJpbyI6ImNvbXByYWRvciIsIm5vbWJyZSI6ImNyaXN0aWFuIiwiYXBlbGxpZG8iOiJhY29zdGEiLCJlbWFpbCI6ImNyaXN0aWFudGVjbm9sb2dvaW5mb3JtYXRpYUBnbWFpbC5jb20iLCJpbWFnZW5VcmwiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS9BR05teXhZMFItN1k5dkJDWFBlWm9PUDMtdEtuYnExYWtiWGpFYUJuMy1tMT1zOTYtYyIsInVzdWFyaW8iOiJjcmlzMTk5NiIsInVpZCI6MTIzfQ.dbMT5cdxtGBjPvCH9BLm1TThGLEDrRRDqLqaw8NDO18";
-    setToken(token);
 
     dispatch(
       login({
@@ -67,7 +64,7 @@ export const startGoogleSignIn = (): ThunkAction<
         email: result.email,
         imageUrl: result.photoURL,
         uid: result.uid,
-        token,
+        token: null,
         googleUser: true,
       })
     );
