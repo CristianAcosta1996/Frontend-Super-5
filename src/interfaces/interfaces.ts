@@ -1,3 +1,4 @@
+
 export interface Token {
   rol: "admin" | "sucursal" | "comprador";
   nombre: string;

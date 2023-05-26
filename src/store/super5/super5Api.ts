@@ -18,9 +18,25 @@ interface SignupProps {
   usuario: string;
 }
 
+interface AddressProps {
+  direccion: string,
+  ciudad: string,
+  departamento: string,
+  longitud: string,
+  latitud: string,
+  aclaracion: string,
+}
+
 export const super5Api = createApi({
+
   reducerPath: "super5Api",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8080/api/" }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://localhost:8080/api/",
+    prepareHeaders: (Headers) => {
+      Headers.set("Authorization", "Bearer " + window.localStorage.getItem("token")?.slice(1, -1) || "")
+      return Headers
+    }
+  }),
   endpoints: (builder) => ({
     login: builder.mutation<Token, LoginProps>({
       query: (body) => ({
@@ -39,6 +55,13 @@ export const super5Api = createApi({
     getProductosPorSucursal: builder.query<any, string>({
       query: (id) => `producto/obtenerPorSucursal/${id}`,
     }),
+    addAddress: builder.mutation<Token, AddressProps>({
+      query: (body) => ({
+        url: "direccion/crear",
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
@@ -46,4 +69,5 @@ export const {
   useLoginMutation,
   useSignupMutation,
   useGetProductosPorSucursalQuery,
+  useAddAddressMutation,
 } = super5Api;
