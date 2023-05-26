@@ -28,6 +28,13 @@ interface AddressProps {
   aclaracion: string;
 }
 
+interface ModificarUsuarioProps {
+  nombre: string;
+  apellido: string;
+  telefono: string;
+  fechaNac: Date;
+}
+
 export const super5Api = createApi({
   reducerPath: "super5Api",
   baseQuery: fetchBaseQuery({

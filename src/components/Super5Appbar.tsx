@@ -97,7 +97,7 @@ export const Super5Appbar = () => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleProfile}>Perfil</MenuItem>
+                <MenuItem onClick={handleProfile}>Datos Personales</MenuItem>
                 <MenuItem onClick={handleDireccion}>Agregar direccion</MenuItem>
                 <MenuItem onClick={handleUserInfo}>User Info</MenuItem>
               </Menu>

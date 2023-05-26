@@ -10,7 +10,7 @@ export const ProfilePage = () => {
     const [nuevoApellido, setNuevoApellido] = useState(apellido);
     const [nuevoEmail, setNuevoEmail] = useState(email);
     const [nuevoTelefono, setNuevoTelefono] = useState(telefono)
-
+    //NOMBRE APELLLIDO TELEFONO FECHA 
 
     const handleEditar = () => {
         setActivado(!activado)
