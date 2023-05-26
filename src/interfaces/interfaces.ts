@@ -1,4 +1,3 @@
-
 export interface Token {
   rol: "admin" | "sucursal" | "comprador";
   nombre: string;
@@ -26,5 +25,14 @@ export interface Sucursal {
   direccion: Direccion;
 }
 export interface Producto {
+  id: string;
   nombre: string;
+  imagen: string;
+  precio: number;
+  eliminado: boolean;
+  categoriaId: number;
+  stock: number;
+  precioDescuento: number | null;
+  aplicaDescuento: number | null;
+  descripcion: string;
 }

@@ -9,8 +9,13 @@ import {
   CardMedia,
   Typography,
 } from "@mui/material";
+import { Producto } from "../../interfaces/interfaces";
 
-export const ProductoCard = () => {
+interface ProductoCardProps {
+  producto: Producto;
+}
+
+export const ProductoCard = ({ producto }: ProductoCardProps) => {
   const [cantidad, setCantidad] = useState<number>(0);
 
   const handleAgregarItemAlCarrito = () => {
@@ -22,8 +27,8 @@ export const ProductoCard = () => {
       <CardMedia
         sx={{ mt: 1 }}
         component="img"
-        height={120}
-        src="https://discouy.vtexassets.com/arquivos/ids/1348524-1600-auto?v=1771421958&width=1600&height=auto&aspect=true"
+        height={100}
+        src={producto.imagen}
       />
       <CardContent
         sx={{
@@ -34,9 +39,9 @@ export const ProductoCard = () => {
         }}
       >
         <Typography variant="caption" fontSize={10} color="#777">
-          Categoria
+          categoria: {producto.categoriaId}
         </Typography>
-        <Typography variant="body2">Descripcion</Typography>
+        <Typography variant="body2">{producto.descripcion}</Typography>
         <Typography
           variant="body2"
           fontSize={12}
@@ -44,7 +49,7 @@ export const ProductoCard = () => {
           color="primary"
           my={1}
         >
-          $precio
+          $ {producto.precio}
         </Typography>
       </CardContent>
       <CardActions sx={{ paddingBottom: 0, paddingX: 0 }}>
