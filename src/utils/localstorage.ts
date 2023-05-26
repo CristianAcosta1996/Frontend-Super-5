@@ -1,5 +1,10 @@
 import jwt_decode from "jwt-decode";
-import { CarritoItem, Sucursal, Token } from "../interfaces/interfaces";
+import {
+  CarritoItem,
+  CompraDTO,
+  Sucursal,
+  Token,
+} from "../interfaces/interfaces";
 
 export const getToken = () => {
   try {
@@ -54,6 +59,24 @@ export const guardarCarrito = (carrito: CarritoItem[]) => {
 export const obtenerCarritoStorage = () => {
   try {
     const carrito = JSON.parse(localStorage.getItem("carrito") || "");
+    return carrito;
+  } catch (error) {
+    return;
+  }
+};
+
+export const guardarcompraPaypal = (compraPaypal: CompraDTO) => {
+  try {
+    localStorage.setItem("compraPaypal", JSON.stringify(compraPaypal));
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+};
+
+export const obtenerCompraPaypal = () => {
+  try {
+    const carrito = JSON.parse(localStorage.getItem("compraPaypal") || "");
     return carrito;
   } catch (error) {
     return;

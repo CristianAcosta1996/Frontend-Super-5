@@ -31,6 +31,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { CarritoDto, CompraDTO } from "../../interfaces/interfaces";
 import { useGenerarCompraPaypalMutation } from "../../store/super5/super5Api";
 import { realizarCompraPaypal } from "../../store/super5/super5Slice";
+import { guardarcompraPaypal } from "../../utils/localstorage";
 
 interface CarritoDrawerProps {
   cartOpen: boolean;
@@ -59,6 +60,7 @@ export const CarritoDrawer = ({
     };
     startCompraPaypal(compra).then((resp: any) => {
       dispatch(realizarCompraPaypal(resp.data));
+      guardarcompraPaypal(resp.data);
       window.location.replace(resp.data.urlPaypal);
     });
   };

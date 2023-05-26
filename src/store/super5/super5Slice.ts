@@ -7,6 +7,7 @@ import {
 } from "../../interfaces/interfaces";
 import {
   obtenerCarritoStorage,
+  obtenerCompraPaypal,
   obtenerSucursalStorage,
 } from "../../utils/localstorage";
 
@@ -25,11 +26,13 @@ const initialStateCompraPaypal: CompraDTO = {
 const initialState = (): Super5InitialState => {
   const sucursal = obtenerSucursalStorage();
   const carrito = obtenerCarritoStorage();
+  const compraPaypal = obtenerCompraPaypal();
   if (sucursal)
     return {
       sucursal,
       carrito: carrito !== undefined ? carrito : [],
-      compraPaypal: initialStateCompraPaypal,
+      compraPaypal:
+        compraPaypal !== undefined ? compraPaypal : initialStateCompraPaypal,
     };
   return {
     sucursal: {
@@ -45,7 +48,8 @@ const initialState = (): Super5InitialState => {
       },
     },
     carrito: [],
-    compraPaypal: initialStateCompraPaypal,
+    compraPaypal:
+      compraPaypal !== undefined ? compraPaypal : initialStateCompraPaypal,
   };
 };
 
