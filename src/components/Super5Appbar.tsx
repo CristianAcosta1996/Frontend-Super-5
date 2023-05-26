@@ -49,6 +49,13 @@ export const Super5Appbar = () => {
   const handleProfile = () => {
     navigate("/user/profile");
   };
+  const handleDireccion = () => {
+    navigate("/user/address");
+  }
+
+  const handleUserInfo = () => {
+    navigate("/user/userInfo")
+  }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -62,6 +69,7 @@ export const Super5Appbar = () => {
           <Box sx={{ flexGrow: 1 }}>
             <Avatar variant="square" src={brandLogo} sx={{ width: 120 }} />
           </Box>
+          <button onClick={() => navigate("/")}>inicio</button>
           {status === "authenticated" ? (
             <Box>
               <IconButton
@@ -90,7 +98,9 @@ export const Super5Appbar = () => {
                 onClose={handleClose}
               >
                 <MenuItem onClick={handleProfile}>Perfil</MenuItem>
+                <MenuItem onClick={handleDireccion}>Agregar direccion</MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={handleUserInfo}>User Info</MenuItem>
               </Menu>
               <IconButton color="inherit" onClick={() => handleLogout()}>
                 <Logout fontSize="small" />

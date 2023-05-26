@@ -58,7 +58,9 @@ export const useAuth = () => {
       eliminado: 0,
       rol: 1,
     });
+
     alert(`USUARIO REGISTRADOR CORRECTAMENTE`)
+
   };
 
   return {
