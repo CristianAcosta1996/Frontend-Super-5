@@ -32,10 +32,6 @@ export const super5Api = createApi({
   reducerPath: "super5Api",
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:8080/api/",
-    prepareHeaders: (Headers) => {
-      Headers.set("Authorization", "Bearer " + window.localStorage.getItem("token")?.slice(1, -1) || "")
-      return Headers
-    }
   }),
   endpoints: (builder) => ({
     login: builder.mutation<Token, LoginProps>({
@@ -63,6 +59,7 @@ export const super5Api = createApi({
         url: "direccion/crear",
         method: "POST",
         body,
+        Headers: { "Authorization": "Bearer " + window.localStorage.getItem("token")?.slice(1, -1) || "" }
       }),
     }),
   }),
