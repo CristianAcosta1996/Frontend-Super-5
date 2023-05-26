@@ -4,6 +4,7 @@ import { useState } from "react";
 import usePlacesAutocomplete from "use-places-autocomplete";
 import Autocomplete from '@mui/material/Autocomplete';
 import { TextField } from "@mui/material";
+import { useAddress } from "../hooks/useAddress";
 
 export default function AddressPage() {
     const [libraries] = useState(['places']);
@@ -16,39 +17,40 @@ export default function AddressPage() {
 function Map() {
     const first_center = useMemo(() => ({ lat: -34.8947415062631, lng: -56.16628964887531 }), []);
     const [selected, setSelected] = useState({ lat: -34.8947415062631, lng: -56.16628964887531 });
-    const [new_place, setNew_place] = useState("");
+    const [direccion, setDireccion] = useState("");
     const [previous_place, setPrevious_place] = useState("");
-    const [valorInput, setValorInput] = useState("");
     const [aclaraciones, setAclaraciones] = useState("");
     const [latLong, setLatLong] = useState({ lat: 0, lng: 0 })
+    const { handleAddAddress } = useAddress();
+
+    const [ciudad, setCiudad] = useState("");
+    const [departamento, setDepartamento] = useState("");
+
     const addMarker = ({ latLng }) => {
+        console.log("LATLNG", latLng);
+
         //tomo lat y lng del lugar del evento (click)
         const newMarker = { lat: latLng.lat(), lng: latLng.lng() };
-        setLatLong(newMarker)
-        //actualizamos el marker
-        setSelected(newMarker);
+        console.log("NEWMARKER ", newMarker);
         //paso la latitud y longitud de la marca en el mapa y se los mando a la api para obtener la direccion
         fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${newMarker.lat},${newMarker.lng}&key=AIzaSyB8FiaESvpDDrcOkwW07BVr5Z-rdumVSds`)
             .then(res => res.json())
             .then(data => {
-                //guardamos en new_place la direccion seleccionada en el mapa
-                setPrevious_place(new_place)
-                console.log(latLong)
-                console.log(data.results[0].address)
-                setNew_place(data.results[0].formatted_address)
-                console.log("NEW PLACE:", new_place);
-                setValorInput(data.results[0].formatted_address)
-                console.log("VALOR INPUT: ", valorInput);
-                console.log(data.results[0])
-                console.log("CIUDAD: ", data.results[0].address_components[2].long_name)
-                console.log("DEPARTAMENTO: ", data.results[0].address_components[4].long_name)
+                //guardamos en direccion la direccion seleccionada en el mapa
+                setPrevious_place(direccion)
+                console.log(data)
+                setDireccion(data.results[0].formatted_address)
+                setCiudad(data.results[0].address_components[2].long_name)
+                setDepartamento(data.results[0].address_components[4].long_name)
+                setLatLong(newMarker)
+                setSelected(newMarker);
             })
             .catch(err => console.warn(err.message))
     };
 
     const saveDirection = () => {
-        window.localStorage.setItem("direccion", new_place)
-        window.localStorage.setItem("aclaraciones", aclaraciones)
+        console.log(direccion, ciudad, departamento, latLong.lng.toString(), latLong.lat.toString(), aclaraciones)
+        handleAddAddress(direccion, ciudad, departamento, latLong.lng.toString(), latLong.lat.toString(), aclaraciones)
     }
 
     return (
@@ -69,7 +71,7 @@ function Map() {
                 {selected && <MarkerF position={selected} />}
             </GoogleMap>
             <div >
-                <PlacesAutocomplete previous_place={previous_place} setPrevious_place={setPrevious_place} setNew_place={setNew_place} new_place={new_place} setSelected={setSelected} />
+                <PlacesAutocomplete setLatLong={setLatLong} setCiudad={setCiudad} setDepartamento={setDepartamento} previous_place={previous_place} setPrevious_place={setPrevious_place} setDireccion={setDireccion} direccion={direccion} setSelected={setSelected} />
             </div>
             <TextField
                 variant="filled"
@@ -90,7 +92,7 @@ function Map() {
     );
 }
 
-const PlacesAutocomplete = ({ setSelected, new_place, setNew_place, previous_place, setPrevious_place }) => {
+const PlacesAutocomplete = ({ setLatLong, setCiudad, setDepartamento, setSelected, direccion, setDireccion, previous_place, setPrevious_place }) => {
 
     const {
         value,
@@ -109,6 +111,11 @@ const PlacesAutocomplete = ({ setSelected, new_place, setNew_place, previous_pla
                     //obtenemos la latitud y longitud de la direccion con id place_id y lo seteamos como selected para mostrar un markerF
                     latLng.lat = data.results[0].geometry.location.lat
                     latLng.lng = data.results[0].geometry.location.lng
+                    setDireccion(data.results[0].formatted_address)
+                    setCiudad(data.results[0].address_components[2].long_name)
+                    setDepartamento(data.results[0].address_components[4].long_name)
+                    console.log("ESTO ES LATLGN ", latLng)
+                    setLatLong(latLng)
                     setSelected(latLng)
                 })
                 .catch(err => console.warn(err.message))
@@ -121,8 +128,9 @@ const PlacesAutocomplete = ({ setSelected, new_place, setNew_place, previous_pla
         //checkeamos que el valor actual no sea igual al nuevo, si no lo es seteamos el nuevo valor como value
         if (valor == value) return
         if (valor == previous_place) return
-        setPrevious_place(new_place)
-        setNew_place(valor)
+        if (valor == "") return
+        setPrevious_place(direccion)
+        setDireccion(valor)
         setValue(valor)
     }
 
@@ -130,15 +138,15 @@ const PlacesAutocomplete = ({ setSelected, new_place, setNew_place, previous_pla
         <Autocomplete
             disablePortal
             disableClearable
-            onInputChange={handleSelect}
+            onChange={handleSelect}
             id="combo-box-demo"
             //cargamos la lista de opciones con las sugerencias del hook usePlacesAutocomplete()
             options={data.map(({ place_id, description }) => {
                 return { label: description, place_id }
             })}
-            isOptionEqualToValue={(option, new_place) => option.description === new_place}
+            isOptionEqualToValue={(option, direccion) => option.description === direccion}
             sx={{ width: 800 }}
-            value={new_place}
+            value={direccion}
             renderInput={(params) => {
                 if (params.inputProps.value) {
                     checkValue(params.inputProps.value)

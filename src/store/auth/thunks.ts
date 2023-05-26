@@ -80,6 +80,7 @@ export const startLogout = (): ThunkAction<
   };
 };
 
+/*
 export const startRegistrarUsuario = ({
   username,
   password,
@@ -91,19 +92,7 @@ export const startRegistrarUsuario = ({
 }): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch) => {
     dispatch(checkingCredentials());
-    /* Logica del registrar usuario 
-      Peticion de registro al back, si todo ok guardo el token en el localstorage
-      luego login con los datos enviados al back
-    */
-    window.localStorage.setItem("nombre", nombre);
-    window.localStorage.setItem("apellido", apellido);
-    window.localStorage.setItem("username", username);
-    window.localStorage.setItem("email", email);
-    window.localStorage.setItem("fechaNacimiento", fechaNacimiento);
-    window.localStorage.setItem("password", password);
-    window.localStorage.setItem("phone", phone);
-
-    /* dispatch(login(nombre, apellido, username, email)) */
-    // en caso de error hacer un dispatch(logout)
+   
   };
 };
+*/
