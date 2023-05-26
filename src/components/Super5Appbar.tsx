@@ -99,7 +99,6 @@ export const Super5Appbar = () => {
               >
                 <MenuItem onClick={handleProfile}>Perfil</MenuItem>
                 <MenuItem onClick={handleDireccion}>Agregar direccion</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
                 <MenuItem onClick={handleUserInfo}>User Info</MenuItem>
               </Menu>
               <IconButton color="inherit" onClick={() => handleLogout()}>

@@ -88,7 +88,7 @@ function Map() {
                 onClick={addMarker}
                 zoom={14}
                 center={selected}
-                mapContainerStyle={{ width: 800, height: 500 }}>
+                mapContainerStyle={{ width: 800, height: 400 }}>
                 {selected && <MarkerF position={selected} visible={firstPin} />}
                 {<MarkerF position={sucursal1} label={sucursal1name} />}
                 {<MarkerF position={sucursal2} label={sucursal2name} />}
