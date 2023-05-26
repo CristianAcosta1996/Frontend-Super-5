@@ -1,5 +1,5 @@
 import jwt_decode from "jwt-decode";
-import { Sucursal, Token } from "../interfaces/interfaces";
+import { CarritoItem, Sucursal, Token } from "../interfaces/interfaces";
 
 export const getToken = () => {
   try {
@@ -37,6 +37,24 @@ export const obtenerSucursalStorage = (): Sucursal | undefined => {
   try {
     const sucursal = JSON.parse(localStorage.getItem("sucursal") || "");
     return sucursal;
+  } catch (error) {
+    return;
+  }
+};
+
+export const guardarCarrito = (carrito: CarritoItem[]) => {
+  try {
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+};
+
+export const obtenerCarritoStorage = () => {
+  try {
+    const carrito = JSON.parse(localStorage.getItem("carrito") || "");
+    return carrito;
   } catch (error) {
     return;
   }

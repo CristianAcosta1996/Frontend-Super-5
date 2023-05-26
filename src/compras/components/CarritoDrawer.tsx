@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
@@ -26,6 +27,9 @@ import {
   RemoveCircle,
   RemoveCircleOutline,
 } from "@mui/icons-material";
+import { useAppSelector } from "../../hooks/hooks";
+import { CarritoDto, CompraDTO } from "../../interfaces/interfaces";
+import { useGenerarCompraPaypalMutation } from "../../store/super5/super5Api";
 
 interface CarritoDrawerProps {
   cartOpen: boolean;
@@ -37,6 +41,27 @@ export const CarritoDrawer = ({
   handleClose,
 }: CarritoDrawerProps) => {
   /* const [open, setOpen] = useState(false); */
+  const { carrito } = useAppSelector((state) => state.super5);
+  const { sucursal } = useAppSelector((state) => state.super5);
+  const [startCompraPaypal, { data }] = useGenerarCompraPaypalMutation();
+
+  const handlePagarCompra = (event: any): void => {
+    let arregloCompra: CarritoDto[] = [];
+    carrito.forEach(({ producto, cantidad }) => {
+      arregloCompra.push({ producto_id: +producto.id, cantidad });
+    });
+    const compra: CompraDTO = {
+      carrito: arregloCompra,
+      formaEntrega: "SUCURSAL",
+      sucursal_id: +sucursal.id,
+    };
+    startCompraPaypal(compra).then((resp) => {
+      /*
+       console.log("paypal url:", resp.paypalUrl);
+        hacer un location.href = resp.paypalUrl
+      */
+    });
+  };
 
   const toggleDrawer =
     () => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -57,31 +82,30 @@ export const CarritoDrawer = ({
         <ArrowBack />
       </IconButton>
       <List>
-        {/* , "Starred", "Send email", "Drafts" */}
-        {["Inbox"].map((text, index) => (
-          <ListItem
-            key={text}
-            disablePadding
-            sx={{ backgroundColor: "red", px: 1 }}
-          >
+        {carrito.map(({ producto, cantidad }, index) => (
+          <ListItem key={producto.id} disablePadding sx={{ px: 1 }}>
             <ListItemAvatar>
-              <Avatar src={""} />
+              <Avatar src={producto.imagen} />
             </ListItemAvatar>
             <Box sx={{ display: "flex", flex: 1, gap: 1 }}>
-              <Box sx={{ flex: 1, backgroundColor: "blue" }}>Descripcion</Box>
-              <Box sx={{ backgroundColor: "orange", borderRadius: 4 }}>
-                <IconButton>
+              <Box sx={{ flex: 1 }}>
+                <Typography variant="caption">
+                  {producto.descripcion}
+                </Typography>
+              </Box>
+              <Box sx={{ borderRadius: 4 }}>
+                <IconButton disabled>
                   <RemoveCircleOutline fontSize="small" />
                 </IconButton>
                 <Typography variant="body1" component="span">
-                  0
+                  {cantidad}
                 </Typography>
-                <IconButton>
+                <IconButton disabled>
                   <AddCircleOutline fontSize="small" />
                 </IconButton>
               </Box>
-              <Box sx={{ backgroundColor: "green" }}>
-                <IconButton>
+              <Box>
+                <IconButton disabled>
                   <Delete fontSize="small" />
                 </IconButton>
               </Box>
@@ -113,7 +137,7 @@ export const CarritoDrawer = ({
         }}
       >
         <Button>Vaciar Carrito</Button>
-        <Button>Finalizar Compra</Button>
+        <Button onClick={handlePagarCompra}>Pagar</Button>
       </Box>
     </Box>
   );
