@@ -63,6 +63,7 @@ export const super5Api = createApi({
         url: "direccion/crear",
         method: "POST",
         body,
+        Header: { "Authorization": ("Bearer " + window.localStorage.getItem("token")?.slice(1, -1) || "") }
       }),
     }),
   }),
