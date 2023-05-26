@@ -1,5 +1,4 @@
 import { Box, Grid } from "@mui/material";
-import { Super5Appbar } from "../components/Super5Appbar";
 import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from "swiper";
 import slide1 from "../assets/1.svg";
 import slide2 from "../assets/2.svg";
@@ -15,24 +14,21 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { ProductoCard } from "../productos/components/ProductoCard";
-import { SelectorSucursales } from "../sucursales/components/SelectorSucursales";
-import { useAppSelector } from "../hooks/hooks";
 
 export const HomePage = () => {
-  const { sucursal } = useAppSelector((state) => state.super5);
   return (
-    <>
+    <Box>
       <Grid container paddingBottom={2}>
-        <Super5Appbar />
         <Grid item xs={12}>
           <Slider imagenes={imagenes} />
         </Grid>
-        <Grid item xs={12} mt={1}>
-          {/* <SliderProductos /> */}
-          {!sucursal.nombreSucursal && <SelectorSucursales openDialog={true} />}
+        <Grid item xs={0} sm={1} />
+        <Grid item xs={12} mt={1} sm={10}>
+          <SliderProductos />
         </Grid>
+        <Grid item xs={0} sm={1} />
       </Grid>
-    </>
+    </Box>
   );
 };
 const imagenes: string[] = [slide1, slide2, slide3, slide4, slide5];
@@ -63,8 +59,8 @@ const Slider = ({ imagenes }: SliderProps) => {
           <Box
             sx={{
               width: "100%",
-              height: 350,
-              background: "#333",
+              /* height: 350, */
+              /* background: "#333", */
             }}
           >
             <img
@@ -81,46 +77,125 @@ const Slider = ({ imagenes }: SliderProps) => {
 const SliderProductos = () => {
   return (
     <Swiper
-      style={{ backgroundColor: "red", height: 200 }}
+      breakpoints={{
+        0: {
+          slidesPerView: 1,
+        },
+        430: {
+          slidesPerView: 2,
+        },
+        600: {
+          slidesPerView: 3,
+        },
+        820: {
+          slidesPerView: 5,
+        },
+        1000: {
+          slidesPerView: 6,
+        },
+      }}
+      style={{
+        height: 350,
+
+        paddingLeft: 35,
+        paddingRight: 35,
+        marginRight: 10,
+      }}
+      modules={[Navigation]}
+      navigation
       spaceBetween={10}
       slidesPerView={6}
       onSlideChange={() => console.log("slide change")}
       onSwiper={(swiper) => console.log(swiper)}
     >
-      <SwiperSlide style={{ backgroundColor: "orange" }}>
+      <SwiperSlide
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <ProductoCard />
       </SwiperSlide>
-      <SwiperSlide>
+      <SwiperSlide
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <ProductoCard />
       </SwiperSlide>
-      <SwiperSlide>
+      <SwiperSlide
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <ProductoCard />
       </SwiperSlide>
-      <SwiperSlide>
+      <SwiperSlide
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <ProductoCard />
       </SwiperSlide>
-      <SwiperSlide style={{ backgroundColor: "orange" }}>
+      <SwiperSlide
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <ProductoCard />
       </SwiperSlide>
-      <SwiperSlide>
+      <SwiperSlide
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <ProductoCard />
       </SwiperSlide>
-      <SwiperSlide>
+      <SwiperSlide
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <ProductoCard />
       </SwiperSlide>
-      <SwiperSlide>
+      <SwiperSlide
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <ProductoCard />
       </SwiperSlide>
-      <SwiperSlide style={{ backgroundColor: "orange" }}>
+      <SwiperSlide
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <ProductoCard />
       </SwiperSlide>
-      <SwiperSlide>
-        <ProductoCard />
-      </SwiperSlide>
-      <SwiperSlide>
-        <ProductoCard />
-      </SwiperSlide>
-      <SwiperSlide>
+      <SwiperSlide
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <ProductoCard />
       </SwiperSlide>
     </Swiper>
