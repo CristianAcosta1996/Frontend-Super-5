@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Sucursal, Token } from "../../interfaces/interfaces";
+import { Producto, Sucursal, Token } from "../../interfaces/interfaces";
 import { RootState } from "../store";
 
 interface LoginProps {
@@ -57,7 +57,7 @@ export const super5Api = createApi({
         body,
       }),
     }),
-    getProductosPorSucursal: builder.query<any, string>({
+    getProductosPorSucursal: builder.query<Producto[], string>({
       query: (id) => `producto/obtenerPorSucursal/${id}`,
     }),
     getSucursales: builder.query<Sucursal[], void>({

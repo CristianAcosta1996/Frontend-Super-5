@@ -13,7 +13,8 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import { ProductoCard } from "../productos/components/ProductoCard";
+
+import { ProductosSlide } from "../productos/components/ProductosSlide";
 
 export const HomePage = () => {
   return (
@@ -24,7 +25,7 @@ export const HomePage = () => {
         </Grid>
         <Grid item xs={0} sm={1} />
         <Grid item xs={12} mt={1} sm={10}>
-          <SliderProductos />
+          <ProductosSlide />
         </Grid>
         <Grid item xs={0} sm={1} />
       </Grid>
@@ -70,134 +71,6 @@ const Slider = ({ imagenes }: SliderProps) => {
           </Box>
         </SwiperSlide>
       ))}
-    </Swiper>
-  );
-};
-
-const SliderProductos = () => {
-  return (
-    <Swiper
-      breakpoints={{
-        0: {
-          slidesPerView: 1,
-        },
-        430: {
-          slidesPerView: 2,
-        },
-        600: {
-          slidesPerView: 3,
-        },
-        820: {
-          slidesPerView: 5,
-        },
-        1000: {
-          slidesPerView: 6,
-        },
-      }}
-      style={{
-        height: 350,
-
-        paddingLeft: 35,
-        paddingRight: 35,
-        marginRight: 10,
-      }}
-      modules={[Navigation]}
-      navigation
-      spaceBetween={10}
-      slidesPerView={6}
-      onSlideChange={() => console.log("slide change")}
-      onSwiper={(swiper) => console.log(swiper)}
-    >
-      <SwiperSlide
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <ProductoCard />
-      </SwiperSlide>
-      <SwiperSlide
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <ProductoCard />
-      </SwiperSlide>
-      <SwiperSlide
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <ProductoCard />
-      </SwiperSlide>
-      <SwiperSlide
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <ProductoCard />
-      </SwiperSlide>
-      <SwiperSlide
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <ProductoCard />
-      </SwiperSlide>
-      <SwiperSlide
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <ProductoCard />
-      </SwiperSlide>
-      <SwiperSlide
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <ProductoCard />
-      </SwiperSlide>
-      <SwiperSlide
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <ProductoCard />
-      </SwiperSlide>
-      <SwiperSlide
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <ProductoCard />
-      </SwiperSlide>
-      <SwiperSlide
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <ProductoCard />
-      </SwiperSlide>
     </Swiper>
   );
 };
