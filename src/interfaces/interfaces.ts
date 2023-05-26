@@ -11,10 +11,18 @@ export interface Token {
   sub: string;
 }
 
+export interface Direccion {
+  id: string;
+  direccion: string;
+  ciudad: string;
+  departamento: string;
+  longitud: string;
+  latitud: string;
+}
 export interface Sucursal {
-  sucursalID: string;
-  nombreSucursal: string;
-  direccionSucursal: string;
+  id: string;
+  nombre: string;
+  direccion: Direccion;
 }
 export interface Producto {
   nombre: string;

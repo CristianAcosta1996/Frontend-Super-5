@@ -43,14 +43,9 @@ export const startGoogleSignIn = (): ThunkAction<
       return;
     }
 
-    /* 
-    
-    1- Si el usuario no esta registrado con google en el servidor se envia los datos necesarios para registrarlo.
-    2- Se espera confirmacion y jwt.
-    3- Una vez obtenido el jwt se guarda en el localstorage.
-    4- Se hace el decode del jwt para obtener los otros datos como lo seria el tipo de usuario el cual es importante para la proteccion de rutas
-       y datos de informacion del usuario adicionales.
-    5- se guardan esos datos obtenidos en el estado de redux.
+    /*  
+    FALTA SI NO ESTA EL USUARIO REGISTRADO CON GOOGLE EN EL BACKEND
+    REGISTRARLO E INICIARLE SESION CON EL TOKEN RECIBIDO
     */
 
     const nombreCompleto = result.displayName?.split(" ");

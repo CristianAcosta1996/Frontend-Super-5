@@ -10,6 +10,8 @@ import { useState, useMemo } from "react";
 import { useAppDispatch } from "../../hooks/hooks";
 import { agregarSucursal } from "../../store/super5/super5Slice";
 import { guardarSucursal } from "../../utils/localstorage";
+import { Sucursal } from "../../interfaces/interfaces";
+import { useGetSucursalesQuery } from "../../store/super5/super5Api";
 
 interface SelectorSucursalesProps {
   openDialog: boolean;
@@ -17,23 +19,24 @@ interface SelectorSucursalesProps {
 
 export const SelectorSucursales = ({ openDialog }: SelectorSucursalesProps) => {
   const [open, setOpen] = useState<boolean>(openDialog);
-  const [sucursalSeleccionada, setSucursalSeleccionada] = useState<string>("");
+  const [sucursalSeleccionada, setSucursalSeleccionada] =
+    useState<Sucursal | null>(null);
   const dispatch = useAppDispatch();
 
-  const handleOnClose = (sucursal: string) => {
+  const handleOnClose = (sucursal: Sucursal) => {
     setOpen(false);
     setSucursalSeleccionada(sucursal);
     dispatch(
       agregarSucursal({
-        sucursalID: "",
-        direccionSucursal: "",
-        nombreSucursal: sucursal,
+        nombre: sucursal.nombre,
+        direccion: sucursal.direccion,
+        id: sucursal.id,
       })
     );
     guardarSucursal({
-      nombreSucursal: sucursal,
-      sucursalID: "",
-      direccionSucursal: "",
+      nombre: sucursal.nombre,
+      direccion: sucursal.direccion,
+      id: sucursal.id,
     });
   };
 
@@ -49,19 +52,32 @@ export const SelectorSucursales = ({ openDialog }: SelectorSucursalesProps) => {
 };
 interface SimpleDialog {
   open: boolean;
-  selectedValue: string;
-  onClose: (value: string) => void;
+  selectedValue: Sucursal | null;
+  onClose: (value: Sucursal) => void;
 }
 
-const SimpleDialog = ({ open, selectedValue, onClose }: SimpleDialog) => {
-  const [value, setValue] = useState<string | null>(null);
-  const [estaConfirmado, setEstaConfirmado] = useState<boolean>(false);
+const initialStateSucursal: Sucursal = {
+  direccion: {
+    ciudad: "",
+    departamento: "",
+    direccion: "",
+    id: "",
+    latitud: "",
+    longitud: "",
+  },
+  id: "",
+  nombre: "",
+};
 
-  const options = useMemo(() => ["sucursal 1", "sucursal 2", "sucursal 3"], []);
+const SimpleDialog = ({ open, selectedValue, onClose }: SimpleDialog) => {
+  const [value, setValue] = useState<Sucursal | null>(null);
+  const [estaConfirmado, setEstaConfirmado] = useState<boolean>(false);
+  const { data, isLoading } = useGetSucursalesQuery();
+  /* const options = useMemo(() => ["sucursal 1", "sucursal 2", "sucursal 3"], []); */
 
   //Funcion que ejecuta cuando se cierra el Dialog, llama on close con el parametro nuevo que selecciono el usuario y se cierra el dialog
   const handleClose = () => {
-    onClose(value || "");
+    onClose(value || initialStateSucursal);
   };
 
   return (
@@ -84,12 +100,19 @@ const SimpleDialog = ({ open, selectedValue, onClose }: SimpleDialog) => {
       >
         <DialogTitle>Seleccione una sucursal:</DialogTitle>
         <Autocomplete
+          loading={isLoading}
           id="controllable-states"
           value={value}
-          onChange={(event: any, newValue: string | null) => {
-            setValue(newValue);
+          onChange={(event: any, newValue: any) => {
+            if (value?.nombre === "" && !estaConfirmado) return;
+            console.log(newValue);
+            onClose(newValue);
           }}
-          options={options}
+          isOptionEqualToValue={(option, value) =>
+            option.nombre === value.nombre
+          }
+          getOptionLabel={(sucursal) => sucursal.nombre}
+          options={data || []}
           sx={{ width: 300 }}
           renderInput={(params) => <TextField {...params} label="Sucursal" />}
         />
@@ -97,8 +120,8 @@ const SimpleDialog = ({ open, selectedValue, onClose }: SimpleDialog) => {
           variant="contained"
           onClick={() => {
             setEstaConfirmado(true);
-            if (!value) return;
-            onClose(value || "");
+            if (value === null) return;
+            onClose(value || initialStateSucursal);
           }}
         >
           confirmar
