@@ -1,9 +1,8 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { HomePage } from "../pages/HomePage";
 import { AuthRoutes } from "../auth/routes/AuthRoutes";
 import { CssBaseline } from "@mui/material";
 import { useAppSelector } from "../hooks/hooks";
-import { RoutesUsuarios } from "../usuarios/routes/RoutesUsuarios";
+import { Super5Routes } from "./Super5Routes";
 
 export const AppRouter = () => {
   const { status } = useAppSelector((state) => state.auth);
@@ -11,11 +10,10 @@ export const AppRouter = () => {
     <>
       <CssBaseline />
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<Super5Routes />} />
         {status !== "authenticated" && (
           <Route path="auth/*" element={<AuthRoutes />} />
         )}
-        <Route path="user/*" element={<RoutesUsuarios />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </>

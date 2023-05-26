@@ -22,19 +22,21 @@ import {
 import { useAuth } from "../auth/hooks/useAuth";
 import { useAppSelector } from "../hooks/hooks";
 import brandLogo from "../assets/super5Balnco2.png";
+import { CarritoDrawer } from "../compras/carrito/CarritoDrawer";
+import { useCarrito } from "../compras/carrito/hooks/useCarrito";
 
 export const Super5Appbar = () => {
   const { handleLogout } = useAuth();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { open, handleOnClose: handleCarrito } = useCarrito();
 
   const {
     imageUrl,
     status,
-    sucursal: { nombreSucursal },
+    sucursal: { nombre: nombreSucursal },
   } = useAppSelector((state) => ({ ...state.auth, ...state.super5 }));
 
   const navigate = useNavigate();
-
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleMenu = ({ currentTarget }: MouseEvent<HTMLElement>) => {
     setAnchorEl(currentTarget);
@@ -45,20 +47,20 @@ export const Super5Appbar = () => {
   };
 
   const handleProfile = () => {
-    navigate("/user/profile")
-  }
+    navigate("/user/profile");
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar variant="dense">
           <Button color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-            <MenuIcon />
-            <Typography>Categorias</Typography>
+            <MenuIcon fontSize="small" />
+            <Typography variant="caption">Categorias</Typography>
           </Button>
 
           <Box sx={{ flexGrow: 1 }}>
-            <Avatar variant="square" src={brandLogo} sx={{ width: 150 }} />
+            <Avatar variant="square" src={brandLogo} sx={{ width: 120 }} />
           </Box>
           {status === "authenticated" ? (
             <Box>
@@ -91,7 +93,7 @@ export const Super5Appbar = () => {
                 <MenuItem onClick={handleClose}>My account</MenuItem>
               </Menu>
               <IconButton color="inherit" onClick={() => handleLogout()}>
-                <Logout />
+                <Logout fontSize="small" />
               </IconButton>
             </Box>
           ) : (
@@ -102,16 +104,11 @@ export const Super5Appbar = () => {
                 navigate("/auth/login");
               }}
             >
-              Ingresar
+              <Typography variant="caption">Ingresar</Typography>
             </Button>
           )}
-          <IconButton
-            color="inherit"
-            onClick={() => {
-              navigate("");
-            }}
-          >
-            <ShoppingCart />
+          <IconButton color="inherit" onClick={handleCarrito}>
+            <ShoppingCart fontSize="small" />
           </IconButton>
         </Toolbar>
         <Toolbar variant="dense">
@@ -131,6 +128,7 @@ export const Super5Appbar = () => {
           </Button>
         </Toolbar>
       </AppBar>
+      <CarritoDrawer cartOpen={open} handleClose={handleCarrito} />
     </Box>
   );
 };

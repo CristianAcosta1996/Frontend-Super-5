@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Token } from "../../interfaces/interfaces";
+import { Sucursal, Token } from "../../interfaces/interfaces";
 
 interface LoginProps {
   usuarioOCorreo: string;
@@ -55,6 +55,9 @@ export const super5Api = createApi({
     getProductosPorSucursal: builder.query<any, string>({
       query: (id) => `producto/obtenerPorSucursal/${id}`,
     }),
+    getSucursales: builder.query<Sucursal[], void>({
+      query: () => "sucursal/obtener",
+    }),
     addAddress: builder.mutation<Token, AddressProps>({
       query: (body) => ({
         url: "direccion/crear",
@@ -65,9 +68,11 @@ export const super5Api = createApi({
   }),
 });
 
+
 export const {
   useLoginMutation,
   useSignupMutation,
   useGetProductosPorSucursalQuery,
   useAddAddressMutation,
+  useGetSucursalesQuery,
 } = super5Api;

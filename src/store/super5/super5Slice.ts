@@ -12,9 +12,16 @@ const initialState = (): Super5InitialState => {
   if (sucursal) return { sucursal, carrito: [] };
   return {
     sucursal: {
-      direccionSucursal: "",
-      nombreSucursal: "",
-      sucursalID: "",
+      id: "",
+      nombre: "",
+      direccion: {
+        id: "",
+        ciudad: "",
+        departamento: "",
+        direccion: "",
+        latitud: "",
+        longitud: "",
+      },
     },
     carrito: [],
   };
@@ -25,9 +32,9 @@ export const super5Slice = createSlice({
   initialState,
   reducers: {
     agregarSucursal: (state, action: PayloadAction<Sucursal>) => {
-      state.sucursal.direccionSucursal = action.payload.direccionSucursal;
-      state.sucursal.nombreSucursal = action.payload.nombreSucursal;
-      state.sucursal.sucursalID = action.payload.sucursalID;
+      state.sucursal.direccion = action.payload.direccion;
+      state.sucursal.nombre = action.payload.nombre;
+      state.sucursal.id = action.payload.id;
     },
     agregarProductosAlCarrito: (state, action: PayloadAction<Producto>) => {
       state.carrito.push(action.payload);
