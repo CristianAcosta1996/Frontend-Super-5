@@ -82,6 +82,13 @@ export const super5Api = createApi({
         body,
       }),
     }),
+    generarPago: builder.mutation<CompraDTO | undefined, CompraDTO>({
+      query: (body) => ({
+        url: "venta/generarPago",
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
@@ -92,4 +99,5 @@ export const {
   useAddAddressMutation,
   useGetSucursalesQuery,
   useGenerarCompraPaypalMutation,
+  useGenerarPagoMutation,
 } = super5Api;

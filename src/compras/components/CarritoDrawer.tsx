@@ -27,9 +27,10 @@ import {
   RemoveCircle,
   RemoveCircleOutline,
 } from "@mui/icons-material";
-import { useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { CarritoDto, CompraDTO } from "../../interfaces/interfaces";
 import { useGenerarCompraPaypalMutation } from "../../store/super5/super5Api";
+import { realizarCompraPaypal } from "../../store/super5/super5Slice";
 
 interface CarritoDrawerProps {
   cartOpen: boolean;
@@ -44,6 +45,7 @@ export const CarritoDrawer = ({
   const { carrito } = useAppSelector((state) => state.super5);
   const { sucursal } = useAppSelector((state) => state.super5);
   const [startCompraPaypal, { data }] = useGenerarCompraPaypalMutation();
+  const dispatch = useAppDispatch();
 
   const handlePagarCompra = (event: any): void => {
     let arregloCompra: CarritoDto[] = [];
@@ -55,11 +57,9 @@ export const CarritoDrawer = ({
       formaEntrega: "SUCURSAL",
       sucursal_id: +sucursal.id,
     };
-    startCompraPaypal(compra).then((resp) => {
-      /*
-       console.log("paypal url:", resp.paypalUrl);
-        hacer un location.href = resp.paypalUrl
-      */
+    startCompraPaypal(compra).then((resp: any) => {
+      dispatch(realizarCompraPaypal(resp.data));
+      window.location.replace(resp.data.urlPaypal);
     });
   };
 

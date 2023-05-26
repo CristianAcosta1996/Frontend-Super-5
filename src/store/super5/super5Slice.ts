@@ -1,5 +1,10 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { CarritoItem, Producto, Sucursal } from "../../interfaces/interfaces";
+import {
+  CarritoItem,
+  CompraDTO,
+  Producto,
+  Sucursal,
+} from "../../interfaces/interfaces";
 import {
   obtenerCarritoStorage,
   obtenerSucursalStorage,
@@ -8,13 +13,24 @@ import {
 interface Super5InitialState {
   sucursal: Sucursal;
   carrito: CarritoItem[];
+  compraPaypal: CompraDTO;
 }
+
+const initialStateCompraPaypal: CompraDTO = {
+  formaEntrega: "SUCURSAL",
+  sucursal_id: 0,
+  carrito: [],
+};
 
 const initialState = (): Super5InitialState => {
   const sucursal = obtenerSucursalStorage();
   const carrito = obtenerCarritoStorage();
   if (sucursal)
-    return { sucursal, carrito: carrito !== undefined ? carrito : [] };
+    return {
+      sucursal,
+      carrito: carrito !== undefined ? carrito : [],
+      compraPaypal: initialStateCompraPaypal,
+    };
   return {
     sucursal: {
       id: "",
@@ -29,6 +45,7 @@ const initialState = (): Super5InitialState => {
       },
     },
     carrito: [],
+    compraPaypal: initialStateCompraPaypal,
   };
 };
 
@@ -43,9 +60,11 @@ export const super5Slice = createSlice({
     },
     agregarProductosAlCarrito: (state, action: PayloadAction<CarritoItem>) => {
       if (action.payload.cantidad <= 0) return;
-      if (state.carrito.length === 0) state.carrito.push(action.payload);
-
-      state.carrito.map((caritoItem) => {
+      if (state.carrito.length === 0) {
+        state.carrito.push(action.payload);
+        return;
+      }
+      state.carrito = state.carrito.map((caritoItem) => {
         if (caritoItem.producto.id !== action.payload.producto.id) {
           return caritoItem;
         }
@@ -54,8 +73,14 @@ export const super5Slice = createSlice({
       });
     },
     quitarProductosAlCarrito: (state, action: PayloadAction<CarritoItem>) => {},
+    realizarCompraPaypal: (state, action) => {
+      state.compraPaypal = action.payload;
+    },
   },
 });
 
-export const { agregarProductosAlCarrito, agregarSucursal } =
-  super5Slice.actions;
+export const {
+  agregarProductosAlCarrito,
+  agregarSucursal,
+  realizarCompraPaypal,
+} = super5Slice.actions;
