@@ -10,11 +10,11 @@ export const AppRouter = () => {
     <>
       <CssBaseline />
       <Routes>
-        <Route path="/" element={<Super5Routes />} />
+        <Route path="/*" element={<Super5Routes />} />
         {status !== "authenticated" && (
           <Route path="auth/*" element={<AuthRoutes />} />
         )}
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="*" element={<Navigate to="/*" />} />
       </Routes>
     </>
   );

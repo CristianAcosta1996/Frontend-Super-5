@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Sucursal, Token } from "../../interfaces/interfaces";
+import { Producto, Sucursal, Token } from "../../interfaces/interfaces";
+import { RootState } from "../store";
 
 interface LoginProps {
   usuarioOCorreo: string;
@@ -19,19 +20,27 @@ interface SignupProps {
 }
 
 interface AddressProps {
-  direccion: string,
-  ciudad: string,
-  departamento: string,
-  longitud: string,
-  latitud: string,
-  aclaracion: string,
+  direccion: string;
+  ciudad: string;
+  departamento: string;
+  longitud: string;
+  latitud: string;
+  aclaracion: string;
 }
 
 export const super5Api = createApi({
-
   reducerPath: "super5Api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:8080/api/",
+    baseUrl: "http://127.0.0.1:8080/api/",
+    prepareHeaders: (headers, { getState }) => {
+      const token = (getState() as RootState).auth.token;
+
+      if (token) {
+        headers.set("authorization", `Bearer ${token}`);
+      }
+
+      return headers;
+    },
   }),
   endpoints: (builder) => ({
     login: builder.mutation<Token, LoginProps>({
@@ -48,7 +57,7 @@ export const super5Api = createApi({
         body,
       }),
     }),
-    getProductosPorSucursal: builder.query<any, string>({
+    getProductosPorSucursal: builder.query<Producto[], string>({
       query: (id) => `producto/obtenerPorSucursal/${id}`,
     }),
     getSucursales: builder.query<Sucursal[], void>({
@@ -64,7 +73,6 @@ export const super5Api = createApi({
     }),
   }),
 });
-
 
 export const {
   useLoginMutation,
