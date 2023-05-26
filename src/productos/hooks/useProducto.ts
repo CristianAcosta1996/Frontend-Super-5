@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Producto } from "../../interfaces/interfaces";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { agregarProductosAlCarrito } from "../../store/super5/super5Slice";
@@ -9,9 +9,12 @@ export const useProducto = () => {
   const dispatch = useAppDispatch();
   const { carrito } = useAppSelector((state) => state.super5);
 
+  useEffect(() => {
+    guardarCarrito(carrito);
+  }, [carrito]);
+
   const handleAgregarItemAlCarrito = (producto: Producto) => {
     dispatch(agregarProductosAlCarrito({ producto, cantidad }));
-    guardarCarrito(carrito);
   };
 
   const aumentarCantidadProducto = () => {

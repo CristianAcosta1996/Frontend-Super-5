@@ -32,6 +32,7 @@ import { CarritoDto, CompraDTO } from "../../interfaces/interfaces";
 import { useGenerarCompraPaypalMutation } from "../../store/super5/super5Api";
 import { realizarCompraPaypal } from "../../store/super5/super5Slice";
 import { guardarcompraPaypal } from "../../utils/localstorage";
+import { useEffect, useState } from "react";
 
 interface CarritoDrawerProps {
   cartOpen: boolean;
@@ -47,6 +48,18 @@ export const CarritoDrawer = ({
   const { sucursal } = useAppSelector((state) => state.super5);
   const [startCompraPaypal, { data }] = useGenerarCompraPaypalMutation();
   const dispatch = useAppDispatch();
+  const [precioTotalCarrito, setPrecioTotalCarrito] = useState<number>(0);
+
+  useEffect(() => {
+    const calcularPrecioTotalCarrito = (): number => {
+      let contador = 0;
+      carrito.forEach((carritoItem) => {
+        contador += carritoItem.producto.precio * carritoItem.cantidad;
+      });
+      return contador;
+    };
+    setPrecioTotalCarrito(calcularPrecioTotalCarrito());
+  }, [carrito]);
 
   const handlePagarCompra = (event: any): void => {
     let arregloCompra: CarritoDto[] = [];
@@ -114,6 +127,11 @@ export const CarritoDrawer = ({
             </Box>
           </ListItem>
         ))}
+        {carrito.length === 0 && (
+          <Typography variant="h6" textAlign="center">
+            No hay nada que mostrar en el carrito
+          </Typography>
+        )}
       </List>
       <Divider />
       <List>
@@ -125,7 +143,7 @@ export const CarritoDrawer = ({
               Precio total:
             </Typography>
             <Typography variant="h6" color="primary" component="span">
-              $0
+              ${precioTotalCarrito}
             </Typography>
           </Box>
         </ListItem>
@@ -160,3 +178,4 @@ export const CarritoDrawer = ({
     </div>
   );
 };
+/* ELIMINAR TODO DEL ESTADO DE REDUX AL LOGOUT  */

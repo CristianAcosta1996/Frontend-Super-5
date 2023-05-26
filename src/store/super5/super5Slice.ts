@@ -64,17 +64,15 @@ export const super5Slice = createSlice({
     },
     agregarProductosAlCarrito: (state, action: PayloadAction<CarritoItem>) => {
       if (action.payload.cantidad <= 0) return;
-      if (state.carrito.length === 0) {
-        state.carrito.push(action.payload);
-        return;
-      }
-      state.carrito = state.carrito.map((caritoItem) => {
-        if (caritoItem.producto.id !== action.payload.producto.id) {
-          return caritoItem;
-        }
-
+      let estaRepetido = false;
+      state.carrito = state.carrito.map((carritoItem) => {
+        if (carritoItem.producto.id !== action.payload.producto.id)
+          return carritoItem;
+        estaRepetido = true;
         return action.payload;
       });
+
+      if (!estaRepetido) state.carrito.push(action.payload);
     },
     quitarProductosAlCarrito: (state, action: PayloadAction<CarritoItem>) => {},
     realizarCompraPaypal: (state, action) => {

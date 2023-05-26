@@ -90,7 +90,7 @@ export const ProductoCard = ({ producto }: ProductoCardProps) => {
             handleAgregarItemAlCarrito(producto);
           }}
         >
-          Comprar
+          Agregar
         </Button>
       </CardActions>
     </Card>
