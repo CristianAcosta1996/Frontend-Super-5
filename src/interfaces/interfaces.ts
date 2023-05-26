@@ -36,3 +36,31 @@ export interface Producto {
   aplicaDescuento: number | null;
   descripcion: string;
 }
+export interface CarritoItem {
+  producto: Producto;
+  cantidad: number;
+}
+
+export interface CarritoDto {
+  producto_id: number;
+  cantidad: number;
+}
+
+export interface CompraDTO {
+  formaEntrega: "DOMICILIO" | "SUCURSAL";
+  direccion_id?: number;
+  sucursal_id: number;
+  carrito: CarritoDto[];
+  id?: number;
+  estado?: "PENDIENTE" | "PAGO" | "CANCELADO" | "CONFIRMADO" | "FINALIZADO";
+  eliminado?: boolean;
+  fechaCompra?: Date;
+  fechaConfirmacion?: Date;
+  fechaCancelacion?: Date;
+  fechaFinalizacion?: Date;
+  codigoPayPal?: string;
+  precio?: number;
+  comprador_id?: number;
+  promocion_id?: number;
+  urlPaypal?: string;
+}

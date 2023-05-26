@@ -1,15 +1,20 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Producto, Sucursal } from "../../interfaces/interfaces";
-import { obtenerSucursalStorage } from "../../utils/localstorage";
+import { CarritoItem, Producto, Sucursal } from "../../interfaces/interfaces";
+import {
+  obtenerCarritoStorage,
+  obtenerSucursalStorage,
+} from "../../utils/localstorage";
 
 interface Super5InitialState {
   sucursal: Sucursal;
-  carrito: Producto[];
+  carrito: CarritoItem[];
 }
 
 const initialState = (): Super5InitialState => {
   const sucursal = obtenerSucursalStorage();
-  if (sucursal) return { sucursal, carrito: [] };
+  const carrito = obtenerCarritoStorage();
+  if (sucursal)
+    return { sucursal, carrito: carrito !== undefined ? carrito : [] };
   return {
     sucursal: {
       id: "",
@@ -36,9 +41,19 @@ export const super5Slice = createSlice({
       state.sucursal.nombre = action.payload.nombre;
       state.sucursal.id = action.payload.id;
     },
-    agregarProductosAlCarrito: (state, action: PayloadAction<Producto>) => {
-      state.carrito.push(action.payload);
+    agregarProductosAlCarrito: (state, action: PayloadAction<CarritoItem>) => {
+      if (action.payload.cantidad <= 0) return;
+      if (state.carrito.length === 0) state.carrito.push(action.payload);
+
+      state.carrito.map((caritoItem) => {
+        if (caritoItem.producto.id !== action.payload.producto.id) {
+          return caritoItem;
+        }
+
+        return action.payload;
+      });
     },
+    quitarProductosAlCarrito: (state, action: PayloadAction<CarritoItem>) => {},
   },
 });
 

@@ -58,7 +58,6 @@ export const useAuth = () => {
       eliminado: 0,
       rol: 1,
     });
-    console.log(resp);
   };
 
   return {
