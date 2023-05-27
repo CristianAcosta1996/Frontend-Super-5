@@ -86,7 +86,7 @@ function Map() {
                 clickableIcons={false}
                 // onCenterChanged={} PARA AGREGAR CARGA
                 onClick={addMarker}
-                zoom={14}
+                zoom={13}
                 center={selected}
                 mapContainerStyle={{ width: 800, height: 400 }}>
                 {selected && <MarkerF position={selected} visible={firstPin} />}

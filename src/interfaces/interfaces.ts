@@ -6,7 +6,6 @@ export interface Token {
   telefono: string;
   imagenUrl: string;
   usuario: string;
-  fechaNac: Date;
   uid: string;
   iat: number;
   exp: number;

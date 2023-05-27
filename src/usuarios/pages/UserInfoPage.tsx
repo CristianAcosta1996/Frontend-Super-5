@@ -91,7 +91,7 @@ export const UserInfoPage = () => {
                     </Grid>
                     <Grid marginLeft={2} item xs={8} mb={3}>
                         <TextField
-                            disabled={activado}
+                            disabled={true}
                             size="small"
                             variant="filled"
                             label="Email"

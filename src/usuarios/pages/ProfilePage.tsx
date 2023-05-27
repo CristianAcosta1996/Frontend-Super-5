@@ -5,6 +5,7 @@ import { useState } from "react";
 
 export const ProfilePage = () => {
     const { nombre, apellido, email, telefono } = useAppSelector((state) => state.auth);
+    console.log(nombre, apellido, email, telefono)
     const [activado, setActivado] = useState(true);
     const [nuevoNombre, setNuevoNombre] = useState(nombre);
     const [nuevoApellido, setNuevoApellido] = useState(apellido);
@@ -16,7 +17,7 @@ export const ProfilePage = () => {
         setActivado(!activado)
     }
     const handleGuardar = () => {
-        console.log(nuevoNombre, nuevoApellido, nuevoEmail, nuevoTelefono)
+        console.log(nuevoNombre, nuevoApellido, nuevoEmail, nuevoTelefono,)
         setActivado(!activado)
 
     }

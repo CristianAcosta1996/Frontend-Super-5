@@ -59,8 +59,8 @@ export const useAuth = () => {
       rol: 1,
     });
     if (resp)
-      alert(`USUARIO REGISTRADOR CORRECTAMENTE`)
-    return "OK"
+      alert(`USUARIO REGISTRADO CORRECTAMENTE`)
+    return resp
   };
 
   return {

@@ -10,7 +10,7 @@ interface AuthSliceState {
   apellido: string | null | undefined;
   email: string | null | undefined;
   telefono: string | null | undefined;
-  fechaNac: Date | null | undefined;
+  //fechaNac: Date | null | undefined;
   uid?: string | null | undefined;
   token?: string | null | undefined;
   errorMessage?: string | null | undefined;
@@ -28,7 +28,6 @@ const initialState = (): AuthSliceState => {
       apellido: null,
       email: null,
       telefono: null,
-      fechaNac: null,
       uid: null,
       token: null,
       errorMessage: null,
@@ -42,7 +41,6 @@ const initialState = (): AuthSliceState => {
       apellido: tokenInfo.apellido,
       email: tokenInfo.correo,
       telefono: tokenInfo.telefono,
-      fechaNac: tokenInfo.fechaNac,
       uid: tokenInfo.uid,
       token: tokenInfo.token,
       errorMessage: null,

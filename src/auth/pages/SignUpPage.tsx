@@ -40,10 +40,9 @@ export const SignUpPage = () => {
     if (!email || !password || !name || !surname || !username || !phone) return;
 
     const respuesta = handleRegistrarUsuario(username, password, email, name, surname, phone);
-    if (respuesta) {
-      handleLogin(username, password);
-      navigate("/");
-    }
+    navigate("/");
+    //NO ESTA FUNCIONANDO EL LOGIN (PORQUE SE EJECUTA ANTES DE RECIBIR EL TOKEN)
+
     reset();
   };
 
