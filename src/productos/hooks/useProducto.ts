@@ -1,21 +1,7 @@
-import { useEffect, useState } from "react";
-import { Producto } from "../../interfaces/interfaces";
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
-import { agregarProductosAlCarrito } from "../../store/super5/super5Slice";
-import { guardarCarrito } from "../../utils/localstorage";
+import { useState } from "react";
 
 export const useProducto = () => {
   const [cantidad, setCantidad] = useState<number>(0);
-  const dispatch = useAppDispatch();
-  const { carrito } = useAppSelector((state) => state.super5);
-
-  useEffect(() => {
-    guardarCarrito(carrito);
-  }, [carrito]);
-
-  const handleAgregarItemAlCarrito = (producto: Producto) => {
-    dispatch(agregarProductosAlCarrito({ producto, cantidad }));
-  };
 
   const aumentarCantidadProducto = () => {
     setCantidad(cantidad + 1);
@@ -26,7 +12,6 @@ export const useProducto = () => {
   };
 
   return {
-    handleAgregarItemAlCarrito,
     aumentarCantidadProducto,
     reducirCantidadProducto,
     cantidad,

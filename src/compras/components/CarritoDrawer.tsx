@@ -30,9 +30,13 @@ import {
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { CarritoDto, CompraDTO } from "../../interfaces/interfaces";
 import { useGenerarCompraPaypalMutation } from "../../store/super5/super5Api";
-import { realizarCompraPaypal } from "../../store/super5/super5Slice";
-import { guardarcompraPaypal } from "../../utils/localstorage";
+import {
+  realizarCompraPaypal,
+  resetearCarrito,
+} from "../../store/super5/super5Slice";
+import { guardarcompraPaypal, limpiarCarrito } from "../../utils/localstorage";
 import { useEffect, useState } from "react";
+import { useCarrito } from "../carrito/hooks/useCarrito";
 
 interface CarritoDrawerProps {
   cartOpen: boolean;
@@ -48,18 +52,8 @@ export const CarritoDrawer = ({
   const { sucursal } = useAppSelector((state) => state.super5);
   const [startCompraPaypal, { data }] = useGenerarCompraPaypalMutation();
   const dispatch = useAppDispatch();
-  const [precioTotalCarrito, setPrecioTotalCarrito] = useState<number>(0);
-
-  useEffect(() => {
-    const calcularPrecioTotalCarrito = (): number => {
-      let contador = 0;
-      carrito.forEach((carritoItem) => {
-        contador += carritoItem.producto.precio * carritoItem.cantidad;
-      });
-      return contador;
-    };
-    setPrecioTotalCarrito(calcularPrecioTotalCarrito());
-  }, [carrito]);
+  const { precioTotalCarrito, quitarItemDelCarrito, agregarItemAlCarrito } =
+    useCarrito();
 
   const handlePagarCompra = (event: any): void => {
     let arregloCompra: CarritoDto[] = [];
@@ -109,18 +103,30 @@ export const CarritoDrawer = ({
                 </Typography>
               </Box>
               <Box sx={{ borderRadius: 4 }}>
-                <IconButton disabled>
+                <IconButton
+                  onClick={() => {
+                    agregarItemAlCarrito(producto, cantidad - 1);
+                  }}
+                >
                   <RemoveCircleOutline fontSize="small" />
                 </IconButton>
                 <Typography variant="body1" component="span">
                   {cantidad}
                 </Typography>
-                <IconButton disabled>
+                <IconButton
+                  onClick={() => {
+                    agregarItemAlCarrito(producto, cantidad + 1);
+                  }}
+                >
                   <AddCircleOutline fontSize="small" />
                 </IconButton>
               </Box>
               <Box>
-                <IconButton disabled>
+                <IconButton
+                  onClick={() => {
+                    quitarItemDelCarrito(producto);
+                  }}
+                >
                   <Delete fontSize="small" />
                 </IconButton>
               </Box>
@@ -156,7 +162,14 @@ export const CarritoDrawer = ({
           gap: 2,
         }}
       >
-        <Button>Vaciar Carrito</Button>
+        <Button
+          onClick={() => {
+            limpiarCarrito();
+            dispatch(resetearCarrito());
+          }}
+        >
+          Vaciar Carrito
+        </Button>
         <Button onClick={handlePagarCompra}>Pagar</Button>
       </Box>
     </Box>

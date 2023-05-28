@@ -65,6 +65,14 @@ export const obtenerCarritoStorage = () => {
   }
 };
 
+export const limpiarCarrito = () => {
+  try {
+    localStorage.removeItem("carrito");
+  } catch (error) {
+    return;
+  }
+};
+
 export const guardarcompraPaypal = (compraPaypal: CompraDTO) => {
   try {
     localStorage.setItem("compraPaypal", JSON.stringify(compraPaypal));

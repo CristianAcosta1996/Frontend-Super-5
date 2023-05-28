@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+
 import {
   CarritoItem,
   CompraDTO,
@@ -74,7 +75,14 @@ export const super5Slice = createSlice({
 
       if (!estaRepetido) state.carrito.push(action.payload);
     },
-    quitarProductosAlCarrito: (state, action: PayloadAction<CarritoItem>) => {},
+    quitarProductosAlCarrito: (state, action: PayloadAction<Producto>) => {
+      state.carrito = state.carrito.filter(
+        (carritoItem) => carritoItem.producto.id !== action.payload.id
+      );
+    },
+    resetearCarrito: (state) => {
+      state.carrito = [];
+    },
     realizarCompraPaypal: (state, action) => {
       state.compraPaypal = action.payload;
     },
@@ -85,4 +93,6 @@ export const {
   agregarProductosAlCarrito,
   agregarSucursal,
   realizarCompraPaypal,
+  resetearCarrito,
+  quitarProductosAlCarrito,
 } = super5Slice.actions;
