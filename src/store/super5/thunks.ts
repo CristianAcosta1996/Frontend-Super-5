@@ -1,14 +1,16 @@
 import { AnyAction, ThunkAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { CarritoItem, Producto } from "../../interfaces/interfaces";
+import { CarritoItem, CompraDTO, Producto } from "../../interfaces/interfaces";
 import {
   quitarProductosAlCarrito,
   resetearCarrito,
   agregarProductosAlCarrito,
+  realizarCompraPaypal as realizarCompraPaypalSlice,
 } from "./super5Slice";
 import {
   guardarCarrito,
   limpiarCarrito as limpiarCarritoStorage,
+  guardarcompraPaypal,
 } from "../../utils/localstorage";
 
 export const quitarProductoDelCarrito = (
@@ -38,5 +40,17 @@ export const limpiarCarrito = (): ThunkAction<
   return async (dispatcher, getState) => {
     dispatcher(resetearCarrito());
     limpiarCarritoStorage();
+  };
+};
+
+export const realizarCompraPaypal = ({
+  compra,
+}: {
+  compra: CompraDTO;
+}): ThunkAction<void, RootState, unknown, AnyAction> => {
+  return async (dispatch) => {
+    dispatch(realizarCompraPaypalSlice(compra));
+    guardarcompraPaypal(compra);
+    window.location.replace(compra.urlPaypal || "");
   };
 };

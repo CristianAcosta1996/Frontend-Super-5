@@ -83,7 +83,7 @@ export const super5Slice = createSlice({
     resetearCarrito: (state) => {
       state.carrito = [];
     },
-    realizarCompraPaypal: (state, action) => {
+    realizarCompraPaypal: (state, action: PayloadAction<CompraDTO>) => {
       state.compraPaypal = action.payload;
     },
   },
