@@ -1,24 +1,19 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { RoutesUsuarios } from "../usuarios/routes/RoutesUsuarios";
-import { HomePage } from "../pages/HomePage";
-import { Super5Appbar } from "../components/Super5Appbar";
 import { SelectorSucursales } from "../sucursales/components/SelectorSucursales";
 import { useAppSelector } from "../hooks/hooks";
-import { ComprasRoutes } from "../compras/routes/ComprasRoutes";
+import { RoutesSucursales } from "../sucursales/routes/RoutesSucursales";
+import { RoutesUsuarios } from "../usuarios/routes/RoutesUsuarios";
+import { DashboardSucursalesPage } from "../sucursales/pages/DashboardSucursalesPage";
 
 export const Super5Routes = () => {
   const { sucursal } = useAppSelector((state) => state.super5);
   return (
     <>
-      {!sucursal.nombre && <SelectorSucursales openDialog={true} />}
-
-      <Super5Appbar />
-
+      {/* {!sucursal.nombre && <SelectorSucursales openDialog={true} />} */}
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="user/*" element={<RoutesUsuarios />} />
-        <Route path="compra/*" element={<ComprasRoutes />} />
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="user/*" element={<RoutesUsuarios />} />        
+        <Route path="sucursal/*" element={<DashboardSucursalesPage />} />
+        <Route path="/*" element={<Navigate to="user" />} />
       </Routes>
     </>
   );
