@@ -27,9 +27,16 @@ import {
   RemoveCircle,
   RemoveCircleOutline,
 } from "@mui/icons-material";
-import { useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { CarritoDto, CompraDTO } from "../../interfaces/interfaces";
 import { useGenerarCompraPaypalMutation } from "../../store/super5/super5Api";
+import {
+  realizarCompraPaypal,
+  resetearCarrito,
+} from "../../store/super5/super5Slice";
+import { guardarcompraPaypal, limpiarCarrito } from "../../utils/localstorage";
+import { useEffect, useState } from "react";
+import { useCarrito } from "../carrito/hooks/useCarrito";
 
 interface CarritoDrawerProps {
   cartOpen: boolean;
@@ -44,6 +51,9 @@ export const CarritoDrawer = ({
   const { carrito } = useAppSelector((state) => state.super5);
   const { sucursal } = useAppSelector((state) => state.super5);
   const [startCompraPaypal, { data }] = useGenerarCompraPaypalMutation();
+  const dispatch = useAppDispatch();
+  const { precioTotalCarrito, quitarItemDelCarrito, agregarItemAlCarrito } =
+    useCarrito();
 
   const handlePagarCompra = (event: any): void => {
     let arregloCompra: CarritoDto[] = [];
@@ -55,11 +65,10 @@ export const CarritoDrawer = ({
       formaEntrega: "SUCURSAL",
       sucursal_id: +sucursal.id,
     };
-    startCompraPaypal(compra).then((resp) => {
-      /*
-       console.log("paypal url:", resp.paypalUrl);
-        hacer un location.href = resp.paypalUrl
-      */
+    startCompraPaypal(compra).then((resp: any) => {
+      dispatch(realizarCompraPaypal(resp.data));
+      guardarcompraPaypal(resp.data);
+      window.location.replace(resp.data.urlPaypal);
     });
   };
 
@@ -94,24 +103,41 @@ export const CarritoDrawer = ({
                 </Typography>
               </Box>
               <Box sx={{ borderRadius: 4 }}>
-                <IconButton disabled>
+                <IconButton
+                  onClick={() => {
+                    agregarItemAlCarrito(producto, cantidad - 1);
+                  }}
+                >
                   <RemoveCircleOutline fontSize="small" />
                 </IconButton>
                 <Typography variant="body1" component="span">
                   {cantidad}
                 </Typography>
-                <IconButton disabled>
+                <IconButton
+                  onClick={() => {
+                    agregarItemAlCarrito(producto, cantidad + 1);
+                  }}
+                >
                   <AddCircleOutline fontSize="small" />
                 </IconButton>
               </Box>
               <Box>
-                <IconButton disabled>
+                <IconButton
+                  onClick={() => {
+                    quitarItemDelCarrito(producto);
+                  }}
+                >
                   <Delete fontSize="small" />
                 </IconButton>
               </Box>
             </Box>
           </ListItem>
         ))}
+        {carrito.length === 0 && (
+          <Typography variant="h6" textAlign="center">
+            No hay nada que mostrar en el carrito
+          </Typography>
+        )}
       </List>
       <Divider />
       <List>
@@ -123,7 +149,7 @@ export const CarritoDrawer = ({
               Precio total:
             </Typography>
             <Typography variant="h6" color="primary" component="span">
-              $0
+              ${precioTotalCarrito}
             </Typography>
           </Box>
         </ListItem>
@@ -136,7 +162,14 @@ export const CarritoDrawer = ({
           gap: 2,
         }}
       >
-        <Button>Vaciar Carrito</Button>
+        <Button
+          onClick={() => {
+            limpiarCarrito();
+            dispatch(resetearCarrito());
+          }}
+        >
+          Vaciar Carrito
+        </Button>
         <Button onClick={handlePagarCompra}>Pagar</Button>
       </Box>
     </Box>
@@ -158,3 +191,4 @@ export const CarritoDrawer = ({
     </div>
   );
 };
+/* ELIMINAR TODO DEL ESTADO DE REDUX AL LOGOUT  */

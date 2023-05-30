@@ -9,18 +9,17 @@ import {
 } from "@mui/material";
 import { Producto } from "../../interfaces/interfaces";
 import { useProducto } from "../hooks/useProducto";
+import { useCarrito } from "../../compras/carrito/hooks/useCarrito";
 
 interface ProductoCardProps {
   producto: Producto;
 }
 
 export const ProductoCard = ({ producto }: ProductoCardProps) => {
-  const {
-    handleAgregarItemAlCarrito,
-    aumentarCantidadProducto,
-    cantidad,
-    reducirCantidadProducto,
-  } = useProducto();
+  const { aumentarCantidadProducto, cantidad, reducirCantidadProducto } =
+    useProducto();
+
+  const { agregarItemAlCarrito } = useCarrito();
 
   return (
     <Card sx={{ maxWidth: 150 }}>
@@ -87,10 +86,10 @@ export const ProductoCard = ({ producto }: ProductoCardProps) => {
           size="small"
           fullWidth
           onClick={() => {
-            handleAgregarItemAlCarrito(producto);
+            agregarItemAlCarrito(producto, cantidad);
           }}
         >
-          Comprar
+          Agregar
         </Button>
       </CardActions>
     </Card>
