@@ -1,46 +1,54 @@
 import { Box, Button, Container, Grid, TextField } from "@mui/material";
 import { useAppSelector } from "../../hooks/hooks";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useModificarComprador } from "../hooks/useModificarComprador";
 
-export const UserInfoPage = () => {
+export const DatosPersonales = () => {
+    const navigate = useNavigate();
     const { nombre, apellido, email, telefono } = useAppSelector((state) => state.auth);
-    const [selected, setSelected] = useState("Datos Personales")
-    const [activado, setActivado] = useState(true)
-    const [mostrar, setMostrar] = useState("No hay datos")
+    const [activado, setActivado] = useState(true);
+    const { handleModificarComprador } = useModificarComprador();
+    const [name, setName] = useState(nombre);
+    const [surname, setSurname] = useState(apellido);
+    const [phone, setPhone] = useState(telefono);
 
     const handleDatosPersonales = () => {
-        setSelected("Datos Personales");
-        console.log(selected)
+        navigate("/user/datospersonales");
     }
     const handleMisDirecciones = () => {
-        setSelected("Mis Direcciones");
-        console.log(selected)
+        navigate("/user/misdirecciones");
     }
     const handleMisPedidos = () => {
-        setSelected("Mis Pedidos");
-        console.log(selected)
+        navigate("/user/mispedidos");
     }
 
     const handleEditar = () => {
-        setActivado(!activado)
+        setActivado(!activado);
+    }
+
+    const handleSurnameChange = (e) => {
+        setSurname(e.target.value)
+    }
+
+    const handleNameChange = (e) => {
+        setName(e.target.value);
+    }
+
+    const handlePhoneChange = (e) => {
+        setPhone(e.target.value);
     }
 
     const handleGuardar = () => {
+        if (name && surname && phone) {
+            handleModificarComprador(name, surname, phone);
+        }
         setActivado(!activado)
-
     }
 
-    useEffect(() => {
-        if (selected == "Datos Personales") {
-            setMostrar(`Nombre: ${nombre} |  Apellido:  ${apellido} | Email:${email}`)
-        }
-        if (selected == "Mis Direcciones") {
-            setMostrar("LAS DIRECCIONES")
-        }
-        if (selected == "Mis Pedidos") {
-            setMostrar("LOS PEDIDOS")
-        }
-    }, [selected])
+    const handleCancelar = () => {
+        setActivado(!activado);
+    }
 
     return (
         <>
@@ -75,6 +83,7 @@ export const UserInfoPage = () => {
                             sx={{ backgroundColor: "#fff", borderRadius: 2, width: 200 }}
                             name="nombre"
                             defaultValue={nombre}
+                            onChange={handleNameChange}
                         />
                     </Grid>
                     <Grid marginLeft={2} item xs={8} mb={3}>
@@ -87,6 +96,7 @@ export const UserInfoPage = () => {
                             sx={{ backgroundColor: "#fff", borderRadius: 2, width: 200 }}
                             name="apellido"
                             defaultValue={apellido}
+                            onChange={handleSurnameChange}
                         />
                     </Grid>
                     <Grid marginLeft={2} item xs={8} mb={3}>
@@ -111,6 +121,7 @@ export const UserInfoPage = () => {
                             sx={{ backgroundColor: "#fff", borderRadius: 2, width: 200 }}
                             name="nombre"
                             defaultValue={telefono}
+                            onChange={handlePhoneChange}
                         />
                     </Grid>
                     <Button
@@ -130,6 +141,9 @@ export const UserInfoPage = () => {
                     </button>
                     <button hidden={activado} onClick={handleGuardar}>
                         Guardar
+                    </button>
+                    <button hidden={activado} onClick={handleCancelar}>
+                        Cancelar
                     </button>
                 </Grid>
 

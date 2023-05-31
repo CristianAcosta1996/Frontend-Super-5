@@ -33,11 +33,10 @@ interface AddressProps {
   aclaracion: string;
 }
 
-interface ModificarUsuarioProps {
+interface ModificarCompradorProps {
   nombre: string;
   apellido: string;
   telefono: string;
-  fechaNac: Date;
 }
 
 export const super5Api = createApi({
@@ -96,6 +95,13 @@ export const super5Api = createApi({
         body,
       }),
     }),
+    modificarComprador: builder.mutation<Token, ModificarCompradorProps>({
+      query: (body) => ({
+        url: "cliente/modificarComprador",
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
@@ -107,4 +113,5 @@ export const {
   useGetSucursalesQuery,
   useGenerarCompraPaypalMutation,
   useGenerarPagoMutation,
+  useModificarCompradorMutation,
 } = super5Api;

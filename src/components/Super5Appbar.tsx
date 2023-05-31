@@ -54,7 +54,7 @@ export const Super5Appbar = () => {
   }
 
   const handleUserInfo = () => {
-    navigate("/user/userInfo")
+    navigate("/user/datospersonales")
   }
 
   return (
