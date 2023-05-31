@@ -1,5 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Producto, Sucursal, Token } from "../../interfaces/interfaces";
+import {
+  CompraDTO,
+  Producto,
+  Sucursal,
+  Token,
+} from "../../interfaces/interfaces";
 import { RootState } from "../store";
 
 interface LoginProps {
@@ -77,6 +82,20 @@ export const super5Api = createApi({
         body,
       }),
     }),
+    generarCompraPaypal: builder.mutation<CompraDTO, CompraDTO>({
+      query: (body) => ({
+        url: "paypal/crear",
+        method: "POST",
+        body,
+      }),
+    }),
+    generarPago: builder.mutation<CompraDTO | undefined, CompraDTO>({
+      query: (body) => ({
+        url: "venta/generarPago",
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
@@ -86,4 +105,6 @@ export const {
   useGetProductosPorSucursalQuery,
   useAddAddressMutation,
   useGetSucursalesQuery,
+  useGenerarCompraPaypalMutation,
+  useGenerarPagoMutation,
 } = super5Api;

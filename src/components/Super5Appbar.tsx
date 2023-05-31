@@ -22,7 +22,7 @@ import {
 import { useAuth } from "../auth/hooks/useAuth";
 import { useAppSelector } from "../hooks/hooks";
 import brandLogo from "../assets/super5Balnco2.png";
-import { CarritoDrawer } from "../compras/carrito/CarritoDrawer";
+import { CarritoDrawer } from "../compras/components/CarritoDrawer";
 import { useCarrito } from "../compras/carrito/hooks/useCarrito";
 
 export const Super5Appbar = () => {

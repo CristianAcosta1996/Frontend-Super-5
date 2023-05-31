@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
@@ -26,6 +27,16 @@ import {
   RemoveCircle,
   RemoveCircleOutline,
 } from "@mui/icons-material";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { CarritoDto, CompraDTO } from "../../interfaces/interfaces";
+import { useGenerarCompraPaypalMutation } from "../../store/super5/super5Api";
+import {
+  realizarCompraPaypal,
+  resetearCarrito,
+} from "../../store/super5/super5Slice";
+import { guardarcompraPaypal, limpiarCarrito } from "../../utils/localstorage";
+import { useEffect, useState } from "react";
+import { useCarrito } from "../carrito/hooks/useCarrito";
 
 interface CarritoDrawerProps {
   cartOpen: boolean;
@@ -37,6 +48,29 @@ export const CarritoDrawer = ({
   handleClose,
 }: CarritoDrawerProps) => {
   /* const [open, setOpen] = useState(false); */
+  const { carrito } = useAppSelector((state) => state.super5);
+  const { sucursal } = useAppSelector((state) => state.super5);
+  const [startCompraPaypal, { data }] = useGenerarCompraPaypalMutation();
+  const dispatch = useAppDispatch();
+  const { precioTotalCarrito, quitarItemDelCarrito, agregarItemAlCarrito } =
+    useCarrito();
+
+  const handlePagarCompra = (event: any): void => {
+    let arregloCompra: CarritoDto[] = [];
+    carrito.forEach(({ producto, cantidad }) => {
+      arregloCompra.push({ producto_id: +producto.id, cantidad });
+    });
+    const compra: CompraDTO = {
+      carrito: arregloCompra,
+      formaEntrega: "SUCURSAL",
+      sucursal_id: +sucursal.id,
+    };
+    startCompraPaypal(compra).then((resp: any) => {
+      dispatch(realizarCompraPaypal(resp.data));
+      guardarcompraPaypal(resp.data);
+      window.location.replace(resp.data.urlPaypal);
+    });
+  };
 
   const toggleDrawer =
     () => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -57,37 +91,53 @@ export const CarritoDrawer = ({
         <ArrowBack />
       </IconButton>
       <List>
-        {/* , "Starred", "Send email", "Drafts" */}
-        {["Inbox"].map((text, index) => (
-          <ListItem
-            key={text}
-            disablePadding
-            sx={{ backgroundColor: "red", px: 1 }}
-          >
+        {carrito.map(({ producto, cantidad }, index) => (
+          <ListItem key={producto.id} disablePadding sx={{ px: 1 }}>
             <ListItemAvatar>
-              <Avatar src={""} />
+              <Avatar src={producto.imagen} />
             </ListItemAvatar>
             <Box sx={{ display: "flex", flex: 1, gap: 1 }}>
-              <Box sx={{ flex: 1, backgroundColor: "blue" }}>Descripcion</Box>
-              <Box sx={{ backgroundColor: "orange", borderRadius: 4 }}>
-                <IconButton>
+              <Box sx={{ flex: 1 }}>
+                <Typography variant="caption">
+                  {producto.descripcion}
+                </Typography>
+              </Box>
+              <Box sx={{ borderRadius: 4 }}>
+                <IconButton
+                  onClick={() => {
+                    agregarItemAlCarrito(producto, cantidad - 1);
+                  }}
+                >
                   <RemoveCircleOutline fontSize="small" />
                 </IconButton>
                 <Typography variant="body1" component="span">
-                  0
+                  {cantidad}
                 </Typography>
-                <IconButton>
+                <IconButton
+                  onClick={() => {
+                    agregarItemAlCarrito(producto, cantidad + 1);
+                  }}
+                >
                   <AddCircleOutline fontSize="small" />
                 </IconButton>
               </Box>
-              <Box sx={{ backgroundColor: "green" }}>
-                <IconButton>
+              <Box>
+                <IconButton
+                  onClick={() => {
+                    quitarItemDelCarrito(producto);
+                  }}
+                >
                   <Delete fontSize="small" />
                 </IconButton>
               </Box>
             </Box>
           </ListItem>
         ))}
+        {carrito.length === 0 && (
+          <Typography variant="h6" textAlign="center">
+            No hay nada que mostrar en el carrito
+          </Typography>
+        )}
       </List>
       <Divider />
       <List>
@@ -99,7 +149,7 @@ export const CarritoDrawer = ({
               Precio total:
             </Typography>
             <Typography variant="h6" color="primary" component="span">
-              $0
+              ${precioTotalCarrito}
             </Typography>
           </Box>
         </ListItem>
@@ -112,8 +162,15 @@ export const CarritoDrawer = ({
           gap: 2,
         }}
       >
-        <Button>Vaciar Carrito</Button>
-        <Button>Finalizar Compra</Button>
+        <Button
+          onClick={() => {
+            limpiarCarrito();
+            dispatch(resetearCarrito());
+          }}
+        >
+          Vaciar Carrito
+        </Button>
+        <Button onClick={handlePagarCompra}>Pagar</Button>
       </Box>
     </Box>
   );
@@ -134,3 +191,4 @@ export const CarritoDrawer = ({
     </div>
   );
 };
+/* ELIMINAR TODO DEL ESTADO DE REDUX AL LOGOUT  */

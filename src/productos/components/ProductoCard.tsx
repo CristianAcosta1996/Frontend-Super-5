@@ -1,26 +1,25 @@
-import { useState } from "react";
 import {
   Box,
   Button,
   Card,
-  CardActionArea,
   CardActions,
   CardContent,
   CardMedia,
   Typography,
 } from "@mui/material";
 import { Producto } from "../../interfaces/interfaces";
+import { useProducto } from "../hooks/useProducto";
+import { useCarrito } from "../../compras/carrito/hooks/useCarrito";
 
 interface ProductoCardProps {
   producto: Producto;
 }
 
 export const ProductoCard = ({ producto }: ProductoCardProps) => {
-  const [cantidad, setCantidad] = useState<number>(0);
+  const { aumentarCantidadProducto, cantidad, reducirCantidadProducto } =
+    useProducto();
 
-  const handleAgregarItemAlCarrito = () => {
-    console.log("agregue item al carrito");
-  };
+  const { agregarItemAlCarrito } = useCarrito();
 
   return (
     <Card sx={{ maxWidth: 150 }}>
@@ -64,7 +63,7 @@ export const ProductoCard = ({ producto }: ProductoCardProps) => {
             size="small"
             onClick={() => {
               if (cantidad < 1) return;
-              setCantidad(cantidad - 1);
+              reducirCantidadProducto();
             }}
           >
             -1
@@ -75,7 +74,7 @@ export const ProductoCard = ({ producto }: ProductoCardProps) => {
           <Button
             size="small"
             onClick={() => {
-              setCantidad(cantidad + 1);
+              aumentarCantidadProducto();
             }}
           >
             +1
@@ -83,7 +82,13 @@ export const ProductoCard = ({ producto }: ProductoCardProps) => {
         </Box>
       </CardActions>
       <CardActions sx={{ paddingTop: 0 }}>
-        <Button size="small" fullWidth onClick={handleAgregarItemAlCarrito}>
+        <Button
+          size="small"
+          fullWidth
+          onClick={() => {
+            agregarItemAlCarrito(producto, cantidad);
+          }}
+        >
           Agregar
         </Button>
       </CardActions>

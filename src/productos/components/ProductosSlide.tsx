@@ -42,8 +42,12 @@ export const ProductosSlide = () => {
       navigation
       spaceBetween={10}
       slidesPerView={6}
-      onSlideChange={() => console.log("slide change")}
-      onSwiper={(swiper) => console.log(swiper)}
+      onSlideChange={() => {
+        /* console.log("slide change") */
+      }}
+      onSwiper={(swiper) => {
+        /* console.log(swiper) */
+      }}
     >
       {productos?.map((producto, index) => (
         <SwiperSlide
