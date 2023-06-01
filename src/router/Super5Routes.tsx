@@ -10,9 +10,9 @@ export const Super5Routes = () => {
     <>
       {!sucursal.nombre && <SelectorSucursales openDialog={true} />}
       <Routes>
-        <Route path="user/*" element={<RoutesUsuarios />} />
         <Route path="sucursal/*" element={<DashboardSucursalesPage />} />
-        <Route path="/*" element={<Navigate to="user" />} />
+        {/* <Route path="/*" element={<Navigate to="user" />} /> */}
+        <Route path="/*" element={<RoutesUsuarios />} />
       </Routes>
     </>
   );

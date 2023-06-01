@@ -47,17 +47,6 @@ export const useAuth = () => {
     apellido: string,
     phone: string
   ) => {
-    /* const resp = await startRegistrarUsuario({
-      nombre,
-      correo: email,
-      usuario: username,
-      contrasenia: password,
-      apellido,
-      telefono: phone,
-      bloqueado: 0,
-      eliminado: 0,
-      rol: 1,
-    }); */
     startRegistrarUsuario({
       nombre,
       correo: email,
@@ -69,7 +58,11 @@ export const useAuth = () => {
       eliminado: 0,
       rol: 1,
     })
-      .then((resp) => {})
+      .then((resp: any) => {
+        alert(`USUARIO REGISTRADO CORRECTAMENTE`);
+        console.log(resp);
+        dispatch(startEmailAndPasswordLogin(resp.data));
+      })
       .catch(console.log);
   };
 

@@ -33,6 +33,7 @@ export const LoginPage = () => {
     if (!username || !password) return;
 
     handleLogin(username, password);
+    navigate("/");
     reset();
   };
 

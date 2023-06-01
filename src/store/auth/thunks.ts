@@ -24,6 +24,7 @@ export const startEmailAndPasswordLogin = (
         token,
         uid: decoded?.uid,
         imageUrl: decoded?.imagenUrl,
+        telefono: decoded?.telefono,
       })
     );
   };
@@ -61,6 +62,7 @@ export const startGoogleSignIn = (): ThunkAction<
         uid: result.uid,
         token: null,
         googleUser: true,
+        telefono: null,
       })
     );
   };
@@ -81,16 +83,11 @@ export const startLogout = (): ThunkAction<
 };
 /* 
 export const startRegistrarUsuario = ({
-  username,
-  password,
-  email,
-  nombre,
-  apellido,
-  phone,
-  fechaNacimiento,
+  token,
 }): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch) => {
     dispatch(checkingCredentials());
+    startEmailAndPasswordLogin(token);
   };
 };
  */

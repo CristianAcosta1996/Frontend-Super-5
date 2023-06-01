@@ -4,6 +4,9 @@ import { ProfilePage } from "../pages/ProfilePage";
 import { HomePage } from "../../pages/HomePage";
 import { ComprasRoutes } from "../../compras/routes/ComprasRoutes";
 import { Super5Appbar } from "../../components/Super5Appbar";
+import { DatosPersonales } from "../pages/DatosPersonales";
+import { MisDirecciones } from "../pages/MisDirecciones";
+import { MisPedidos } from "../pages/MisPedidos";
 
 export const RoutesUsuarios = () => {
   return (
@@ -12,8 +15,11 @@ export const RoutesUsuarios = () => {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="compra/*" element={<ComprasRoutes />} />
-        <Route path="profile" element={<ProfilePage />} />
-        <Route path="address" element={<AddressPage />} />
+        <Route path="user/profile" element={<ProfilePage />} />
+        <Route path="user/address" element={<AddressPage />} />
+        <Route path="user/datospersonales" element={<DatosPersonales />} />
+        <Route path="user/misdirecciones" element={<MisDirecciones />} />
+        <Route path="user/mispedidos" element={<MisPedidos />} />
         <Route path="/*" element={<Navigate replace to="/" />} />
       </Routes>
     </>

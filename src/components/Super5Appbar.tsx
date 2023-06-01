@@ -14,6 +14,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import {
   Edit,
+  Home,
   LocationOnOutlined,
   Logout,
   ShoppingCart,
@@ -49,6 +50,13 @@ export const Super5Appbar = () => {
   const handleProfile = () => {
     navigate("/user/profile");
   };
+  const handleDireccion = () => {
+    navigate("/user/address");
+  };
+
+  const handleUserInfo = () => {
+    navigate("/user/datospersonales");
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -63,6 +71,11 @@ export const Super5Appbar = () => {
           <Box sx={{ flexGrow: 1 }}>
             <Avatar variant="square" src={brandLogo} sx={{ width: 120 }} />
           </Box>
+          <Tooltip title="Inicio">
+            <IconButton onClick={() => navigate("/")} color="inherit">
+              <Home />
+            </IconButton>
+          </Tooltip>
           {status === "authenticated" ? (
             <Box>
               <IconButton
@@ -90,8 +103,9 @@ export const Super5Appbar = () => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleProfile}>Perfil</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={handleProfile}>Datos Personales</MenuItem>
+                <MenuItem onClick={handleDireccion}>Agregar direccion</MenuItem>
+                <MenuItem onClick={handleUserInfo}>User Info</MenuItem>
               </Menu>
               <Tooltip title="cerrar sesion">
                 <IconButton color="inherit" onClick={() => handleLogout()}>

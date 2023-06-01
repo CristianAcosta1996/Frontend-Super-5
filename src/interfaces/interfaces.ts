@@ -3,6 +3,7 @@ export interface Token {
   nombre: string;
   apellido: string;
   correo: string;
+  telefono: string;
   imagenUrl: string;
   usuario: string;
   uid: string;
