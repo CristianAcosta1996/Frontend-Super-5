@@ -19,7 +19,7 @@ const initialStateForm = {
 export const SignUpPage = () => {
   const [isFirstStep, setIsFirstStep] = useState<boolean>(true);
   const navigate = useNavigate();
-  const { handleRegistrarUsuario } = useAuth();
+  const { handleRegistrarUsuario, handleLogin } = useAuth();
   /* react query: custom hook mutation*/
 
   const {
@@ -37,7 +37,7 @@ export const SignUpPage = () => {
   const handleFormSubmit = (event: SyntheticEvent): void => {
     event.preventDefault();
     //checkear que datos son obligatorios
-    if (!email || !password || !name || !surname) return;
+    if (!email || !password || !name || !surname || !username || !phone) return;
 
     handleRegistrarUsuario(username, password, email, name, surname, phone);
     reset();

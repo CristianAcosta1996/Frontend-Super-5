@@ -21,7 +21,7 @@ export const useAddress = () => {
             latitud,
             aclaracion
         });
-        console.log(resp);
+        if (resp) alert(`${direccion} CORRECTAMENTE AGREGADO A MIS DIRECCIONES`)
     };
 
     return { handleAddAddress }

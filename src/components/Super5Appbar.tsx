@@ -6,7 +6,7 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import MenuItem from "@mui/material/MenuItem";
-import { Avatar, Button, Typography } from "@mui/material";
+import { Avatar, Button, Tooltip, Typography } from "@mui/material";
 import Menu from "@mui/material/Menu";
 import IconButton from "@mui/material/IconButton";
 
@@ -14,6 +14,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import {
   Edit,
+  Home,
   LocationOnOutlined,
   Logout,
   ShoppingCart,
@@ -49,19 +50,32 @@ export const Super5Appbar = () => {
   const handleProfile = () => {
     navigate("/user/profile");
   };
+  const handleDireccion = () => {
+    navigate("/user/address");
+  };
+
+  const handleUserInfo = () => {
+    navigate("/user/datospersonales");
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar variant="dense">
-          <Button color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-            <MenuIcon fontSize="small" />
-            <Typography variant="caption">Categorias</Typography>
-          </Button>
+          <Tooltip title="Categorias">
+            <IconButton color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+              <MenuIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
 
           <Box sx={{ flexGrow: 1 }}>
             <Avatar variant="square" src={brandLogo} sx={{ width: 120 }} />
           </Box>
+          <Tooltip title="Inicio">
+            <IconButton onClick={() => navigate("/")} color="inherit">
+              <Home />
+            </IconButton>
+          </Tooltip>
           {status === "authenticated" ? (
             <Box>
               <IconButton
@@ -89,12 +103,15 @@ export const Super5Appbar = () => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleProfile}>Perfil</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={handleProfile}>Datos Personales</MenuItem>
+                <MenuItem onClick={handleDireccion}>Agregar direccion</MenuItem>
+                <MenuItem onClick={handleUserInfo}>User Info</MenuItem>
               </Menu>
-              <IconButton color="inherit" onClick={() => handleLogout()}>
-                <Logout fontSize="small" />
-              </IconButton>
+              <Tooltip title="cerrar sesion">
+                <IconButton color="inherit" onClick={() => handleLogout()}>
+                  <Logout fontSize="small" />
+                </IconButton>
+              </Tooltip>
             </Box>
           ) : (
             <Button

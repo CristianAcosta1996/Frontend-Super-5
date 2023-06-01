@@ -1,6 +1,11 @@
 import { AnyAction, ThunkAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { CarritoItem, CompraDTO, Producto } from "../../interfaces/interfaces";
+import {
+  CarritoItem,
+  CompraDTO,
+  Producto,
+  Sucursal,
+} from "../../interfaces/interfaces";
 import {
   quitarProductosAlCarrito,
   resetearCarrito,
@@ -11,7 +16,9 @@ import {
   guardarCarrito,
   limpiarCarrito as limpiarCarritoStorage,
   guardarcompraPaypal,
+  guardarSucursal,
 } from "../../utils/localstorage";
+import { agregarSucursal } from "./super5Slice";
 
 export const quitarProductoDelCarrito = (
   producto: Producto
@@ -52,5 +59,14 @@ export const realizarCompraPaypal = ({
     dispatch(realizarCompraPaypalSlice(compra));
     guardarcompraPaypal(compra);
     window.location.replace(compra.urlPaypal || "");
+  };
+};
+
+export const startAgregarSucursal = (
+  sucursal: Sucursal
+): ThunkAction<void, RootState, unknown, AnyAction> => {
+  return async (dispatch) => {
+    dispatch(agregarSucursal(sucursal));
+    guardarSucursal(sucursal);
   };
 };

@@ -1,10 +1,10 @@
-import { useMemo } from "react";
-import { GoogleMap, useLoadScript, MarkerF } from "@react-google-maps/api";
-import { useState } from "react";
+import { GoogleMap, useLoadScript, MarkerF, Data } from "@react-google-maps/api";
+import { useEffect, useState } from "react";
 import usePlacesAutocomplete from "use-places-autocomplete";
 import Autocomplete from '@mui/material/Autocomplete';
 import { TextField } from "@mui/material";
 import { useAddress } from "../hooks/useAddress";
+import { useGetSucursalesQuery } from "../../store/super5/super5Api";
 
 export default function AddressPage() {
     const [libraries] = useState(['places']);
@@ -15,30 +15,51 @@ export default function AddressPage() {
 }
 
 function Map() {
-    const first_center = useMemo(() => ({ lat: -34.8947415062631, lng: -56.16628964887531 }), []);
     const [selected, setSelected] = useState({ lat: -34.8947415062631, lng: -56.16628964887531 });
     const [direccion, setDireccion] = useState("");
     const [previous_place, setPrevious_place] = useState("");
     const [aclaraciones, setAclaraciones] = useState("");
     const [latLong, setLatLong] = useState({ lat: 0, lng: 0 })
     const { handleAddAddress } = useAddress();
-
+    const [firstPin, setFirstPin] = useState(false)
     const [ciudad, setCiudad] = useState("");
     const [departamento, setDepartamento] = useState("");
 
-    const addMarker = ({ latLng }) => {
-        console.log("LATLNG", latLng);
+    const { data: sucursales } = useGetSucursalesQuery();
 
+    const [sucursal1, setSucursal1] = useState({ lat: 0, lng: 0 })
+    const [sucursal2, setSucursal2] = useState({ lat: 0, lng: 0 })
+    const [sucursal3, setSucursal3] = useState({ lat: 0, lng: 0 })
+    const [sucursal4, setSucursal4] = useState({ lat: 0, lng: 0 })
+    const [sucursal1name, setSucursal1name] = useState("")
+    const [sucursal2name, setSucursal2name] = useState("")
+    const [sucursal3name, setSucursal3name] = useState("")
+    const [sucursal4name, setSucursal4name] = useState("")
+
+    useEffect(() => {
+        if (sucursales) {
+            setSucursal1({ lat: +sucursales[0].direccion.latitud, lng: +sucursales[0].direccion.longitud });
+            setSucursal1name(sucursales[0].nombre)
+            setSucursal2({ lat: +sucursales[1].direccion.latitud, lng: +sucursales[1].direccion.longitud });
+            setSucursal2name(sucursales[1].nombre)
+            setSucursal3({ lat: +sucursales[2].direccion.latitud, lng: +sucursales[2].direccion.longitud });
+            setSucursal3name(sucursales[2].nombre)
+            setSucursal4({ lat: +sucursales[3].direccion.latitud, lng: +sucursales[3].direccion.longitud });
+            setSucursal4name(sucursales[3].nombre)
+        }
+    }, [sucursales]);
+
+
+    const addMarker = ({ latLng }) => {
+        setFirstPin(true)
         //tomo lat y lng del lugar del evento (click)
         const newMarker = { lat: latLng.lat(), lng: latLng.lng() };
-        console.log("NEWMARKER ", newMarker);
         //paso la latitud y longitud de la marca en el mapa y se los mando a la api para obtener la direccion
         fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${newMarker.lat},${newMarker.lng}&key=AIzaSyB8FiaESvpDDrcOkwW07BVr5Z-rdumVSds`)
             .then(res => res.json())
             .then(data => {
                 //guardamos en direccion la direccion seleccionada en el mapa
                 setPrevious_place(direccion)
-                console.log(data)
                 setDireccion(data.results[0].formatted_address)
                 setCiudad(data.results[0].address_components[2].long_name)
                 setDepartamento(data.results[0].address_components[4].long_name)
@@ -49,8 +70,8 @@ function Map() {
     };
 
     const saveDirection = () => {
-        console.log(direccion, ciudad, departamento, latLong.lng.toString(), latLong.lat.toString(), aclaraciones)
         handleAddAddress(direccion, ciudad, departamento, latLong.lng.toString(), latLong.lat.toString(), aclaraciones)
+
     }
 
     return (
@@ -65,10 +86,14 @@ function Map() {
                 clickableIcons={false}
                 // onCenterChanged={} PARA AGREGAR CARGA
                 onClick={addMarker}
-                zoom={14}
-                center={selected ? selected : first_center}
-                mapContainerStyle={{ width: 800, height: 500 }}>
-                {selected && <MarkerF position={selected} />}
+                zoom={13}
+                center={selected}
+                mapContainerStyle={{ width: 800, height: 400 }}>
+                {selected && <MarkerF position={selected} visible={firstPin} />}
+                {<MarkerF position={sucursal1} label={sucursal1name} />}
+                {<MarkerF position={sucursal2} label={sucursal2name} />}
+                {<MarkerF position={sucursal3} label={sucursal3name} />}
+                {<MarkerF position={sucursal4} label={sucursal4name} />}
             </GoogleMap>
             <div >
                 <PlacesAutocomplete setLatLong={setLatLong} setCiudad={setCiudad} setDepartamento={setDepartamento} previous_place={previous_place} setPrevious_place={setPrevious_place} setDireccion={setDireccion} direccion={direccion} setSelected={setSelected} />
@@ -114,7 +139,6 @@ const PlacesAutocomplete = ({ setLatLong, setCiudad, setDepartamento, setSelecte
                     setDireccion(data.results[0].formatted_address)
                     setCiudad(data.results[0].address_components[2].long_name)
                     setDepartamento(data.results[0].address_components[4].long_name)
-                    console.log("ESTO ES LATLGN ", latLng)
                     setLatLong(latLng)
                     setSelected(latLng)
                 })

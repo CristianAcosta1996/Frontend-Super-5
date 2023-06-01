@@ -6,12 +6,11 @@ import {
   Button,
   Box,
 } from "@mui/material";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useAppDispatch } from "../../hooks/hooks";
-import { agregarSucursal } from "../../store/super5/super5Slice";
-import { guardarSucursal } from "../../utils/localstorage";
 import { Sucursal } from "../../interfaces/interfaces";
 import { useGetSucursalesQuery } from "../../store/super5/super5Api";
+import { startAgregarSucursal } from "../../store/super5/thunks";
 
 interface SelectorSucursalesProps {
   openDialog: boolean;
@@ -26,18 +25,7 @@ export const SelectorSucursales = ({ openDialog }: SelectorSucursalesProps) => {
   const handleOnClose = (sucursal: Sucursal) => {
     setOpen(false);
     setSucursalSeleccionada(sucursal);
-    dispatch(
-      agregarSucursal({
-        nombre: sucursal.nombre,
-        direccion: sucursal.direccion,
-        id: sucursal.id,
-      })
-    );
-    guardarSucursal({
-      nombre: sucursal.nombre,
-      direccion: sucursal.direccion,
-      id: sucursal.id,
-    });
+    dispatch(startAgregarSucursal(sucursal));
   };
 
   return (

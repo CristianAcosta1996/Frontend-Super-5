@@ -24,10 +24,6 @@ export const getToken = () => {
 
 export const setToken = (token: string) => {
   window.localStorage.setItem("token", JSON.stringify(token));
-  return {
-    getToken,
-    setToken,
-  };
 };
 
 export const limpiarStorage = () => {
