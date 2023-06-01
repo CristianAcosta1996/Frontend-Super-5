@@ -6,7 +6,7 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import MenuItem from "@mui/material/MenuItem";
-import { Avatar, Button, Typography } from "@mui/material";
+import { Avatar, Button, Tooltip, Typography } from "@mui/material";
 import Menu from "@mui/material/Menu";
 import IconButton from "@mui/material/IconButton";
 
@@ -54,10 +54,11 @@ export const Super5Appbar = () => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar variant="dense">
-          <Button color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-            <MenuIcon fontSize="small" />
-            <Typography variant="caption">Categorias</Typography>
-          </Button>
+          <Tooltip title="Categorias">
+            <IconButton color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+              <MenuIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
 
           <Box sx={{ flexGrow: 1 }}>
             <Avatar variant="square" src={brandLogo} sx={{ width: 120 }} />
@@ -92,9 +93,11 @@ export const Super5Appbar = () => {
                 <MenuItem onClick={handleProfile}>Perfil</MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
               </Menu>
-              <IconButton color="inherit" onClick={() => handleLogout()}>
-                <Logout fontSize="small" />
-              </IconButton>
+              <Tooltip title="cerrar sesion">
+                <IconButton color="inherit" onClick={() => handleLogout()}>
+                  <Logout fontSize="small" />
+                </IconButton>
+              </Tooltip>
             </Box>
           ) : (
             <Button

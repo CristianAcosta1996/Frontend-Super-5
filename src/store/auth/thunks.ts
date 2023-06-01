@@ -79,8 +79,7 @@ export const startLogout = (): ThunkAction<
     /* llamar a logout y eliminar la info de localstorage */
   };
 };
-
-/*
+/* 
 export const startRegistrarUsuario = ({
   username,
   password,
@@ -92,7 +91,6 @@ export const startRegistrarUsuario = ({
 }): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch) => {
     dispatch(checkingCredentials());
-   
   };
 };
-*/
+ */
