@@ -27,7 +27,7 @@ export interface Sucursal {
 }
 
 export interface Categoria {
-  id: number;
+  id: string;
   nombre: string;
 }
 

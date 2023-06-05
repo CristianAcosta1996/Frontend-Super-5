@@ -11,10 +11,14 @@ export const useProductos = () => {
   const { isLoading: isLoadingCategorias, data: categorias } =
     useGetCategoriasQuery();
 
+  const obtenerProductoPorCategoria = (categoriaId: string) => {
+    const prodPorCategoria = productos?.filter(producto => producto.categoriaId === +categoriaId);
+    return prodPorCategoria
+  }
   const getProductosCompletos = () => {
     const productosCompletos = productos?.map((producto) => {
       const getNombreCategoria = categorias?.find(
-        (categoria) => categoria.id === producto.categoriaId
+        (categoria) => +categoria.id === producto.categoriaId
       )?.nombre;
       return {
         ...producto,
@@ -40,5 +44,6 @@ export const useProductos = () => {
     categorias,
     isLoadingCategorias,
     getProductosCompletos,
+    obtenerProductoPorCategoria,
   };
 };

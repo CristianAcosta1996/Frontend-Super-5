@@ -120,7 +120,7 @@ export const super5Api = createApi({
       }),
     }),
   }),
-});
+})
 
 export const {
   useLoginMutation,

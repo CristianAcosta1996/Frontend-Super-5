@@ -16,8 +16,10 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 
 import { ProductosSlide } from "../productos/components/ProductosSlide";
+import { useGetCategoriasQuery } from "../store/super5/super5Api";
 
 export const HomePage = () => {
+  const { data: categorias } = useGetCategoriasQuery()
   return (
     <Box>
       <Grid container paddingBottom={2}>
@@ -26,7 +28,8 @@ export const HomePage = () => {
         </Grid>
         <Grid item xs={0} sm={1} />
         <Grid item xs={12} mt={1} sm={10}>
-          <ProductosSlide />
+          {categorias?.map((categoria) => <ProductosSlide key={categoria.id} categoria={categoria} />)}
+
         </Grid>
         <Grid item xs={0} sm={1} />
       </Grid>
