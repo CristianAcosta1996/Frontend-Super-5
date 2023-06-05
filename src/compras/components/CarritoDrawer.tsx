@@ -181,7 +181,6 @@ export const CarritoDrawer = ({
         anchor="right"
         open={cartOpen}
         onClose={(event, reason) => {
-          console.log(event, reason);
           return;
           toggleDrawer();
         }}

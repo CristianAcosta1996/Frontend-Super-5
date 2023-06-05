@@ -5,8 +5,8 @@ import { useProductos } from "../hooks/useProductos";
 import { CircularProgress, Container } from "@mui/material";
 
 export const ProductosSlide = () => {
-  const { isLoading, productos } = useProductos();
-  if (isLoading)
+  const { isLoadingProductos, productos } = useProductos();
+  if (isLoadingProductos)
     return (
       <Container sx={{ display: "flex", justifyContent: "center" }}>
         <CircularProgress />
@@ -42,12 +42,8 @@ export const ProductosSlide = () => {
       navigation
       spaceBetween={10}
       slidesPerView={6}
-      onSlideChange={() => {
-        /* console.log("slide change") */
-      }}
-      onSwiper={(swiper) => {
-        /* console.log(swiper) */
-      }}
+      onSlideChange={() => {}}
+      onSwiper={(swiper) => {}}
     >
       {productos?.map((producto, index) => (
         <SwiperSlide
