@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
+  Categoria,
   CompraDTO,
   Producto,
   Sucursal,
@@ -102,6 +103,9 @@ export const super5Api = createApi({
         body,
       }),
     }),
+    getCategorias: builder.query<Categoria[], void>({
+      query: () => "producto/listarCategorias",
+    }),
   }),
 });
 
@@ -114,4 +118,5 @@ export const {
   useGenerarCompraPaypalMutation,
   useGenerarPagoMutation,
   useModificarCompradorMutation,
+  useGetCategoriasQuery,
 } = super5Api;

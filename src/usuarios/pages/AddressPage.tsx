@@ -88,12 +88,12 @@ function Map() {
                 onClick={addMarker}
                 zoom={13}
                 center={selected}
-                mapContainerStyle={{ width: 800, height: 400 }}>
+                mapContainerStyle={{ width: 1400, height: 400 }}>
                 {selected && <MarkerF position={selected} visible={firstPin} />}
-                {<MarkerF position={sucursal1} label={sucursal1name} />}
-                {<MarkerF position={sucursal2} label={sucursal2name} />}
-                {<MarkerF position={sucursal3} label={sucursal3name} />}
-                {<MarkerF position={sucursal4} label={sucursal4name} />}
+                {<MarkerF position={sucursal1} label={sucursal1name} icon={"https://cdn.discordapp.com/attachments/1086451309487587421/1113673314997645333/super5markerWhite42.png"} />}
+                {<MarkerF position={sucursal2} label={sucursal2name} icon={"https://cdn.discordapp.com/attachments/1086451309487587421/1113673314997645333/super5markerWhite42.png"} />}
+                {<MarkerF position={sucursal3} label={sucursal3name} icon={"https://cdn.discordapp.com/attachments/1086451309487587421/1113673314997645333/super5markerWhite42.png"} />}
+                {<MarkerF position={sucursal4} label={sucursal4name} icon={"https://cdn.discordapp.com/attachments/1086451309487587421/1113673314997645333/super5markerWhite42.png"} />}
             </GoogleMap>
             <div >
                 <PlacesAutocomplete setLatLong={setLatLong} setCiudad={setCiudad} setDepartamento={setDepartamento} previous_place={previous_place} setPrevious_place={setPrevious_place} setDireccion={setDireccion} direccion={direccion} setSelected={setSelected} />

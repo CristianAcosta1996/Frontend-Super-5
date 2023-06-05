@@ -25,6 +25,12 @@ export interface Sucursal {
   nombre: string;
   direccion: Direccion;
 }
+
+export interface Categoria {
+  id: string;
+  nombre: string;
+}
+
 export interface Producto {
   id: string;
   nombre: string;

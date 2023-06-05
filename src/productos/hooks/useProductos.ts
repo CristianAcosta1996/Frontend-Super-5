@@ -8,5 +8,10 @@ export const useProductos = () => {
     sucursal.id
   );
 
-  return { isLoading, productos };
+  const obtenerProductoPorCategoria = (categoriaId: string) => {
+    const prodPorCategoria = productos?.filter(producto => producto.categoriaId === +categoriaId);
+    return prodPorCategoria
+  }
+
+  return { isLoading, productos, obtenerProductoPorCategoria };
 };
