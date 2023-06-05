@@ -1,5 +1,6 @@
 import { SyntheticEvent, useEffect, useState } from "react";
 import {
+  Alert,
   Box,
   Button,
   Grid,
@@ -22,7 +23,14 @@ const initialStateForm = {
 };
 
 export const LoginPage = () => {
-  const { handleGoogleLogin, handleLogin, isAuthenticatingLogin } = useAuth();
+  const {
+    handleGoogleLogin,
+    handleLogin,
+    isAuthenticatingLogin,
+    isErrorLogin,
+    errorLogin,
+    isSuccessLogin,
+  } = useAuth();
   const navigate = useNavigate();
 
   const { username, password, handleInputChange, reset } =
@@ -31,9 +39,7 @@ export const LoginPage = () => {
   const handleFormSubmit = async (event: SyntheticEvent) => {
     event.preventDefault();
     if (!username || !password) return;
-
     handleLogin(username, password);
-    navigate("/");
     reset();
   };
 
@@ -140,6 +146,25 @@ export const LoginPage = () => {
           </Grid>
         </Grid>
       </form>
+      {isErrorLogin && (
+        <Alert
+          variant="filled"
+          severity="error"
+          className="animate__animated animate__fadeIn"
+        >
+          {errorLogin && "status" in errorLogin && errorLogin.status}: Algo
+          salio mal
+        </Alert>
+      )}
+      {isSuccessLogin && (
+        <Alert
+          variant="filled"
+          severity="success"
+          className="animate__animated animate__fadeIn"
+        >
+          Login exitoso!.
+        </Alert>
+      )}
       {isAuthenticatingLogin && (
         <Box
           sx={{

@@ -40,6 +40,11 @@ interface ModificarCompradorProps {
   telefono: string;
 }
 
+interface ModificarStockProps {
+  productoId: number;
+  cantidad: number;
+}
+
 export const super5Api = createApi({
   reducerPath: "super5Api",
   baseQuery: fetchBaseQuery({
@@ -54,15 +59,16 @@ export const super5Api = createApi({
       return headers;
     },
   }),
+
   endpoints: (builder) => ({
-    login: builder.mutation<Token, LoginProps>({
+    login: builder.mutation<string, LoginProps>({
       query: (body) => ({
         url: "auth/login",
         method: "POST",
         body,
       }),
     }),
-    signup: builder.mutation<Token, SignupProps>({
+    signup: builder.mutation<string, SignupProps>({
       query: (body) => ({
         url: "cliente/crear",
         method: "POST",
@@ -71,6 +77,9 @@ export const super5Api = createApi({
     }),
     getProductosPorSucursal: builder.query<Producto[], string>({
       query: (id) => `producto/obtenerPorSucursal/${id}`,
+    }),
+    getCategorias: builder.query<Categoria[], void>({
+      query: () => "producto/listarCategorias",
     }),
     getSucursales: builder.query<Sucursal[], void>({
       query: () => "sucursal/obtener",
@@ -103,20 +112,26 @@ export const super5Api = createApi({
         body,
       }),
     }),
-    getCategorias: builder.query<Categoria[], void>({
-      query: () => "producto/listarCategorias",
+    modificarStock: builder.mutation<string, ModificarStockProps>({
+      query: (body) => ({
+        url: "producto/modificarStock",
+        method: "POST",
+        body,
+      }),
     }),
   }),
-});
+})
 
 export const {
   useLoginMutation,
   useSignupMutation,
   useGetProductosPorSucursalQuery,
+  useLazyGetProductosPorSucursalQuery,
   useAddAddressMutation,
   useGetSucursalesQuery,
   useGenerarCompraPaypalMutation,
   useGenerarPagoMutation,
   useModificarCompradorMutation,
   useGetCategoriasQuery,
+  useModificarStockMutation,
 } = super5Api;

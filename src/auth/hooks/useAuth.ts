@@ -14,12 +14,26 @@ export const useAuth = () => {
 
   const [
     startLogin,
-    { isLoading: isAuthenticatingLogin, status: statusLogin },
+    {
+      isLoading: isAuthenticatingLogin,
+      status: statusLogin,
+      error: errorLogin,
+      isError: isErrorLogin,
+      isSuccess: isSuccessLogin,
+      data: dataLogin,
+    },
   ] = useLoginMutation();
 
   const [
     startRegistrarUsuario,
-    { isLoading: isAuthenticatingRegistro, status: statusRegistro },
+    {
+      isLoading: isAuthenticatingRegistro,
+      status: statusRegistro,
+      error: errorSignup,
+      isError: isErrorSignup,
+      isSuccess: isSuccessSignup,
+      data: dataSignup,
+    },
   ] = useSignupMutation();
 
   const handleLogout = () => {
@@ -27,12 +41,20 @@ export const useAuth = () => {
   };
 
   const handleLogin = async (email: string, password: string) => {
-    const resp: any = await startLogin({
+    startLogin({
       usuarioOCorreo: email,
       contrasenia: password,
-    });
-    const token: string = resp.data.token;
-    dispatch(startEmailAndPasswordLogin(token));
+    })
+      .unwrap()
+      .then((resp) => {
+        setTimeout(() => {
+          const token: string = resp;
+          dispatch(startEmailAndPasswordLogin(token));
+        }, 3000);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const handleGoogleLogin = () => {
@@ -58,14 +80,17 @@ export const useAuth = () => {
       eliminado: 0,
       rol: 1,
     })
-      .then((resp: any) => {
-        alert(`USUARIO REGISTRADO CORRECTAMENTE`);
-        console.log(resp);
-        dispatch(startEmailAndPasswordLogin(resp.data));
+      .unwrap()
+      .then((resp) => {
+        setTimeout(() => {
+          const token: string = resp;
+          dispatch(startEmailAndPasswordLogin(token));
+        }, 3000);
       })
-      .catch(console.log);
+      .catch((error) => {
+        console.error(error);
+      });
   };
-
   return {
     handleRegistrarUsuario,
     handleLogin,
@@ -75,5 +100,13 @@ export const useAuth = () => {
     statusLogin,
     isAuthenticatingRegistro,
     statusRegistro,
+    isErrorLogin,
+    errorLogin,
+    isSuccessLogin,
+    isErrorSignup,
+    errorSignup,
+    isSuccessSignup,
+    dataLogin,
+    dataSignup,
   };
 };

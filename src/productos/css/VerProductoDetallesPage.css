@@ -1,0 +1,6 @@
+.MuiFormHelperText-root {
+  color: rgb(190, 24, 24) !important;
+  position: absolute;
+  top: 90%;
+  right: 0;
+}

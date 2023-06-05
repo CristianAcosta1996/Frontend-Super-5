@@ -5,11 +5,15 @@ export const useProductosActions = () => {
   const navigate = useNavigate();
 
   const handleOnVerDetalles = (producto: Producto): void => {
-    navigate(`/sucursal/producto/${producto.id}`, { state: producto });
+    navigate(`/sucursal/producto/${producto.id}`, {
+      state: { producto, editable: false },
+    });
   };
 
-  const handleOnModificar = (): void => {
-    console.log("handle modificar");
+  const handleOnModificar = (producto: Producto): void => {
+    navigate(`/sucursal/producto/${producto.id}`, {
+      state: { producto, editable: true },
+    });
   };
 
   const handleOnEliminar = (): void => {

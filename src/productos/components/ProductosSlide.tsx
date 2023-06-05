@@ -4,14 +4,14 @@ import { ProductoCard } from "./ProductoCard";
 import { useProductos } from "../hooks/useProductos";
 import { CircularProgress, Container } from "@mui/material";
 import { Categoria } from "../../interfaces/interfaces";
-import { useGetCategoriasQuery } from "../../store/super5/super5Api";
 
 export const ProductosSlide = ({ categoria }: { categoria: Categoria }) => {
 
-  const { isLoading, obtenerProductoPorCategoria } = useProductos();
+  const { isLoadingProductos, obtenerProductoPorCategoria } = useProductos();
+
   const prodPorCategoria = obtenerProductoPorCategoria(categoria.id)
 
-  if (isLoading)
+  if (isLoadingProductos)
     return (
       <Container sx={{ display: "flex", justifyContent: "center" }}>
         <CircularProgress />

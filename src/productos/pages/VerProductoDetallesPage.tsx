@@ -1,28 +1,56 @@
-import { Avatar, Box, Grid, IconButton, Typography } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
-import { Producto } from "../../interfaces/interfaces";
-import { ArrowBack } from "@mui/icons-material";
+import {
+  Avatar,
+  Box,
+  CircularProgress,
+  Grid,
+  IconButton,
+  TextField,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+
+import { ArrowBack, Check, Clear } from "@mui/icons-material";
+import { ChangeEvent, useState } from "react";
+import "../css/VerProductoDetallesPage.css";
+import { useVerProductoDetalles } from "../hooks/useVerProductoDetalles";
 
 export const VerProductoDetallesPage = () => {
-  const location = useLocation();
-  const producto: Producto = location.state;
-  const navigate = useNavigate();
+  const { editable, goBack, producto, isLoading, data, modificarStock } =
+    useVerProductoDetalles();
+  const [value, setValue] = useState("");
+
+  if (isLoading)
+    return (
+      <Box
+        sx={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+
   return (
     <Box
       className="animate__animated animate__fadeInLeft"
       sx={{
-        height: "100%",
+        minHeight: "95vh",
         width: "100%",
         boxShadow: "1px 7px 13px -2px rgba(0,0,0,0.39);",
         borderRadius: 1,
         backgroundColor: "#333",
         p: 1,
+        position: "relative",
       }}
     >
       <IconButton
         sx={{ color: "#fff" }}
         onClick={() => {
-          navigate("/sucursal/producto");
+          goBack();
         }}
       >
         <ArrowBack />
@@ -58,34 +86,44 @@ export const VerProductoDetallesPage = () => {
                 height="100%"
                 display="flex"
                 flexDirection="column"
-                justifyContent="space-around"
+                justifyContent={!editable ? "space-around" : "space-between"}
               >
-                <Typography variant="h5" ml={2} sx={{ color: "#fff" }}>
-                  <span style={{ color: "#ff0056" }}>Nombre: </span>
-                  {producto.nombre}
-                </Typography>
-                <Typography variant="h5" ml={2} sx={{ color: "#fff" }}>
-                  <span style={{ color: "#ff0056" }}>Categoria: </span>
-                  {producto.categoriaId}
-                </Typography>
-                <Typography variant="h5" ml={2} sx={{ color: "#fff" }}>
-                  <span style={{ color: "#ff0056" }}>Disponible: </span>
-                  {producto.eliminado ? "No" : "Si"}
-                </Typography>
-                <Typography variant="h5" ml={2} sx={{ color: "#fff" }}>
-                  <span style={{ color: "#ff0056" }}>Stock: </span>
-                  {producto.stock} unidades
-                </Typography>
-                <Typography variant="h5" ml={2} sx={{ color: "#fff" }}>
-                  <span style={{ color: "#ff0056" }}> Precio: </span>$
-                  {producto.precio}
-                </Typography>
-                <Typography variant="h5" ml={2} sx={{ color: "#fff" }}>
-                  Precio descuento: {producto.precioDescuento || "No tiene"}
-                </Typography>
-                <Typography variant="h5" ml={2} sx={{ color: "#fff" }}>
-                  Aplica descuento: {producto.aplicaDescuento || "No tiene"}
-                </Typography>
+                <ProductDetail
+                  title="Nombre:"
+                  productDetail={producto.nombre}
+                />
+                <ProductDetail
+                  title="Categoria:"
+                  productDetail={producto.categoriaId}
+                />
+                <ProductDetail
+                  title="Disponible:"
+                  productDetail={producto.eliminado ? "No" : "Si"}
+                />
+                <Box>
+                  <ProductDetail
+                    title="Stock:"
+                    productDetail={`${producto.stock} unidades`}
+                    editable={editable}
+                    unidad="Unidades"
+                    productDetailInput={value}
+                    modificarProductDetailInput={(event) => {
+                      setValue(event.target.value);
+                    }}
+                  />
+                </Box>
+                <ProductDetail
+                  title="Precio:"
+                  productDetail={producto.precio}
+                />
+                <ProductDetail
+                  title="Precio descuento:"
+                  productDetail={producto.precioDescuento || "No tiene"}
+                />
+                <ProductDetail
+                  title="Aplica descuento:"
+                  productDetail={producto.aplicaDescuento || "No tiene"}
+                />
               </Box>
             </Grid>
           </Grid>
@@ -94,7 +132,7 @@ export const VerProductoDetallesPage = () => {
           item
           xs={12}
           sx={{ height: { md: "50%", xs: "20%" } }}
-          pt={{ md: 4 }}
+          pt={{ md: 1 }}
           px={2}
         >
           <Grid
@@ -118,10 +156,111 @@ export const VerProductoDetallesPage = () => {
               <Typography variant="body2" sx={{ color: "#fff" }}>
                 {producto.descripcion}
               </Typography>
+              {editable && (
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: "100%",
+                    right: 35,
+                    transform: "translateY(-160%);",
+                    display: "flex",
+                    gap: 1,
+                  }}
+                >
+                  <Tooltip title="Cancelar">
+                    <IconButton
+                      sx={{
+                        background: "#ff0056",
+                        color: "#fff",
+                        "&:hover": {
+                          background: "#ca0144",
+                        },
+                      }}
+                      onClick={() => {
+                        goBack();
+                      }}
+                    >
+                      <Clear />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Confirmar">
+                    <IconButton
+                      sx={{
+                        background: "#ff0056",
+                        color: "#fff",
+
+                        "&:hover": {
+                          background: "#ca0144",
+                        },
+                      }}
+                      onClick={() => {
+                        modificarStock(+producto.id, +value);
+                      }}
+                    >
+                      <Check />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+              )}
             </Grid>
           </Grid>
         </Grid>
       </Grid>
     </Box>
   );
+};
+
+const ProductDetail = ({
+  productDetail,
+  title,
+  editable = false,
+  unidad,
+  productDetailInput = "",
+  modificarProductDetailInput,
+}: {
+  productDetail: any;
+  title: string;
+  editable?: boolean;
+  unidad?: string;
+  productDetailInput?: string;
+  modificarProductDetailInput?: (event: ChangeEvent<HTMLInputElement>) => void;
+}) => {
+  return (
+    <Box display="flex" alignItems="flex-end" my={1}>
+      <Typography variant="h5" ml={2} sx={{ color: "#fff" }}>
+        <span style={{ color: "#ff0056" }}>{title} </span>
+        {!editable && `${productDetail}`}
+      </Typography>
+      {editable && (
+        <>
+          <TextField
+            type="text"
+            size="small"
+            value={productDetailInput}
+            onChange={modificarProductDetailInput}
+            helperText={
+              productDetailInput.length > 0 &&
+              !validarEntero(productDetailInput || "") &&
+              "debe ser un numero"
+            }
+            error={
+              productDetailInput.length > 0 &&
+              !validarEntero(productDetailInput)
+            }
+            placeholder={`Nuevo ${title.replace(":", "").toLocaleLowerCase()}`}
+            sx={{ bgcolor: "#999", borderRadius: 1, ml: 1 }}
+          />
+          <Typography variant="caption" component="span" ml={1} color="#fff">
+            {unidad}
+          </Typography>
+        </>
+      )}
+    </Box>
+  );
+  /*    );
+  } */
+};
+
+const validarEntero = (entero: string): boolean => {
+  return Number.isInteger(+entero);
 };

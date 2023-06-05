@@ -1,4 +1,4 @@
-import { Button, Grid, TextField, Typography } from "@mui/material";
+import { Alert, Button, Grid, TextField, Typography } from "@mui/material";
 import { FormLayout } from "../layout/FormLayout";
 import { useForm } from "../../hooks/useForm";
 import brandLogo from "../../assets/super5Balnco2.png";
@@ -19,8 +19,14 @@ const initialStateForm = {
 export const SignUpPage = () => {
   const [isFirstStep, setIsFirstStep] = useState<boolean>(true);
   const navigate = useNavigate();
-  const { handleRegistrarUsuario, handleLogin } = useAuth();
-  /* react query: custom hook mutation*/
+  const {
+    handleRegistrarUsuario,
+    isAuthenticatingRegistro,
+    errorSignup,
+    isErrorSignup,
+    isSuccessSignup,
+    dataSignup,
+  } = useAuth();
 
   const {
     username,
@@ -38,7 +44,6 @@ export const SignUpPage = () => {
     event.preventDefault();
     //checkear que datos son obligatorios
     if (!email || !password || !name || !surname || !username || !phone) return;
-
     handleRegistrarUsuario(username, password, email, name, surname, phone);
     reset();
   };
@@ -200,6 +205,20 @@ export const SignUpPage = () => {
           </Grid>
         </Grid>
       </form>
+      {isErrorSignup && (
+        <Alert variant="filled" severity="error">
+          {errorSignup
+            ? "data" in errorSignup
+              ? `${errorSignup.data}`
+              : ""
+            : "Algo salio mal"}
+        </Alert>
+      )}
+      {isSuccessSignup && (
+        <Alert variant="filled" severity="success">
+          Usuario registrado Correctamente!.
+        </Alert>
+      )}
     </FormLayout>
   );
 };
