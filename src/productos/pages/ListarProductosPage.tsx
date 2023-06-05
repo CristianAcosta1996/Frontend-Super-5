@@ -1,12 +1,20 @@
-import { Box } from "@mui/material";
+import { Avatar, Box } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { ProductosActions } from "../components/ProductosActions";
 import { useProductos } from "../hooks/useProductos";
+import { useEffect, useState, useCallback, useMemo } from "react";
+import { useLazyGetProductosPorSucursalQuery } from "../../store/super5/super5Api";
+import { useAppSelector } from "../../hooks/hooks";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 70 },
+  {
+    field: "imagen",
+    headerName: "Imagen",
+    width: 65,
+    renderCell: (params) => <Avatar src={params.row.imagen} />,
+  },
   { field: "nombre", headerName: "Nombre", width: 120 },
-  { field: "imagen", headerName: "Imagen", width: 130 },
   {
     field: "precio",
     headerName: "Precio",
@@ -19,12 +27,19 @@ const columns: GridColDef[] = [
     description: "Muestra si el producto fue eliminado",
     sortable: false,
     width: 80,
+    type: "boolean",
   },
   {
     field: "categoriaId",
     headerName: "Categoria ID",
     type: "number",
-    width: 90,
+    width: 80,
+  },
+  {
+    field: "categoria",
+    headerName: "Categoria",
+    type: "string",
+    width: 110,
   },
   {
     field: "stock",
@@ -63,13 +78,19 @@ const columns: GridColDef[] = [
 ];
 
 export const ListarProductosPage = () => {
-  const { productos } = useProductos();
+  const { isLoadingProductos, productos } = useProductos();
+
   return (
     <Box
-      sx={{ height: "80vh", width: "100%" }}
+      sx={{ height: "97vh", width: "100%" }}
       className="animate__animated animate__fadeIn"
     >
-      <DataGrid columns={columns} rows={productos || []} autoPageSize />
+      <DataGrid
+        columns={columns}
+        rows={productos || []}
+        autoPageSize
+        loading={isLoadingProductos}
+      />
     </Box>
   );
 };

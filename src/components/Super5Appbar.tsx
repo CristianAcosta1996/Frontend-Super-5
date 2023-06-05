@@ -1,4 +1,4 @@
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -6,7 +6,7 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import MenuItem from "@mui/material/MenuItem";
-import { Avatar, Button, Tooltip, Typography } from "@mui/material";
+import { Avatar, Badge, Button, Tooltip, Typography } from "@mui/material";
 import Menu from "@mui/material/Menu";
 import IconButton from "@mui/material/IconButton";
 
@@ -25,16 +25,20 @@ import { useAppSelector } from "../hooks/hooks";
 import brandLogo from "../assets/super5Balnco2.png";
 import { CarritoDrawer } from "../compras/components/CarritoDrawer";
 import { useCarrito } from "../compras/carrito/hooks/useCarrito";
+import { SelectorSucursales } from "../sucursales/components/SelectorSucursales";
 
 export const Super5Appbar = () => {
   const { handleLogout } = useAuth();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { open, handleOnClose: handleCarrito } = useCarrito();
+  const [mostrarElegirSucursal, setMostrarElegirSucursal] =
+    useState<boolean>(false);
 
   const {
     imageUrl,
     status,
     sucursal: { nombre: nombreSucursal },
+    carrito,
   } = useAppSelector((state) => ({ ...state.auth, ...state.super5 }));
 
   const navigate = useNavigate();
@@ -60,6 +64,14 @@ export const Super5Appbar = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
+      {mostrarElegirSucursal && (
+        <SelectorSucursales
+          openDialog={true}
+          onClose={() => {
+            setMostrarElegirSucursal(false);
+          }}
+        />
+      )}
       <AppBar position="static">
         <Toolbar variant="dense">
           <Tooltip title="Categorias">
@@ -125,7 +137,14 @@ export const Super5Appbar = () => {
             </Button>
           )}
           <IconButton color="inherit" onClick={handleCarrito}>
-            <ShoppingCart fontSize="small" />
+            <Badge
+              badgeContent={
+                (carrito.length >= 1 && carrito.length) || undefined
+              }
+              color="error"
+            >
+              <ShoppingCart fontSize="small" />
+            </Badge>
           </IconButton>
         </Toolbar>
         <Toolbar variant="dense">
@@ -134,7 +153,7 @@ export const Super5Appbar = () => {
             color="inherit"
             size="small"
             onClick={() => {
-              /* //TODO: hacer que pueda cambiar la sucursal.*/
+              setMostrarElegirSucursal(true);
             }}
           >
             <LocationOnOutlined fontSize="inherit" />

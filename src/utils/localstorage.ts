@@ -47,7 +47,6 @@ export const guardarCarrito = (carrito: CarritoItem[]) => {
   try {
     localStorage.setItem("carrito", JSON.stringify(carrito));
   } catch (error) {
-    console.log(error);
     return;
   }
 };
@@ -73,7 +72,6 @@ export const guardarcompraPaypal = (compraPaypal: CompraDTO) => {
   try {
     localStorage.setItem("compraPaypal", JSON.stringify(compraPaypal));
   } catch (error) {
-    console.log(error);
     return;
   }
 };

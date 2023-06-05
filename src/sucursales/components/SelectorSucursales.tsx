@@ -14,9 +14,13 @@ import { startAgregarSucursal } from "../../store/super5/thunks";
 
 interface SelectorSucursalesProps {
   openDialog: boolean;
+  onClose?: () => void;
 }
 
-export const SelectorSucursales = ({ openDialog }: SelectorSucursalesProps) => {
+export const SelectorSucursales = ({
+  openDialog,
+  onClose,
+}: SelectorSucursalesProps) => {
   const [open, setOpen] = useState<boolean>(openDialog);
   const [sucursalSeleccionada, setSucursalSeleccionada] =
     useState<Sucursal | null>(null);
@@ -26,6 +30,7 @@ export const SelectorSucursales = ({ openDialog }: SelectorSucursalesProps) => {
     setOpen(false);
     setSucursalSeleccionada(sucursal);
     dispatch(startAgregarSucursal(sucursal));
+    if (onClose) onClose();
   };
 
   return (
@@ -93,7 +98,6 @@ const SimpleDialog = ({ open, selectedValue, onClose }: SimpleDialog) => {
           value={value}
           onChange={(event: any, newValue: any) => {
             if (value?.nombre === "" && !estaConfirmado) return;
-            console.log(newValue);
             onClose(newValue);
           }}
           isOptionEqualToValue={(option, value) =>

@@ -9,7 +9,11 @@ export const ProductosActions = ({ params }) => {
   return (
     <Box>
       <Tooltip title="Modificar">
-        <IconButton onClick={handleOnModificar}>
+        <IconButton
+          onClick={() => {
+            handleOnModificar(params.row);
+          }}
+        >
           <Edit />
         </IconButton>
       </Tooltip>
