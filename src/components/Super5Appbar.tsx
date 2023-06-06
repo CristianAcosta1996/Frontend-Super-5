@@ -6,7 +6,7 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import MenuItem from "@mui/material/MenuItem";
-import { Avatar, Badge, Button, Tooltip, Typography } from "@mui/material";
+import { Autocomplete, Avatar, Badge, Button, Tooltip, Typography } from "@mui/material";
 import Menu from "@mui/material/Menu";
 import IconButton from "@mui/material/IconButton";
 
@@ -26,6 +26,7 @@ import brandLogo from "../assets/super5Balnco2.png";
 import { CarritoDrawer } from "../compras/components/CarritoDrawer";
 import { useCarrito } from "../compras/carrito/hooks/useCarrito";
 import { SelectorSucursales } from "../sucursales/components/SelectorSucursales";
+import ProductAutocomplete from "./ProductAutocomplete";
 
 export const Super5Appbar = () => {
   const { handleLogout } = useAuth();
@@ -82,6 +83,11 @@ export const Super5Appbar = () => {
 
           <Box sx={{ flexGrow: 1 }}>
             <Avatar variant="square" src={brandLogo} sx={{ width: 120 }} />
+          </Box>
+          <Box sx={{ backgroundColor: "007aff" }} >
+            <Toolbar variant="dense" sx={{ backgroundColor: "007aff", marginTop: 1 }}>
+              <ProductAutocomplete />
+            </Toolbar>
           </Box>
           <Tooltip title="Inicio">
             <IconButton onClick={() => navigate("/")} color="inherit">
