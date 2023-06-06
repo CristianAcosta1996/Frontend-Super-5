@@ -44,9 +44,17 @@ export const ProductoCard = ({ producto }: ProductoCardProps) => {
 
           <Typography
             textAlign={"left"}
-            sx={{ height: 60, width: 141, backgroundColor: "white" }}
+            sx={{
+              width: 141,
+              height: 60,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              display: "-webkit-box",
+              WebkitLineClamp: "3",
+              WebkitBoxOrient: "vertical",
+            }}
             variant="body2"
-            textOverflow={"clip"}
+            title={producto.descripcion}
           >
             {producto.descripcion}
           </Typography>
@@ -57,11 +65,15 @@ export const ProductoCard = ({ producto }: ProductoCardProps) => {
             fontWeight="bold"
             color="primary"
             my={1}
+            sx={{ marginTop: 0, marginBottom: 0 }}
           >
             $ {producto.precio}
           </Typography>
         </CardContent>
-        <CardActions sx={{ paddingBottom: 0, paddingX: 0, marginBottom: 1 }}>
+        <Typography color="primary" sx={{ marginTop: 0, marginBottom: 0 }}>
+          Cantidad:
+        </Typography>
+        <CardActions sx={{ paddingBottom: 0, paddingX: 0, marginBottom: 2 / 5, marginTop: 0 }}>
           <ButtonGroup variant="outlined" aria-label="outlined button group">
             <Box
               aria-label="cantidadProducto"
@@ -95,10 +107,10 @@ export const ProductoCard = ({ producto }: ProductoCardProps) => {
           </ButtonGroup>
         </CardActions>
 
-        <CardActions sx={{ paddingTop: 0, width: "100%" }}>
+        <CardActions sx={{ paddingTop: 0, width: "100%", marginTop: 0 }}>
           <Button
             sx={{
-              backgroundColor: "#007aff", color: "white", gap: 1, '&:hover': { color: "#007aff", borderBlockColor: "#007aff", border: 2 }
+              marginTop: 0, backgroundColor: "#007aff", color: "white", gap: 1, '&:hover': { color: "#007aff", borderBlockColor: "#007aff", border: 2 }
             }}
             size="small"
             fullWidth
