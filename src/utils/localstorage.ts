@@ -8,16 +8,19 @@ import {
 
 export const getToken = () => {
   try {
-    const token = JSON.parse(localStorage.getItem("token") || "");
-    if (!token) return;
-    const decoded: Token = jwt_decode(token);
+    const token: string = JSON.parse(localStorage.getItem("token") || "");
 
+    if (!token) return;
+
+    const decoded: Token = jwt_decode(token);
     const { sub, iat, exp, ...rest } = decoded;
+
     return {
       ...rest,
       token,
     };
   } catch (error) {
+    console.log(error);
     return;
   }
 };

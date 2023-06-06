@@ -11,10 +11,22 @@ export const useProductos = () => {
   const { isLoading: isLoadingCategorias, data: categorias } =
     useGetCategoriasQuery();
 
+  const [
+    startGettingProducts,
+    {
+      data: productos,
+      isLoading: isLoadingProductos,
+      isError: isErrorProductos,
+      error: errorProductos,
+    },
+  ] = useLazyGetProductosPorSucursalQuery();
+
   const obtenerProductoPorCategoria = (categoriaId: string) => {
-    const prodPorCategoria = productos?.filter(producto => producto.categoriaId === +categoriaId);
-    return prodPorCategoria
-  }
+    const prodPorCategoria = productos?.filter(
+      (producto) => producto.categoriaId === +categoriaId
+    );
+    return prodPorCategoria;
+  };
   const getProductosCompletos = () => {
     const productosCompletos = productos?.map((producto) => {
       const getNombreCategoria = categorias?.find(
@@ -28,11 +40,6 @@ export const useProductos = () => {
     return productosCompletos;
   };
 
-  const [
-    startGettingProducts,
-    { data: productos, isLoading: isLoadingProductos },
-  ] = useLazyGetProductosPorSucursalQuery();
-
   useEffect(() => {
     if (!sucursal.id) return;
     startGettingProducts(sucursal.id);
@@ -45,5 +52,7 @@ export const useProductos = () => {
     isLoadingCategorias,
     getProductosCompletos,
     obtenerProductoPorCategoria,
+    isErrorProductos,
+    errorProductos,
   };
 };

@@ -1,11 +1,12 @@
 import {
   SupportAgent,
-  AssignmentTurnedIn,
-  ChecklistRtl,
   Fastfood,
   Home,
   Logout,
   Login,
+  ShoppingBag,
+  Person,
+  TrendingUp,
 } from "@mui/icons-material";
 import {
   Avatar,
@@ -116,17 +117,24 @@ export const DashboardSucursalesPage = () => {
           />
 
           <DashboardListItem
-            Icon={ChecklistRtl}
-            titulo="Confirmación de compras por clientes."
+            Icon={ShoppingBag}
+            titulo="Compras"
             handleOnClick={() => {
-              navigate("/sucursal/confirmar-compras");
+              navigate("/sucursal/compras");
             }}
           />
           <DashboardListItem
-            Icon={AssignmentTurnedIn}
-            titulo="Finalizar compra."
+            Icon={Person}
+            titulo="Usuario"
             handleOnClick={() => {
-              navigate("/sucursal/finalizar-compras");
+              navigate("/sucursal/usuario");
+            }}
+          />
+          <DashboardListItem
+            Icon={TrendingUp}
+            titulo="Ventas"
+            handleOnClick={() => {
+              navigate("/sucursal/ventas");
             }}
           />
         </List>

@@ -15,7 +15,12 @@ export const useVerProductoDetalles = () => {
     useModificarStockMutation();
 
   const modificarStock = (productoId: number, nuevoStock: number) => {
-    startModificarStock({ cantidad: nuevoStock, productoId });
+    startModificarStock({ cantidad: nuevoStock, productoId })
+      .unwrap()
+      .then((resp) => console.log(resp, "success"))
+      .catch((error) => {
+        console.log(error, "error");
+      });
   };
 
   return {
