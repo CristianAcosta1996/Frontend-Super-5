@@ -1,4 +1,4 @@
-import { GoogleMap, useLoadScript, MarkerF, Data } from "@react-google-maps/api";
+import { GoogleMap, useLoadScript, MarkerF } from "@react-google-maps/api";
 import { useEffect, useState } from "react";
 import usePlacesAutocomplete from "use-places-autocomplete";
 import Autocomplete from '@mui/material/Autocomplete';
