@@ -11,11 +11,16 @@ export const useVerProductoDetalles = () => {
   const goBack = useCallback(() => {
     navigate("/sucursal/producto", { replace: true });
   }, []);
-  const [startModificarStock, { isLoading, data }] =
+  const [startModificarStock, { isLoading, data, isSuccess, isError, error }] =
     useModificarStockMutation();
 
   const modificarStock = (productoId: number, nuevoStock: number) => {
-    startModificarStock({ cantidad: nuevoStock, productoId });
+    startModificarStock({ cantidad: nuevoStock, productoId })
+      .unwrap()
+      .then((resp) => console.log(resp, "success"))
+      .catch((error) => {
+        console.log(error, "error");
+      });
   };
 
   return {
@@ -25,5 +30,8 @@ export const useVerProductoDetalles = () => {
     isLoading,
     data,
     modificarStock,
+    isSuccess,
+    isError,
+    error,
   };
 };

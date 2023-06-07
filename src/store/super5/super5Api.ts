@@ -44,6 +44,9 @@ interface ModificarStockProps {
   productoId: number;
   cantidad: number;
 }
+type AuthResponse = {
+  token: string;
+};
 
 export const super5Api = createApi({
   reducerPath: "super5Api",
@@ -51,11 +54,9 @@ export const super5Api = createApi({
     baseUrl: "http://127.0.0.1:8080/api/",
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
-
       if (token) {
         headers.set("authorization", `Bearer ${token}`);
       }
-
       return headers;
     },
   }),
@@ -67,6 +68,9 @@ export const super5Api = createApi({
         method: "POST",
         body,
       }),
+      transformResponse: (response: AuthResponse, meta, arg) => {
+        return response.token;
+      },
     }),
     signup: builder.mutation<string, SignupProps>({
       query: (body) => ({
@@ -74,6 +78,7 @@ export const super5Api = createApi({
         method: "POST",
         body,
       }),
+      transformResponse: (resp: AuthResponse, meta) => resp.token,
     }),
     getProductosPorSucursal: builder.query<Producto[], string>({
       query: (id) => `producto/obtenerPorSucursal/${id}`,
@@ -117,10 +122,18 @@ export const super5Api = createApi({
         url: "producto/modificarStock",
         method: "POST",
         body,
+        responseHandler: (response) => response.text(),
       }),
+      transformErrorResponse: (
+        response: { status: number; data: string },
+        meta,
+        arg
+      ) => {
+        return response.data;
+      },
     }),
   }),
-})
+});
 
 export const {
   useLoginMutation,
