@@ -26,7 +26,7 @@ export const ProductoCard = ({ producto }: ProductoCardProps) => {
 
   return (
     <Card sx={{ maxWidth: 160, height: 360, boxShadow: 5 }}>
-      <Grid container justifyContent={"center"} >
+      <Grid container justifyContent={"center"}>
         <CardMedia
           sx={{ mt: 1, width: 150, height: 150 }}
           component="img"
@@ -41,7 +41,6 @@ export const ProductoCard = ({ producto }: ProductoCardProps) => {
             paddingBottom: 0,
           }}
         >
-
           <Typography
             textAlign={"left"}
             sx={{
@@ -73,7 +72,14 @@ export const ProductoCard = ({ producto }: ProductoCardProps) => {
         <Typography color="primary" sx={{ marginTop: 0, marginBottom: 0 }}>
           Cantidad:
         </Typography>
-        <CardActions sx={{ paddingBottom: 0, paddingX: 0, marginBottom: 2 / 5, marginTop: 0 }}>
+        <CardActions
+          sx={{
+            paddingBottom: 0,
+            paddingX: 0,
+            marginBottom: 2 / 5,
+            marginTop: 0,
+          }}
+        >
           <ButtonGroup variant="outlined" aria-label="outlined button group">
             <Box
               aria-label="cantidadProducto"
@@ -92,7 +98,7 @@ export const ProductoCard = ({ producto }: ProductoCardProps) => {
               >
                 -1
               </Button>
-              <Button size="small">
+              <Button size="small" disableRipple disableFocusRipple>
                 {cantidad}
               </Button>
               <Button
@@ -110,7 +116,15 @@ export const ProductoCard = ({ producto }: ProductoCardProps) => {
         <CardActions sx={{ paddingTop: 0, width: "100%", marginTop: 0 }}>
           <Button
             sx={{
-              marginTop: 0, backgroundColor: "#007aff", color: "white", gap: 1, '&:hover': { color: "#007aff", borderBlockColor: "#007aff", border: 2 }
+              marginTop: 0,
+              backgroundColor: "#007aff",
+              color: "white",
+              gap: 1,
+              "&:hover": {
+                color: "#007aff",
+                borderBlockColor: "#007aff",
+                border: 2,
+              },
             }}
             size="small"
             fullWidth
@@ -122,7 +136,6 @@ export const ProductoCard = ({ producto }: ProductoCardProps) => {
           </Button>
         </CardActions>
       </Grid>
-
-    </Card >
+    </Card>
   );
 };

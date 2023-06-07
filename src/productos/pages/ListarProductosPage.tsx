@@ -1,4 +1,4 @@
-import { Avatar, Box } from "@mui/material";
+import { Alert, Avatar, Box, Fade, Snackbar } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { ProductosActions } from "../components/ProductosActions";
 import { useProductos } from "../hooks/useProductos";
@@ -78,7 +78,18 @@ const columns: GridColDef[] = [
 ];
 
 export const ListarProductosPage = () => {
-  const { isLoadingProductos, productos } = useProductos();
+  const { isLoadingProductos, productos, isErrorProductos, errorProductos } =
+    useProductos();
+
+  const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
+  useEffect(() => {
+    if (!isErrorProductos) return;
+    setShowSnackbar(true);
+  }, [isErrorProductos]);
+
+  const handleOnCloseSnackbar = () => {
+    setShowSnackbar(false);
+  };
 
   return (
     <Box
@@ -91,6 +102,17 @@ export const ListarProductosPage = () => {
         autoPageSize
         loading={isLoadingProductos}
       />
+      <Snackbar
+        anchorOrigin={{ horizontal: "center", vertical: "bottom" }}
+        open={showSnackbar}
+        onClose={handleOnCloseSnackbar}
+        TransitionComponent={Fade}
+        autoHideDuration={3000}
+      >
+        <Alert variant="filled" severity="error">
+          Hubo un error al cargar los productos.
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

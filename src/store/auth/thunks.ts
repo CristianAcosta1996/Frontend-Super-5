@@ -9,7 +9,6 @@ export const startEmailAndPasswordLogin = (
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch) => {
     dispatch(checkingCredentials());
-
     setToken(token);
     const decoded = getToken();
 
