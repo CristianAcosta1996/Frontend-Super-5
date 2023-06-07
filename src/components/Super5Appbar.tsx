@@ -52,14 +52,13 @@ export const Super5Appbar = () => {
     setAnchorEl(null);
   };
 
-  const handleProfile = () => {
-    navigate("/user/profile");
-  };
   const handleDireccion = () => {
+    setAnchorEl(null);
     navigate("/user/address");
   };
 
   const handleUserInfo = () => {
+    setAnchorEl(null);
     navigate("/user/datospersonales");
   };
 
@@ -73,7 +72,7 @@ export const Super5Appbar = () => {
           }}
         />
       )}
-      <AppBar position="static">
+      <AppBar position="fixed" >
         <Toolbar variant="dense">
           <Tooltip title="Categorias">
             <IconButton color="inherit" aria-label="menu" sx={{ mr: 2 }}>
@@ -121,9 +120,8 @@ export const Super5Appbar = () => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleProfile}>Datos Personales</MenuItem>
                 <MenuItem onClick={handleDireccion}>Agregar direccion</MenuItem>
-                <MenuItem onClick={handleUserInfo}>User Info</MenuItem>
+                <MenuItem onClick={handleUserInfo}>Datos personales</MenuItem>
               </Menu>
               <Tooltip title="cerrar sesion">
                 <IconButton color="inherit" onClick={() => handleLogout()}>

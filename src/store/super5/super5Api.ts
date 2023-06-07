@@ -19,6 +19,7 @@ interface SignupProps {
   correo: string;
   contrasenia: string;
   telefono: string;
+  fechaNacimiento: Date;
   rol: 0 | 1;
   eliminado: 0 | 1;
   bloqueado: 0 | 1;

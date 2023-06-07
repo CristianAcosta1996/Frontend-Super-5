@@ -46,7 +46,6 @@ export default function ProductAutocomplete() {
             }) : [{ label: "Cargando productos", nombreCategoria: "Sin categoria" }]}
             sx={{ width: 600, backgroundColor: "white", borderRadius: "5px" }}
             renderInput={(params) => {
-                console.log(params)
                 return <TextField {...params} placeholder='Buscar producto' />
             }}
         />

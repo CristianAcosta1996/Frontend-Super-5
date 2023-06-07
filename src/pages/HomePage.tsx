@@ -21,7 +21,7 @@ import { useGetCategoriasQuery } from "../store/super5/super5Api";
 export const HomePage = () => {
   const { data: categorias } = useGetCategoriasQuery()
   return (
-    <Box>
+    <Box >
       <Grid container paddingBottom={2}>
         <Grid item xs={12}>
           <Slider imagenes={imagenes} />
@@ -29,7 +29,6 @@ export const HomePage = () => {
         <Grid item xs={0} sm={1} />
         <Grid item xs={12} mt={1} sm={10}>
           {categorias?.map((categoria) => <ProductosSlide key={categoria.id} categoria={categoria} />)}
-
         </Grid>
         <Grid item xs={0} sm={1} />
       </Grid>
@@ -52,8 +51,8 @@ const Slider = ({ imagenes }: SliderProps) => {
       navigation
       pagination={{ clickable: true }}
       scrollbar={{ draggable: true }}
-      onSwiper={(swiper) => {}}
-      onSlideChange={() => {}}
+      onSwiper={(swiper) => { }}
+      onSlideChange={() => { }}
     >
       {imagenes.map((imagen) => (
         <SwiperSlide key={imagen}>
