@@ -1,23 +1,41 @@
 import {
+  Alert,
   Avatar,
   Box,
   CircularProgress,
   Grid,
   IconButton,
+  Snackbar,
+  SnackbarCloseReason,
   TextField,
   Tooltip,
   Typography,
 } from "@mui/material";
 
 import { ArrowBack, Check, Clear } from "@mui/icons-material";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 import "../css/VerProductoDetallesPage.css";
 import { useVerProductoDetalles } from "../hooks/useVerProductoDetalles";
 
 export const VerProductoDetallesPage = () => {
-  const { editable, goBack, producto, isLoading, data, modificarStock } =
-    useVerProductoDetalles();
+  const {
+    editable,
+    goBack,
+    producto,
+    isLoading,
+    data,
+    modificarStock,
+    isSuccess,
+    isError,
+    error,
+  } = useVerProductoDetalles();
   const [value, setValue] = useState("");
+  const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
+  useEffect(() => {
+    if (!isError && !isSuccess) return;
+
+    setShowSnackbar(true);
+  }, [isError, isSuccess]);
 
   if (isLoading)
     return (
@@ -206,6 +224,27 @@ export const VerProductoDetallesPage = () => {
           </Grid>
         </Grid>
       </Grid>
+      <Snackbar
+        anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
+        open={showSnackbar}
+        autoHideDuration={3000}
+        onClose={(
+          event: Event | SyntheticEvent<any, Event>,
+          reason?: SnackbarCloseReason
+        ) => {
+          if (reason === "clickaway") return;
+          setShowSnackbar(false);
+        }}
+      >
+        <Alert severity={isError ? "error" : "success"} variant="filled">
+          {isError
+            ? error
+              ? JSON.stringify(error)
+              : "Hubo un error al intentar modificar el stock"
+            : null}
+          {isSuccess && "Producto modificado correctamente!"}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

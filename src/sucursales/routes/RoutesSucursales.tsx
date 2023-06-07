@@ -6,6 +6,7 @@ import { FinalizarComprasPage } from "../pages/FinalizarComprasPage";
 import { ProductosRoutes } from "../../productos/routes/ProductosRoutes";
 import { ComprasRoutes } from "../../compras/routes/ComprasRoutes";
 import { ReclamosRoutes } from "../../reclamos/routes/ReclamosRoutes";
+import { VentasRoutes } from "../../ventas/routes/VentasRoutes";
 
 export const RoutesSucursales = () => {
   return (
@@ -14,6 +15,7 @@ export const RoutesSucursales = () => {
       <Route path="reclamos/*" element={<ReclamosRoutes />} />
       <Route path="/compras/*" element={<ComprasRoutes />} />
       <Route path="finalizar-compra" element={<FinalizarComprasPage />} />
+      <Route path="ventas/*" element={<VentasRoutes />} />
       <Route path="/*" element={<Navigate replace to="producto" />} />
     </Routes>
   );

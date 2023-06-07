@@ -7,6 +7,8 @@ import {
   ShoppingBag,
   Person,
   TrendingUp,
+  Check,
+  DoneAll,
 } from "@mui/icons-material";
 import {
   Avatar,
@@ -115,12 +117,18 @@ export const DashboardSucursalesPage = () => {
               navigate("/sucursal/reclamos");
             }}
           />
-
           <DashboardListItem
-            Icon={ShoppingBag}
-            titulo="Compras"
+            Icon={Check}
+            titulo="Confirmar Venta"
             handleOnClick={() => {
               navigate("/sucursal/compras");
+            }}
+          />{" "}
+          <DashboardListItem
+            Icon={DoneAll}
+            titulo="Finalizar Venta"
+            handleOnClick={() => {
+              navigate("/sucursal/ventas");
             }}
           />
           <DashboardListItem
@@ -132,9 +140,9 @@ export const DashboardSucursalesPage = () => {
           />
           <DashboardListItem
             Icon={TrendingUp}
-            titulo="Ventas"
+            titulo="Analitica"
             handleOnClick={() => {
-              navigate("/sucursal/ventas");
+              navigate("/sucursal/usuario");
             }}
           />
         </List>

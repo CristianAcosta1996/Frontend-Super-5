@@ -6,7 +6,14 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import MenuItem from "@mui/material/MenuItem";
-import { Autocomplete, Avatar, Badge, Button, Tooltip, Typography } from "@mui/material";
+import {
+  Autocomplete,
+  Avatar,
+  Badge,
+  Button,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import Menu from "@mui/material/Menu";
 import IconButton from "@mui/material/IconButton";
 
@@ -73,7 +80,7 @@ export const Super5Appbar = () => {
           }}
         />
       )}
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar variant="dense">
           <Tooltip title="Categorias">
             <IconButton color="inherit" aria-label="menu" sx={{ mr: 2 }}>
@@ -84,10 +91,8 @@ export const Super5Appbar = () => {
           <Box sx={{ flexGrow: 1 }}>
             <Avatar variant="square" src={brandLogo} sx={{ width: 120 }} />
           </Box>
-          <Box sx={{ backgroundColor: "007aff" }} >
-            <Toolbar variant="dense" sx={{ backgroundColor: "007aff", marginTop: 1 }}>
-              <ProductAutocomplete />
-            </Toolbar>
+          <Box sx={{ backgroundColor: "007aff", mt: 1 }}>
+            <ProductAutocomplete />
           </Box>
           <Tooltip title="Inicio">
             <IconButton onClick={() => navigate("/")} color="inherit">

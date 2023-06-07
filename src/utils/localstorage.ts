@@ -20,7 +20,6 @@ export const getToken = () => {
       token,
     };
   } catch (error) {
-    console.log(error);
     return;
   }
 };

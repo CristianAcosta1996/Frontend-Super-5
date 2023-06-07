@@ -152,8 +152,7 @@ export const LoginPage = () => {
           severity="error"
           className="animate__animated animate__fadeIn"
         >
-          {errorLogin && "status" in errorLogin && errorLogin.status}: Algo
-          salio mal
+          Email/Usuario o Contraseña invalidos
         </Alert>
       )}
       {isSuccessLogin && (

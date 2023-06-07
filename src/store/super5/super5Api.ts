@@ -124,6 +124,13 @@ export const super5Api = createApi({
         body,
         responseHandler: (response) => response.text(),
       }),
+      transformErrorResponse: (
+        response: { status: number; data: string },
+        meta,
+        arg
+      ) => {
+        return response.data;
+      },
     }),
   }),
 });

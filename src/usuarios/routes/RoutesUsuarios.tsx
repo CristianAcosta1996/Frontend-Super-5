@@ -7,11 +7,13 @@ import { Super5Appbar } from "../../components/Super5Appbar";
 import { DatosPersonales } from "../pages/DatosPersonales";
 import { MisDirecciones } from "../pages/MisDirecciones";
 import { MisPedidos } from "../pages/MisPedidos";
+import { Toolbar } from "@mui/material";
 
 export const RoutesUsuarios = () => {
   return (
     <>
       <Super5Appbar />
+      <Toolbar sx={{ mb: 4 }} />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="compra/*" element={<ComprasRoutes />} />
