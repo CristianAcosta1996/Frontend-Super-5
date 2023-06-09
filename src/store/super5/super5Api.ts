@@ -8,6 +8,7 @@ import {
 } from "../../interfaces/interfaces";
 import { RootState } from "../store";
 import dayjs from "dayjs";
+import { ReclamoDTO } from "../../interfaces/interfaces";
 
 interface LoginProps {
   usuarioOCorreo: string;
@@ -75,7 +76,7 @@ export const super5Api = createApi({
       return headers;
     },
   }),
-  tagTypes: ["VentasPagadas", "VentasConfirmadas", "User"],
+  tagTypes: ["VentasPagadas", "VentasConfirmadas", "User", "AtenderReclamo"],
   endpoints: (builder) => ({
     login: builder.mutation<string, LoginProps>({
       query: (body) => ({
@@ -106,7 +107,7 @@ export const super5Api = createApi({
     }),
     getUserData: builder.query<UserDataProps, void>({
       query: () => "usuario/obtenerUsuario",
-      providesTags: ["User"]
+      providesTags: ["User"],
     }),
     addAddress: builder.mutation<Token, AddressProps>({
       query: (body) => ({
@@ -135,7 +136,7 @@ export const super5Api = createApi({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["User"]
+      invalidatesTags: ["User"],
     }),
     modificarStock: builder.mutation<string, ModificarStockProps>({
       query: (body) => ({
@@ -176,6 +177,18 @@ export const super5Api = createApi({
       }),
       invalidatesTags: ["VentasConfirmadas"],
     }),
+    getReclamos: builder.query<ReclamoDTO[], void>({
+      query: () => "reclamo/listar",
+      providesTags: ["AtenderReclamo"],
+    }),
+    atenderReclamo: builder.mutation<ReclamoDTO, ReclamoDTO>({
+      query: (body) => ({
+        url: "reclamo/atender",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["AtenderReclamo"],
+    }),
   }),
 });
 
@@ -196,4 +209,6 @@ export const {
   useGetVentasConfirmadasQuery,
   useConfirmarVentaMutation,
   useFinalizarVentaMutation,
+  useGetReclamosQuery,
+  useAtenderReclamoMutation,
 } = super5Api;
