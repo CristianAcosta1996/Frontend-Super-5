@@ -11,7 +11,6 @@ export const startEmailAndPasswordLogin = (
     dispatch(checkingCredentials());
     setToken(token);
     const decoded = getToken();
-
     dispatch(
       login({
         email: decoded?.correo,
@@ -24,6 +23,7 @@ export const startEmailAndPasswordLogin = (
         uid: decoded?.uid,
         imageUrl: decoded?.imagenUrl,
         telefono: decoded?.telefono,
+        sucursal: decoded?.sucursal || null,
       })
     );
   };
@@ -62,6 +62,7 @@ export const startGoogleSignIn = (): ThunkAction<
         token: null,
         googleUser: true,
         telefono: null,
+        sucursal: null,
       })
     );
   };

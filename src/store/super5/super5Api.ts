@@ -60,7 +60,7 @@ export const super5Api = createApi({
       return headers;
     },
   }),
-
+  tagTypes: ["VentasPagadas", "VentasConfirmadas"],
   endpoints: (builder) => ({
     login: builder.mutation<string, LoginProps>({
       query: (body) => ({
@@ -132,6 +132,30 @@ export const super5Api = createApi({
         return response.data;
       },
     }),
+    getVentas: builder.query<any[], void>({
+      query: () => "venta/obtenerVentasPagas",
+      providesTags: ["VentasPagadas"],
+    }),
+    getVentasConfirmadas: builder.query<any[], void>({
+      query: () => "venta/obtenerVentasConfirmadas",
+      providesTags: ["VentasConfirmadas"],
+    }),
+    confirmarVenta: builder.mutation<CompraDTO, CompraDTO>({
+      query: (body) => ({
+        url: "venta/confirmar",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["VentasPagadas", "VentasConfirmadas"],
+    }),
+    finalizarVenta: builder.mutation<CompraDTO, CompraDTO>({
+      query: (body) => ({
+        url: "venta/finalizar",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["VentasConfirmadas"],
+    }),
   }),
 });
 
@@ -147,4 +171,8 @@ export const {
   useModificarCompradorMutation,
   useGetCategoriasQuery,
   useModificarStockMutation,
+  useGetVentasQuery,
+  useGetVentasConfirmadasQuery,
+  useConfirmarVentaMutation,
+  useFinalizarVentaMutation,
 } = super5Api;
