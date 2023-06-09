@@ -35,6 +35,7 @@ export default function ProductAutocomplete() {
 
   return (
     <Autocomplete
+      fullWidth
       size="small"
       forcePopupIcon={false}
       loadingText={"Cargando productos..."}
@@ -44,15 +45,15 @@ export default function ProductAutocomplete() {
       options={
         productos
           ? productos?.map(({ descripcion, precio, categoriaId }) => {
-              const nombreCategoria = getNombreCategoria(categoriaId);
-              return {
-                label: `${descripcion + " $" + precio}`,
-                nombreCategoria,
-              };
-            })
+            const nombreCategoria = getNombreCategoria(categoriaId);
+            return {
+              label: `${descripcion + " $" + precio}`,
+              nombreCategoria,
+            };
+          })
           : [{ label: "Cargando productos", nombreCategoria: "Sin categoria" }]
       }
-      sx={{ width: 600, backgroundColor: "white", borderRadius: "5px" }}
+      sx={{ backgroundColor: "white", borderRadius: "5px" }}
       renderInput={(params) => {
         return <TextField {...params} placeholder="Buscar producto" />;
       }}

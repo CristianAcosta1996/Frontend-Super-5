@@ -13,7 +13,7 @@ const initialStateForm = {
   name: "",
   surname: "",
   phone: "",
-  birthDate: "",
+  fechaNac: null,
 };
 
 export const SignUpPage = () => {
@@ -35,7 +35,7 @@ export const SignUpPage = () => {
     name,
     surname,
     phone,
-
+    fechaNac,
     handleInputChange,
     reset,
   } = useForm(initialStateForm);
@@ -43,8 +43,8 @@ export const SignUpPage = () => {
   const handleFormSubmit = (event: SyntheticEvent): void => {
     event.preventDefault();
     //checkear que datos son obligatorios
-    if (!email || !password || !name || !surname || !username || !phone) return;
-    handleRegistrarUsuario(username, password, email, name, surname, phone);
+    if (!email || !password || !name || !surname || !username || !phone || !fechaNac) return;
+    handleRegistrarUsuario(username, password, email, name, surname, phone, fechaNac);
     reset();
   };
 
@@ -137,7 +137,7 @@ export const SignUpPage = () => {
                 />
               </Grid>
 
-              <Grid item xs={12} mb={3}>
+              <Grid item xs={12} mb={1}>
                 <TextField
                   size="small"
                   variant="filled"
@@ -147,6 +147,22 @@ export const SignUpPage = () => {
                   sx={{ backgroundColor: "#fff", borderRadius: 2 }}
                   name="phone"
                   value={phone}
+                  onChange={handleInputChange}
+                />
+              </Grid>
+              <Grid item xs={12} mb={3} >
+                <TextField
+                  size="small"
+                  variant="filled"
+                  fullWidth
+                  label="Fecha de Nacimiento"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  type="date"
+                  sx={{ backgroundColor: "#fff", borderRadius: 2 }}
+                  name="fechaNac"
+                  value={fechaNac}
                   onChange={handleInputChange}
                 />
               </Grid>

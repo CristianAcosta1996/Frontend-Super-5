@@ -178,6 +178,7 @@ export const CarritoDrawer = ({
   return (
     <div>
       <Drawer
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
         anchor="right"
         open={cartOpen}
         onClose={(event, reason) => {

@@ -9,11 +9,13 @@ export const useModificarComprador = () => {
         nombre: string,
         apellido: string,
         telefono: string,
+        fechaNacimiento: Date,
     ) => {
         const resp = await startModificarComprador({
             nombre,
             apellido,
             telefono,
+            fechaNacimiento,
         });
         if (resp) alert(`DATOS CORRECTAMENTE MODIFICADOS`)
     };

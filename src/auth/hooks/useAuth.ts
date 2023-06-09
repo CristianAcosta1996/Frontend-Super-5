@@ -67,7 +67,8 @@ export const useAuth = () => {
     email: string,
     nombre: string,
     apellido: string,
-    phone: string
+    phone: string,
+    birthDate: Date,
   ) => {
     startRegistrarUsuario({
       nombre,
@@ -76,6 +77,7 @@ export const useAuth = () => {
       contrasenia: password,
       apellido,
       telefono: phone,
+      fechaNacimiento: birthDate,
       bloqueado: 0,
       eliminado: 0,
       rol: 1,

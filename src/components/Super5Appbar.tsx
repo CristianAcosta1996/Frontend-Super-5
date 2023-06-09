@@ -1,4 +1,4 @@
-import { MouseEvent, useEffect, useState } from "react";
+import { MouseEvent, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -7,7 +7,6 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import MenuItem from "@mui/material/MenuItem";
 import {
-  Autocomplete,
   Avatar,
   Badge,
   Button,
@@ -59,15 +58,14 @@ export const Super5Appbar = () => {
     setAnchorEl(null);
   };
 
-  const handleProfile = () => {
-    navigate("/user/profile");
-  };
   const handleDireccion = () => {
+    setAnchorEl(null);
     navigate("/user/address");
   };
 
   const handleUserInfo = () => {
-    navigate("/user/datospersonales");
+    setAnchorEl(null);
+    navigate("/user/perfil");
   };
 
   return (
@@ -80,7 +78,7 @@ export const Super5Appbar = () => {
           }}
         />
       )}
-      <AppBar position="fixed">
+      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Toolbar variant="dense">
           <Tooltip title="Categorias">
             <IconButton color="inherit" aria-label="menu" sx={{ mr: 2 }}>
@@ -91,7 +89,7 @@ export const Super5Appbar = () => {
           <Box sx={{ flexGrow: 1 }}>
             <Avatar variant="square" src={brandLogo} sx={{ width: 120 }} />
           </Box>
-          <Box sx={{ backgroundColor: "007aff", mt: 1 }}>
+          <Box sx={{ backgroundColor: "007aff", mt: 1, flex: 1 }}>
             <ProductAutocomplete />
           </Box>
           <Tooltip title="Inicio">
@@ -126,12 +124,14 @@ export const Super5Appbar = () => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleProfile}>Datos Personales</MenuItem>
                 <MenuItem onClick={handleDireccion}>Agregar direccion</MenuItem>
-                <MenuItem onClick={handleUserInfo}>User Info</MenuItem>
+                <MenuItem onClick={handleUserInfo}>Perfil</MenuItem>
               </Menu>
               <Tooltip title="cerrar sesion">
-                <IconButton color="inherit" onClick={() => handleLogout()}>
+                <IconButton color="inherit" onClick={() => {
+                  handleLogout()
+                  navigate("/")
+                }}>
                   <Logout fontSize="small" />
                 </IconButton>
               </Tooltip>
