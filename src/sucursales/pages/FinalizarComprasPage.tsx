@@ -1,6 +1,3 @@
-
 export const FinalizarComprasPage = () => {
-  return (
-    <div>FinalizarComprasPage</div>
-  )
-}
+  return <div>FinalizarComprasPage</div>;
+};
