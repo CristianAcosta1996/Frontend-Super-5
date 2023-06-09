@@ -1,9 +1,10 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { getToken } from "../../utils/localstorage";
+import { TipoUsuario } from "../../interfaces/interfaces";
 
 interface AuthSliceState {
   status?: "not-authenticated" | "checking" | "authenticated";
-  tipoUsuario?: "admin" | "comprador" | "sucursal" | "invitado";
+  tipoUsuario?: TipoUsuario;
   usuario?: string | null | undefined;
   imageUrl?: string | null | undefined;
   nombre: string | null | undefined;
@@ -15,6 +16,7 @@ interface AuthSliceState {
   token?: string | null | undefined;
   errorMessage?: string | null | undefined;
   googleUser?: boolean | null | undefined;
+  sucursal: number;
 }
 
 const initialState = (): AuthSliceState => {
@@ -32,7 +34,8 @@ const initialState = (): AuthSliceState => {
         uid: null,
         token: null,
         errorMessage: null,
-        tipoUsuario: "invitado",
+        tipoUsuario: TipoUsuario.Invitado,
+        sucursal: -1,
       }
     : {
         status: "authenticated",
@@ -46,6 +49,7 @@ const initialState = (): AuthSliceState => {
         token: tokenInfo.token,
         errorMessage: null,
         tipoUsuario: tokenInfo.rol,
+        sucursal: tokenInfo.sucursal,
       };
 
   return state;
@@ -61,10 +65,11 @@ export const authSlice = createSlice({
       state.apellido = payload.apellido;
       state.email = payload.email;
       state.imageUrl = payload.imageUrl;
-      state.tipoUsuario = "comprador";
+      state.tipoUsuario = payload.tipoUsuario;
       state.uid = payload.uid;
       state.usuario = payload.usuario;
       state.token = payload.token;
+      state.sucursal = payload.sucursal;
     },
     logout: (state, action) => {
       state.status = "not-authenticated";
@@ -75,7 +80,7 @@ export const authSlice = createSlice({
       state.email = null;
       state.uid = null;
       state.token = null;
-      state.tipoUsuario = "invitado";
+      state.tipoUsuario = TipoUsuario.Invitado;
       state.errorMessage = action.payload.errorMessage;
     },
     checkingCredentials: (state) => {

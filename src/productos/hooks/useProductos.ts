@@ -6,7 +6,7 @@ import { useAppSelector } from "../../hooks/hooks";
 import { useEffect } from "react";
 
 export const useProductos = () => {
-  const { sucursal } = useAppSelector((state) => state.super5);
+  const { sucursal } = useAppSelector((state) => state.auth);
 
   const { isLoading: isLoadingCategorias, data: categorias } =
     useGetCategoriasQuery();
@@ -41,8 +41,8 @@ export const useProductos = () => {
   };
 
   useEffect(() => {
-    if (!sucursal.id) return;
-    startGettingProducts(sucursal.id);
+    if (!sucursal) return;
+    startGettingProducts(sucursal + "");
   }, [sucursal]);
 
   return {
