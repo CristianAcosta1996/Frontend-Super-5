@@ -5,6 +5,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { TextField } from "@mui/material";
 import { useAddress } from "../hooks/useAddress";
 import { useGetSucursalesQuery } from "../../store/super5/super5Api";
+import { Button } from "@mui/material";
 
 export default function AddressPage() {
     const [libraries] = useState(['places']);
@@ -102,14 +103,32 @@ function Map() {
                 variant="filled"
                 label="Aclaraciones"
                 type="text"
-                sx={{ backgroundColor: "#fff", borderRadius: 2, width: 800 }}
+                sx={{ backgroundColor: "#fff", borderRadius: 2, width: 800, ml: 2, boxShadow: 5 }}
                 name="Aclaraciones"
                 onChange={(e) => { setAclaraciones(e.target.value) }}
             />
             <div>
-                <button onClick={saveDirection}>
-                    Guardar dirección
-                </button>
+                <Button
+                    onClick={saveDirection}
+                    size="small"
+                    variant="text"
+                    sx={{
+                        boxShadow: 2,
+                        ml: 2,
+                        textTransform: "capitalize",
+                        fontSize: 14,
+                        textDecoration: "underline",
+                        color: "white",
+                        backgroundColor: "#007aff", "inline-block": "none",
+                        "&:hover": {
+                            color: "#007aff",
+                            borderBlockColor: "#007aff",
+                            border: 1,
+                        },
+                    }}
+                >
+                    Guardar Direccion
+                </Button>
             </div>
 
 
@@ -169,7 +188,7 @@ const PlacesAutocomplete = ({ setLatLong, setCiudad, setDepartamento, setSelecte
                 return { label: description, place_id }
             })}
             isOptionEqualToValue={(option, direccion) => option.description === direccion}
-            sx={{ width: 800 }}
+            sx={{ width: 800, ml: 2, boxShadow: 5 }}
             value={direccion}
             renderInput={(params) => {
                 if (params.inputProps.value) {

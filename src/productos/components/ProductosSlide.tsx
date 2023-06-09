@@ -2,7 +2,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from "swiper";
 import { ProductoCard } from "./ProductoCard";
 import { useProductos } from "../hooks/useProductos";
-import { CircularProgress, Container } from "@mui/material";
+import { CircularProgress, Container, Typography } from "@mui/material";
 import { Categoria } from "../../interfaces/interfaces";
 
 export const ProductosSlide = ({ categoria }: { categoria: Categoria }) => {
@@ -24,22 +24,28 @@ export const ProductosSlide = ({ categoria }: { categoria: Categoria }) => {
   return (
     <>
 
-      <h2>{categoria.nombre}</h2>
+      <Typography
+        variant="h5"
+        component={"h2"}
+        color={"black"}
+      >
+        {categoria.nombre}
+      </Typography>
       <Swiper
         breakpoints={{
           0: {
             slidesPerView: 1,
           },
-          430: {
+          450: {
             slidesPerView: 2,
           },
-          600: {
+          680: {
             slidesPerView: 3,
           },
-          820: {
-            slidesPerView: 5,
+          880: {
+            slidesPerView: 4,
           },
-          1000: {
+          1200: {
             slidesPerView: 6,
           },
         }}

@@ -1,4 +1,4 @@
-import { MouseEvent, useEffect, useState } from "react";
+import { MouseEvent, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -65,7 +65,7 @@ export const Super5Appbar = () => {
 
   const handleUserInfo = () => {
     setAnchorEl(null);
-    navigate("/user/datospersonales");
+    navigate("/user/perfil");
   };
 
   return (
@@ -78,7 +78,7 @@ export const Super5Appbar = () => {
           }}
         />
       )}
-      <AppBar position="fixed">
+      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Toolbar variant="dense">
           <Tooltip title="Categorias">
             <IconButton color="inherit" aria-label="menu" sx={{ mr: 2 }}>
@@ -89,7 +89,7 @@ export const Super5Appbar = () => {
           <Box sx={{ flexGrow: 1 }}>
             <Avatar variant="square" src={brandLogo} sx={{ width: 120 }} />
           </Box>
-          <Box sx={{ backgroundColor: "007aff", mt: 1 }}>
+          <Box sx={{ backgroundColor: "007aff", mt: 1, flex: 1 }}>
             <ProductAutocomplete />
           </Box>
           <Tooltip title="Inicio">
@@ -125,10 +125,13 @@ export const Super5Appbar = () => {
                 onClose={handleClose}
               >
                 <MenuItem onClick={handleDireccion}>Agregar direccion</MenuItem>
-                <MenuItem onClick={handleUserInfo}>Datos personales</MenuItem>
+                <MenuItem onClick={handleUserInfo}>Perfil</MenuItem>
               </Menu>
               <Tooltip title="cerrar sesion">
-                <IconButton color="inherit" onClick={() => handleLogout()}>
+                <IconButton color="inherit" onClick={() => {
+                  handleLogout()
+                  navigate("/")
+                }}>
                   <Logout fontSize="small" />
                 </IconButton>
               </Tooltip>

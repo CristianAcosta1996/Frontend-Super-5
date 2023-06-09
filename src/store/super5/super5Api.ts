@@ -7,6 +7,7 @@ import {
   Token,
 } from "../../interfaces/interfaces";
 import { RootState } from "../store";
+import dayjs from "dayjs";
 
 interface LoginProps {
   usuarioOCorreo: string;
@@ -39,6 +40,7 @@ interface ModificarCompradorProps {
   nombre: string;
   apellido: string;
   telefono: string;
+  fechaNacimiento: Date;
 }
 
 interface ModificarStockProps {
@@ -48,6 +50,18 @@ interface ModificarStockProps {
 type AuthResponse = {
   token: string;
 };
+
+interface UserDataProps {
+  nombre: string;
+  apellido: string;
+  correo: string;
+  telefono: string;
+  fechaNacimiento: Date;
+  rol: 0 | 1;
+  eliminado: 0 | 1;
+  bloqueado: 0 | 1;
+  usuario: string;
+}
 
 export const super5Api = createApi({
   reducerPath: "super5Api",
@@ -61,7 +75,7 @@ export const super5Api = createApi({
       return headers;
     },
   }),
-
+  tagTypes: ["User"],
   endpoints: (builder) => ({
     login: builder.mutation<string, LoginProps>({
       query: (body) => ({
@@ -90,6 +104,10 @@ export const super5Api = createApi({
     getSucursales: builder.query<Sucursal[], void>({
       query: () => "sucursal/obtener",
     }),
+    getUserData: builder.query<UserDataProps, void>({
+      query: () => "usuario/obtenerUsuario",
+      providesTags: ["User"]
+    }),
     addAddress: builder.mutation<Token, AddressProps>({
       query: (body) => ({
         url: "direccion/crear",
@@ -117,6 +135,7 @@ export const super5Api = createApi({
         method: "POST",
         body,
       }),
+      invalidatesTags: ["User"]
     }),
     modificarStock: builder.mutation<string, ModificarStockProps>({
       query: (body) => ({
@@ -148,4 +167,5 @@ export const {
   useModificarCompradorMutation,
   useGetCategoriasQuery,
   useModificarStockMutation,
+  useGetUserDataQuery,
 } = super5Api;

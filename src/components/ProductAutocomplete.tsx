@@ -35,6 +35,7 @@ export default function ProductAutocomplete() {
 
   return (
     <Autocomplete
+      fullWidth
       size="small"
       forcePopupIcon={false}
       loadingText={"Cargando productos..."}
@@ -52,7 +53,7 @@ export default function ProductAutocomplete() {
           })
           : [{ label: "Cargando productos", nombreCategoria: "Sin categoria" }]
       }
-      sx={{ width: 600, backgroundColor: "white", borderRadius: "5px" }}
+      sx={{ backgroundColor: "white", borderRadius: "5px" }}
       renderInput={(params) => {
         return <TextField {...params} placeholder="Buscar producto" />;
       }}

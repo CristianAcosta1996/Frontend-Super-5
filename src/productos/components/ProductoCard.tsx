@@ -23,9 +23,9 @@ export const ProductoCard = ({ producto }: ProductoCardProps) => {
     useProducto();
 
   const { agregarItemAlCarrito } = useCarrito();
-
+  /* console.log(producto.nombre, "  ", producto.aplicaDescuento) */
   return (
-    <Card sx={{ maxWidth: 160, height: 360, boxShadow: 5 }}>
+    <Card sx={{ minWidth: 140, maxWidth: 160, height: 350, boxShadow: 5 }}>
       <Grid container justifyContent={"center"}>
         <CardMedia
           sx={{ mt: 1, width: 150, height: 150 }}
@@ -51,6 +51,7 @@ export const ProductoCard = ({ producto }: ProductoCardProps) => {
               display: "-webkit-box",
               WebkitLineClamp: "3",
               WebkitBoxOrient: "vertical",
+              marginLeft: 0
             }}
             variant="body2"
             title={producto.descripcion}
@@ -62,16 +63,14 @@ export const ProductoCard = ({ producto }: ProductoCardProps) => {
             variant="body2"
             fontSize={16}
             fontWeight="bold"
-            color="primary"
+            color="#ff0056"
             my={1}
-            sx={{ marginTop: 0, marginBottom: 0 }}
+            sx={{ marginTop: 0, marginBottom: 0, marginLeft: 0 }}
           >
             $ {producto.precio}
           </Typography>
         </CardContent>
-        <Typography color="primary" sx={{ marginTop: 0, marginBottom: 0 }}>
-          Cantidad:
-        </Typography>
+
         <CardActions
           sx={{
             paddingBottom: 0,
@@ -84,45 +83,60 @@ export const ProductoCard = ({ producto }: ProductoCardProps) => {
             <Box
               aria-label="cantidadProducto"
               sx={{
+                color: "#ff0056",
                 display: "flex",
                 alignItems: "center",
+                borderColor: "black"
               }}
             >
               <Button
                 size="small"
-                sx={{ borderRight: 1 }}
+                sx={{
+                  borderColor: "black",
+                  color: "#ff0056",
+                  borderRight: 1,
+                  fontSize: "14px"
+                }}
                 onClick={() => {
                   if (cantidad < 1) return;
                   reducirCantidadProducto();
                 }}
               >
-                -1
+                -
               </Button>
-              <Button size="small" disableRipple disableFocusRipple>
+              <Button sx={{
+                borderColor: "black",
+                fontSize: "14px",
+                color: "#ff0056"
+              }}
+                size="small"
+                disableRipple
+                disableFocusRipple
+              >
                 {cantidad}
               </Button>
               <Button
+                sx={{ borderColor: "black", color: "#ff0056", fontSize: "14px" }}
                 size="small"
                 onClick={() => {
                   aumentarCantidadProducto();
                 }}
               >
-                +1
+                +
               </Button>
             </Box>
           </ButtonGroup>
         </CardActions>
 
-        <CardActions sx={{ paddingTop: 0, width: "100%", marginTop: 0 }}>
+        <CardActions sx={{ paddingTop: 1, width: "100%", marginTop: 0 }}>
           <Button
             sx={{
-              marginTop: 0,
-              backgroundColor: "#007aff",
+              backgroundColor: "#ff0056",
               color: "white",
               gap: 1,
               "&:hover": {
-                color: "#007aff",
-                borderBlockColor: "#007aff",
+                color: "#ff0056",
+                borderBlockColor: "#ff0056",
                 border: 2,
               },
             }}
