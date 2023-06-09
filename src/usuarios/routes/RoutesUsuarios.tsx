@@ -9,9 +9,15 @@ import { MisDirecciones } from "../pages/MisDirecciones";
 import { MisPedidos } from "../pages/MisPedidos";
 import { Toolbar } from "@mui/material";
 
+import { useAppSelector } from "../../hooks/hooks";
+import { SelectorSucursales } from "../../sucursales/components/SelectorSucursales";
+
 export const RoutesUsuarios = () => {
+  const { sucursal } = useAppSelector((state) => state.super5);
+
   return (
     <>
+      {!sucursal.nombre && <SelectorSucursales openDialog={true} />}
       <Super5Appbar />
       <Toolbar sx={{ mb: 4 }} />
       <Routes>

@@ -121,14 +121,14 @@ export const DashboardSucursalesPage = () => {
             Icon={Check}
             titulo="Confirmar Venta"
             handleOnClick={() => {
-              navigate("/sucursal/compras");
+              navigate("/sucursal/ventas/confirmar-ventas");
             }}
           />{" "}
           <DashboardListItem
             Icon={DoneAll}
             titulo="Finalizar Venta"
             handleOnClick={() => {
-              navigate("/sucursal/ventas");
+              navigate("/sucursal/ventas/finalizar-ventas");
             }}
           />
           <DashboardListItem

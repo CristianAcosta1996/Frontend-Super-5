@@ -1,5 +1,11 @@
+export enum TipoUsuario {
+  Invitado = 0,
+  Comprador = 1,
+  Sucursal = 2,
+  Administrador = 3,
+}
 export interface Token {
-  rol: "admin" | "sucursal" | "comprador";
+  rol: TipoUsuario;
   nombre: string;
   apellido: string;
   correo: string;
@@ -10,6 +16,7 @@ export interface Token {
   iat: number;
   exp: number;
   sub: string;
+  sucursal: number;
 }
 
 export interface Direccion {
@@ -70,4 +77,5 @@ export interface CompraDTO {
   comprador_id?: number;
   promocion_id?: number;
   urlPaypal?: string;
+  correctamenteFinalizado: boolean;
 }
