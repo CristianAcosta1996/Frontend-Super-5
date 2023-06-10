@@ -11,6 +11,7 @@ import { EditarPerfil } from "../pages/EditarPerfil";
 
 import { useAppSelector } from "../../hooks/hooks";
 import { SelectorSucursales } from "../../sucursales/components/SelectorSucursales";
+import { HacerReclamo } from "../pages/Reclamar";
 
 export const RoutesUsuarios = () => {
   const { sucursal } = useAppSelector((state) => state.super5);
@@ -29,6 +30,7 @@ export const RoutesUsuarios = () => {
         <Route path="user/perfil/editar" element={<EditarPerfil />} />
         <Route path="user/misdirecciones" element={<MisDirecciones />} />
         <Route path="user/mispedidos" element={<MisPedidos />} />
+        <Route path="user/mispedidos/reclamo" element={<HacerReclamo />} />
         <Route path="/*" element={<Navigate replace to="/" />} />
       </Routes>
     </>

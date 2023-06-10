@@ -79,3 +79,14 @@ export interface CompraDTO {
   urlPaypal?: string;
   correctamenteFinalizado: boolean;
 }
+
+export interface ReclamoDTO {
+  id?: number;
+  tipo: "ATENCION" | "DEMORA" | "CALIDAD" | "PRECIO" | "OTRO";
+  estado: "ATENDIDO" | "CREADO";
+  comentario: string;
+  comentarioSucursal?: string;
+  venta: {
+    id: number;
+  };
+}

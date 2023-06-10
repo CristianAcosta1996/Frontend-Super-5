@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import MapIcon from '@mui/icons-material/Map';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
+import { MisComprasList } from "../components/MisComprasList";
 
 export const MisPedidos = () => {
     const navigate = useNavigate();
@@ -23,7 +24,7 @@ export const MisPedidos = () => {
     return (
         <>
 
-            <Grid container spacing={2} marginTop={1} sx={{ backgroundColor: 'yellow' }} >
+            <Grid container spacing={2} marginTop={1} >
                 <Drawer
                     variant="permanent"
                     sx={{
@@ -67,8 +68,8 @@ export const MisPedidos = () => {
                 </Drawer>
 
 
-                <Grid sx={{ backgroundColor: 'red' }} item xs={10}>
-
+                <Grid sx={{ ml: "20%" }} item xs={10}>
+                    <MisComprasList />
                 </Grid>
 
             </Grid>

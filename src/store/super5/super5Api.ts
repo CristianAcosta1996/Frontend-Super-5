@@ -3,6 +3,7 @@ import {
   Categoria,
   CompraDTO,
   Producto,
+  ReclamoDTO,
   Sucursal,
   Token,
 } from "../../interfaces/interfaces";
@@ -62,6 +63,7 @@ interface UserDataProps {
   bloqueado: 0 | 1;
   usuario: string;
 }
+
 
 export const super5Api = createApi({
   reducerPath: "super5Api",
@@ -129,6 +131,14 @@ export const super5Api = createApi({
         body,
       }),
     }),
+    crearReclamo: builder.mutation<Token, ReclamoDTO>({
+      query: (body) => ({
+        url: "reclamo/crear",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["User"]
+    }),
     modificarComprador: builder.mutation<Token, ModificarCompradorProps>({
       query: (body) => ({
         url: "cliente/modificarComprador",
@@ -155,6 +165,9 @@ export const super5Api = createApi({
     getVentas: builder.query<any[], void>({
       query: () => "venta/obtenerVentasPagas",
       providesTags: ["VentasPagadas"],
+    }),
+    getCompras: builder.query<any[], void>({
+      query: () => "venta/listar",
     }),
     getVentasConfirmadas: builder.query<any[], void>({
       query: () => "venta/obtenerVentasConfirmadas",
@@ -196,4 +209,6 @@ export const {
   useGetVentasConfirmadasQuery,
   useConfirmarVentaMutation,
   useFinalizarVentaMutation,
+  useGetComprasQuery,
+  useCrearReclamoMutation,
 } = super5Api;
