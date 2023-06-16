@@ -25,12 +25,13 @@ import "swiper/css/scrollbar";
 
 import { ProductosSlide } from "../productos/components/ProductosSlide";
 import { useGetCategoriasQuery } from "../store/super5/super5Api";
+import { Footer } from "../usuarios/components/Footer";
 
 export const HomePage = () => {
   const { data: categorias } = useGetCategoriasQuery();
   return (
-    <Box>
-      <Grid container>
+    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      <Grid container sx={{ flex: 1 }}>
         <Grid item xs={12}>
           <Slider imagenes={imagenes} />
         </Grid>
@@ -44,10 +45,8 @@ export const HomePage = () => {
           ))}
         </Grid>
         <Grid item xs={0} sm={1} />
-        <Grid item xs={12}>
-          <Footer />
-        </Grid>
       </Grid>
+      <Footer />
     </Box>
   );
 };
@@ -67,8 +66,8 @@ const Slider = ({ imagenes }: SliderProps) => {
       navigation
       pagination={{ clickable: true }}
       scrollbar={{ draggable: true }}
-      onSwiper={(swiper) => { }}
-      onSlideChange={() => { }}
+      onSwiper={(swiper) => {}}
+      onSlideChange={() => {}}
     >
       {imagenes.map((imagen) => (
         <SwiperSlide key={imagen}>
@@ -85,55 +84,5 @@ const Slider = ({ imagenes }: SliderProps) => {
         </SwiperSlide>
       ))}
     </Swiper>
-  );
-};
-
-const Footer = () => {
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        px: 1,
-        py: 2,
-        justifyContent: "space-between",
-      }}
-      bgcolor="#1976D2"
-    >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          color: "white",
-          justifyContent: "space-between",
-        }}
-      >
-        <Link color="inherit">Nosotros</Link>
-        <Link color="inherit">Sucursales</Link>
-        <Link color="inherit">Terminos y condiciones</Link>
-      </Box>
-      <Box
-        sx={{
-          color: "white",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-
-            justifyContent: "flex-end",
-            gap: 1,
-          }}
-        >
-          <Link color="inherit">Facebook</Link>
-          <Link color="inherit">Instagram</Link>
-        </Box>
-        <Typography color="inherit">
-          &copy; Todos los derechos reservados por Super5
-        </Typography>
-      </Box>
-    </Box>
   );
 };

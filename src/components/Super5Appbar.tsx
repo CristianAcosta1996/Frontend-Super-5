@@ -6,13 +6,7 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import MenuItem from "@mui/material/MenuItem";
-import {
-  Avatar,
-  Badge,
-  Button,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Avatar, Badge, Button, Tooltip, Typography } from "@mui/material";
 import Menu from "@mui/material/Menu";
 import IconButton from "@mui/material/IconButton";
 
@@ -78,7 +72,10 @@ export const Super5Appbar = () => {
           }}
         />
       )}
-      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+      <AppBar
+        position="fixed"
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
         <Toolbar variant="dense">
           <Tooltip title="Categorias">
             <IconButton color="inherit" aria-label="menu" sx={{ mr: 2 }}>
@@ -128,10 +125,13 @@ export const Super5Appbar = () => {
                 <MenuItem onClick={handleUserInfo}>Perfil</MenuItem>
               </Menu>
               <Tooltip title="cerrar sesion">
-                <IconButton color="inherit" onClick={() => {
-                  handleLogout()
-                  navigate("/")
-                }}>
+                <IconButton
+                  color="inherit"
+                  onClick={() => {
+                    handleLogout();
+                    navigate("/");
+                  }}
+                >
                   <Logout fontSize="small" />
                 </IconButton>
               </Tooltip>

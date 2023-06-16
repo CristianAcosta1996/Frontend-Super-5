@@ -23,7 +23,6 @@ export const VerProductoDetallesPage = () => {
     goBack,
     producto,
     isLoading,
-    data,
     modificarStock,
     isSuccess,
     isError,
@@ -229,7 +228,7 @@ export const VerProductoDetallesPage = () => {
         open={showSnackbar}
         autoHideDuration={3000}
         onClose={(
-          event: Event | SyntheticEvent<any, Event>,
+          _: Event | SyntheticEvent<any, Event>,
           reason?: SnackbarCloseReason
         ) => {
           if (reason === "clickaway") return;

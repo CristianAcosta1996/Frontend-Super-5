@@ -3,7 +3,8 @@ import { useAppSelector } from "../hooks/hooks";
 import { RoutesUsuarios } from "../usuarios/routes/RoutesUsuarios";
 import { DashboardSucursalesPage } from "../sucursales/pages/DashboardSucursalesPage";
 import { TipoUsuario } from "../interfaces/interfaces";
-import { RoutesAdministradores } from "../administradores/routes/AdministradoresRoutes";
+
+import { DashboardAdministradores } from "../administradores/pages/DashboardAdministradores";
 
 export const Super5Routes = () => {
   const { tipoUsuario } = useAppSelector((state) => state.auth);
@@ -23,7 +24,10 @@ export const Super5Routes = () => {
         )}
         {tipoUsuario === TipoUsuario.Administrador && (
           <>
-            <Route path="administrador/*" element={<RoutesAdministradores />} />
+            <Route
+              path="administrador/*"
+              element={<DashboardAdministradores />}
+            />
             <Route path="*" element={<Navigate to="administrador" />} />
           </>
         )}

@@ -26,6 +26,8 @@ import {
 } from "../../store/super5/super5Slice";
 import { guardarcompraPaypal, limpiarCarrito } from "../../utils/localstorage";
 import { useCarrito } from "../carrito/hooks/useCarrito";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 interface CarritoDrawerProps {
   cartOpen: boolean;
@@ -36,15 +38,18 @@ export const CarritoDrawer = ({
   cartOpen,
   handleClose,
 }: CarritoDrawerProps) => {
-  /* const [open, setOpen] = useState(false); */
   const { carrito } = useAppSelector((state) => state.super5);
   const { sucursal } = useAppSelector((state) => state.super5);
+  const navigate = useNavigate();
   const [startCompraPaypal] = useGenerarCompraPaypalMutation();
   const dispatch = useAppDispatch();
   const { precioTotalCarrito, quitarItemDelCarrito, agregarItemAlCarrito } =
     useCarrito();
 
   const handlePagarCompra = (): void => {
+    handleClose();
+    navigate("compra/procesar-pago");
+    return;
     let arregloCompra: CarritoDto[] = [];
     carrito.forEach(({ producto, cantidad }) => {
       arregloCompra.push({ producto_id: +producto.id, cantidad });
@@ -70,6 +75,7 @@ export const CarritoDrawer = ({
 
   const toggleDrawer =
     () => (event: React.KeyboardEvent | React.MouseEvent) => {
+      console.log("entre");
       if (
         event.type === "keydown" &&
         ((event as React.KeyboardEvent).key === "Tab" ||

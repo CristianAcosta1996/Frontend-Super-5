@@ -20,7 +20,7 @@ export interface Token {
 }
 
 export interface Direccion {
-  id: string;
+  id?: string;
   direccion: string;
   ciudad: string;
   departamento: string;
@@ -89,4 +89,18 @@ export interface ReclamoDTO {
   venta: {
     id: number;
   };
+}
+export interface Usuario {
+  id: number;
+  usuario: string;
+  contrasenia: null;
+  nombre: string;
+  apellido: string;
+  eliminado: boolean;
+  bloqueado: boolean;
+  googleId: string;
+  correo: string;
+  telefono: string;
+  rol: number;
+  fechaNacimiento: string;
 }

@@ -2,7 +2,7 @@ import { AnyAction, ThunkAction } from "@reduxjs/toolkit";
 import { checkingCredentials, login, logout } from "./authSlice";
 import { RootState } from "../store";
 import { signInWithGoogle } from "../../firebase/firebase.providers";
-import { getToken, limpiarStorage, setToken } from "../../utils/localstorage";
+import { getToken, limpiarToken, setToken } from "../../utils/localstorage";
 
 export const startEmailAndPasswordLogin = (
   token: string
@@ -23,7 +23,7 @@ export const startEmailAndPasswordLogin = (
         uid: decoded?.uid,
         imageUrl: decoded?.imagenUrl,
         telefono: decoded?.telefono,
-        sucursal: decoded?.sucursal || null,
+        sucursal: decoded?.sucursal || -1,
       })
     );
   };
@@ -62,7 +62,7 @@ export const startGoogleSignIn = (): ThunkAction<
         token: null,
         googleUser: true,
         telefono: null,
-        sucursal: null,
+        sucursal: -1,
       })
     );
   };
@@ -76,7 +76,7 @@ export const startLogout = (): ThunkAction<
 > => {
   return async (dispatch) => {
     dispatch(logout({ errorMessage: null }));
-    limpiarStorage();
+    limpiarToken();
     /* si esta logueado con google llamar a firbease.auth.signout */
     /* llamar a logout y eliminar la info de localstorage */
   };
