@@ -31,10 +31,7 @@ export const RoutesUsuarios = () => {
         <Route path="user/perfil" element={<Perfil />} />
         <Route path="user/perfil/editar" element={<EditarPerfil />} />
         <Route path="user/misdirecciones" element={<MisDirecciones />} />
-        <Route
-          path="user/misdirecciones/modificar"
-          element={<ModificarDireccion />}
-        />
+        <Route path="user/misdirecciones/modificar" element={<ModificarDireccion />} />
         <Route path="user/mispedidos" element={<MisPedidos />} />
         <Route path="user/mispedidos/reclamo" element={<HacerReclamo />} />
         <Route path="/*" element={<Navigate replace to="/" />} />

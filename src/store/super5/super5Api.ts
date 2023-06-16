@@ -73,6 +73,12 @@ interface UserDataProps {
   usuario: string;
   direcciones: Direccion[];
 }
+interface ModificarContrasenaProps {
+  guid: string;
+  contrasena: string;
+  contrasenaRepeticion: string;
+}
+
 interface EliminarProductoProps {
   id: number;
 }
@@ -96,6 +102,10 @@ interface CrearSucursalProps {
     longitud: string;
     latitud: string;
   };
+}
+
+interface RecuperarContrasenaProps {
+  correo: string;
 }
 
 export const super5Api = createApi({
@@ -137,6 +147,20 @@ export const super5Api = createApi({
         body,
       }),
       transformResponse: (resp: AuthResponse, meta) => resp.token,
+    }),
+    recuperarContrasena: builder.mutation<string, RecuperarContrasenaProps>({
+      query: (body) => ({
+        url: "auth/generarRecuperacionContrasena",
+        method: "POST",
+        body,
+      })
+    }),
+    modificarContrasena: builder.mutation<any, ModificarContrasenaProps>({
+      query: (body) => ({
+        url: "auth/modificarContrasena",
+        method: "POST",
+        body,
+      })
     }),
     getProductos: builder.query<Producto[], void>({
       query: () => "producto/obtenerPorSucursal/1",
@@ -341,6 +365,8 @@ export const {
   useModificarDireccionMutation,
   useGetReclamosQuery,
   useAtenderReclamoMutation,
+  useRecuperarContrasenaMutation,
+  useModificarContrasenaMutation,
   useGetProductosQuery,
   useCrearProductoMutation,
   useEliminarProductoMutation,
