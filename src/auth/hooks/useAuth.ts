@@ -41,14 +41,14 @@ export const useAuth = () => {
   const [startRecuperarContrasena] = useRecuperarContrasenaMutation();
   const [startModificarContrasena] = useModificarContrasenaMutation();
 
-  const handleRecuperarContrasena = async (email: string) => {
+  const handleRecuperarContrasena = async (
+    email: string
+  ) => {
     startRecuperarContrasena(
-      email,
+      { correo: email }
     )
       .unwrap()
-      .then((resp) => {
-        alert(resp)
-      })
+      .then()
       .catch((error) => {
         console.error(error);
       });

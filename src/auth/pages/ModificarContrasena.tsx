@@ -48,6 +48,7 @@ export const ModificarContrasena = () => {
     if (!password1 || !password2) return;
     if (password1 != password2) alert("Las contraseñas deben coincidir")
     if (miGuid) handleModificarContrasena(miGuid, password1, password2);
+    alert("Contraseña actualizada con éxito");
     navigate("/auth/login");
     reset();
   };

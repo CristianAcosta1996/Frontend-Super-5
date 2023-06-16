@@ -104,6 +104,10 @@ interface CrearSucursalProps {
   };
 }
 
+interface RecuperarContrasenaProps {
+  correo: string;
+}
+
 export const super5Api = createApi({
   reducerPath: "super5Api",
   baseQuery: fetchBaseQuery({
@@ -144,7 +148,7 @@ export const super5Api = createApi({
       }),
       transformResponse: (resp: AuthResponse, meta) => resp.token,
     }),
-    recuperarContrasena: builder.mutation<string, string>({
+    recuperarContrasena: builder.mutation<string, RecuperarContrasenaProps>({
       query: (body) => ({
         url: "auth/generarRecuperacionContrasena",
         method: "POST",

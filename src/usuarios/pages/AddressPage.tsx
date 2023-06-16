@@ -77,7 +77,7 @@ function Map() {
                 ))}
             </GoogleMap>
             <div >
-                <PlacesAutocomplete setLatLong={setLatLong} setCiudad={setCiudad} setDepartamento={setDepartamento} previous_place={previous_place} setPrevious_place={setPrevious_place} setDireccion={setDireccion} direccion={direccion} setSelected={setSelected} />
+                <PlacesAutocomplete setFirstPin={setFirstPin} setLatLong={setLatLong} setCiudad={setCiudad} setDepartamento={setDepartamento} previous_place={previous_place} setPrevious_place={setPrevious_place} setDireccion={setDireccion} direccion={direccion} setSelected={setSelected} />
             </div>
             <TextField
                 variant="filled"
@@ -115,7 +115,7 @@ function Map() {
     );
 }
 
-const PlacesAutocomplete = ({ setLatLong, setCiudad, setDepartamento, setSelected, direccion, setDireccion, previous_place, setPrevious_place }) => {
+const PlacesAutocomplete = ({ setFirstPin, setLatLong, setCiudad, setDepartamento, setSelected, direccion, setDireccion, previous_place, setPrevious_place }) => {
 
     const {
         value,
@@ -125,7 +125,7 @@ const PlacesAutocomplete = ({ setLatLong, setCiudad, setDepartamento, setSelecte
     } = usePlacesAutocomplete();
 
     const handleSelect = () => {
-
+        setFirstPin(true);
         const latLng = { lat: null, lng: null }
         if (status === "OK") {
             fetch(`https://maps.googleapis.com/maps/api/geocode/json?place_id=${data[0].place_id}&key=AIzaSyB8FiaESvpDDrcOkwW07BVr5Z-rdumVSds`)
