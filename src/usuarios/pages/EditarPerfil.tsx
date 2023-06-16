@@ -21,10 +21,20 @@ export const EditarPerfil = () => {
     const [phone, setPhone] = useState(userData?.telefono);
     const [mail, setMail] = useState(userData?.correo);
     const [fechaNac, setFechaNac] = useState((userData?.fechaNacimiento.toString().slice(0, -19)));
-
     const [nacimiento, setNacimiento] = useState<Dayjs | null>(dayjs(fechaNac));
 
+    useEffect(() => {
+        if (userData) {
+            setName(userData.nombre);
+            setSurname(userData.apellido);
+            setPhone(userData.telefono);
+            setMail(userData.correo);
+            setFechaNac((userData?.fechaNacimiento.toString().slice(0, -19)));
+            setNacimiento(dayjs(fechaNac))
+        }
 
+    }, [userData, fechaNac]);
+    console.log(userData?.direcciones);
 
     const handleDatosPersonales = () => {
         navigate("/user/datospersonales");
@@ -54,10 +64,6 @@ export const EditarPerfil = () => {
             handleModificarComprador(name, surname, phone, nacimiento.toDate());
             navigate("/user/perfil")
         }
-    }
-    const handleFechaNac = (e) => {
-        console.log(e.target.value)
-        setNacimiento(e.target.value);
     }
 
     const handleCancelar = () => {
@@ -195,7 +201,7 @@ export const EditarPerfil = () => {
                                 size="small"
                                 label="Fecha de Nacimiento"
                                 value={nacimiento}
-                                onChange={handleFechaNac}
+                                onChange={(newValue) => setNacimiento(newValue)}
                                 format="DD-MM-YYYY"
                             />
 
@@ -209,9 +215,7 @@ export const EditarPerfil = () => {
                             variant="text"
                             sx={{
                                 ml: 4,
-                                textTransform: "capitalize",
                                 fontSize: 14,
-                                textDecoration: "underline",
                                 color: "white",
                                 backgroundColor: "#007aff",
                                 "&:hover": {
@@ -229,9 +233,7 @@ export const EditarPerfil = () => {
                             variant="text"
                             sx={{
                                 ml: 5,
-                                textTransform: "capitalize",
                                 fontSize: 14,
-                                textDecoration: "underline",
                                 color: "white",
                                 backgroundColor: "#007aff",
                                 "&:hover": {

@@ -26,6 +26,7 @@ export interface Direccion {
   departamento: string;
   longitud: string;
   latitud: string;
+  aclaracion: string;
 }
 export interface Sucursal {
   id: string;

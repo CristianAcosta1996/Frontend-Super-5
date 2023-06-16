@@ -10,7 +10,7 @@ export const useCrearReclamo = () => {
         tipo: "ATENCION" | "DEMORA" | "CALIDAD" | "PRECIO" | "OTRO",
         comentario: string,
     ) => {
-        const resp = await startCrearReclamo({
+        startCrearReclamo({
             tipo,
             estado: "CREADO",
             comentario: comentario,
@@ -18,8 +18,14 @@ export const useCrearReclamo = () => {
                 id
             },
 
-        });
-        if (resp) alert(`RECLAMO EFECTUADO`)
+        }).unwrap()
+            .then((resp) => {
+                console.log(resp);
+            })
+            .catch((error) => {
+                alert(error.data);
+            })
+
     };
 
     return { handleCrearReclamo }
