@@ -124,6 +124,7 @@ export const LoginPage = () => {
                   color: "#fff",
                 }}
                 disabled={isAuthenticatingLogin}
+                onClick={() => navigate("/auth/recuperarcontrasena")}
               >
                 recuperar contraseña
               </Button>

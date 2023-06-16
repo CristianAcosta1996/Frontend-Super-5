@@ -64,7 +64,11 @@ interface UserDataProps {
   usuario: string;
   direcciones: Direccion[];
 }
-
+interface ModificarContrasenaProps {
+  guid: string;
+  contrasena: string;
+  contrasenaRepeticion: string;
+}
 
 export const super5Api = createApi({
   reducerPath: "super5Api",
@@ -97,6 +101,20 @@ export const super5Api = createApi({
         body,
       }),
       transformResponse: (resp: AuthResponse, meta) => resp.token,
+    }),
+    recuperarContrasena: builder.mutation<string, string>({
+      query: (body) => ({
+        url: "auth/generarRecuperacionContrasena",
+        method: "POST",
+        body,
+      })
+    }),
+    modificarContrasena: builder.mutation<any, ModificarContrasenaProps>({
+      query: (body) => ({
+        url: "auth/modificarContrasena",
+        method: "POST",
+        body,
+      })
     }),
     getProductosPorSucursal: builder.query<Producto[], string>({
       query: (id) => `producto/obtenerPorSucursal/${id}`,
@@ -248,4 +266,6 @@ export const {
   useModificarDireccionMutation,
   useGetReclamosQuery,
   useAtenderReclamoMutation,
+  useRecuperarContrasenaMutation,
+  useModificarContrasenaMutation,
 } = super5Api;

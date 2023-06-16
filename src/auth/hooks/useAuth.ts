@@ -1,6 +1,8 @@
 import { useAppDispatch } from "../../hooks/hooks";
 import {
   useLoginMutation,
+  useModificarContrasenaMutation,
+  useRecuperarContrasenaMutation,
   useSignupMutation,
 } from "../../store/super5/super5Api";
 import {
@@ -35,6 +37,40 @@ export const useAuth = () => {
       data: dataSignup,
     },
   ] = useSignupMutation();
+
+  const [startRecuperarContrasena] = useRecuperarContrasenaMutation();
+  const [startModificarContrasena] = useModificarContrasenaMutation();
+
+  const handleRecuperarContrasena = async (email: string) => {
+    startRecuperarContrasena(
+      email,
+    )
+      .unwrap()
+      .then((resp) => {
+        alert(resp)
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleModificarContrasena = async (
+    guid: string,
+    contrasena: string,
+    contrasenaRepeticion: string) => {
+    startModificarContrasena({
+      guid,
+      contrasena,
+      contrasenaRepeticion
+    })
+      .unwrap()
+      .then((resp) => {
+        alert(resp)
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   const handleLogout = () => {
     dispatch(startLogout());
@@ -110,5 +146,7 @@ export const useAuth = () => {
     isSuccessSignup,
     dataLogin,
     dataSignup,
+    handleRecuperarContrasena,
+    handleModificarContrasena
   };
 };
