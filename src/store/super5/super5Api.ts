@@ -2,13 +2,13 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
   Categoria,
   CompraDTO,
+  Direccion,
   Producto,
+  ReclamoDTO,
   Sucursal,
   Token,
 } from "../../interfaces/interfaces";
 import { RootState } from "../store";
-import dayjs from "dayjs";
-import { ReclamoDTO } from "../../interfaces/interfaces";
 
 interface LoginProps {
   usuarioOCorreo: string;
@@ -62,7 +62,9 @@ interface UserDataProps {
   eliminado: 0 | 1;
   bloqueado: 0 | 1;
   usuario: string;
+  direcciones: Direccion[];
 }
+
 
 export const super5Api = createApi({
   reducerPath: "super5Api",
@@ -76,7 +78,7 @@ export const super5Api = createApi({
       return headers;
     },
   }),
-  tagTypes: ["VentasPagadas", "VentasConfirmadas", "User", "AtenderReclamo"],
+  tagTypes: ["VentasPagadas", "VentasConfirmadas", "UserData", "AtenderReclamo", "Direccion"],
   endpoints: (builder) => ({
     login: builder.mutation<string, LoginProps>({
       query: (body) => ({
@@ -107,11 +109,22 @@ export const super5Api = createApi({
     }),
     getUserData: builder.query<UserDataProps, void>({
       query: () => "usuario/obtenerUsuario",
-      providesTags: ["User"],
+      providesTags: ["UserData"]
     }),
     addAddress: builder.mutation<Token, AddressProps>({
       query: (body) => ({
         url: "direccion/crear",
+        method: "POST",
+        body,
+      }),
+    }),
+    getDirecciones: builder.query<Direccion[], void>({
+      query: () => "direccion/listar",
+      providesTags: ["Direccion"],
+    }),
+    eliminarDireccion: builder.mutation<any, any>({
+      query: (body) => ({
+        url: "direccion/eliminar",
         method: "POST",
         body,
       }),
@@ -130,13 +143,29 @@ export const super5Api = createApi({
         body,
       }),
     }),
+    crearReclamo: builder.mutation<Token, ReclamoDTO>({
+      query: (body) => ({
+        url: "reclamo/crear",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["UserData"]
+    }),
     modificarComprador: builder.mutation<Token, ModificarCompradorProps>({
       query: (body) => ({
         url: "cliente/modificarComprador",
         method: "POST",
         body,
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: ["UserData"]
+    }),
+    modificarDireccion: builder.mutation<Token, Direccion>({
+      query: (body) => ({
+        url: "direccion/modificar",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Direccion"]
     }),
     modificarStock: builder.mutation<string, ModificarStockProps>({
       query: (body) => ({
@@ -156,6 +185,9 @@ export const super5Api = createApi({
     getVentas: builder.query<any[], void>({
       query: () => "venta/obtenerVentasPagas",
       providesTags: ["VentasPagadas"],
+    }),
+    getCompras: builder.query<any[], void>({
+      query: () => "venta/listar",
     }),
     getVentasConfirmadas: builder.query<any[], void>({
       query: () => "venta/obtenerVentasConfirmadas",
@@ -209,6 +241,11 @@ export const {
   useGetVentasConfirmadasQuery,
   useConfirmarVentaMutation,
   useFinalizarVentaMutation,
+  useGetComprasQuery,
+  useCrearReclamoMutation,
+  useGetDireccionesQuery,
+  useEliminarDireccionMutation,
+  useModificarDireccionMutation,
   useGetReclamosQuery,
   useAtenderReclamoMutation,
 } = super5Api;

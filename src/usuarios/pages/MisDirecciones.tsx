@@ -1,13 +1,17 @@
 import { Box, Button, Container, Drawer, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField, Toolbar } from "@mui/material";
-import { useAppSelector } from "../../hooks/hooks";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import MapIcon from '@mui/icons-material/Map';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
+import { MisComprasList } from "../components/MisComprasList";
+import { useGetDireccionesQuery } from "../../store/super5/super5Api";
+import { MisDireccionesList } from "../components/MisDireccionesList";
 
 export const MisDirecciones = () => {
     const navigate = useNavigate();
+
+    const direcciones = useGetDireccionesQuery();
 
     const handleDatosPersonales = () => {
         navigate("/user/perfil");
@@ -24,7 +28,7 @@ export const MisDirecciones = () => {
     return (
         <>
 
-            <Grid container spacing={2} marginTop={1} sx={{ backgroundColor: 'yellow' }} >
+            <Grid container spacing={2} marginTop={1} >
                 <Drawer
                     variant="permanent"
                     sx={{
@@ -47,8 +51,8 @@ export const MisDirecciones = () => {
                             </ListItem>
 
                             <ListItem sx={{ backgroundColor: "#ff0056" }} disablePadding>
-                                <ListItemButton sx={{ color: "#fff" }} onClick={handleMisDirecciones} >
-                                    <ListItemIcon sx={{ color: "#fff" }}>
+                                <ListItemButton onClick={handleMisDirecciones} >
+                                    <ListItemIcon>
                                         <MapIcon />
                                     </ListItemIcon>
                                     <ListItemText primary={"Mis Direcciones"} />
@@ -68,8 +72,8 @@ export const MisDirecciones = () => {
                 </Drawer>
 
 
-                <Grid sx={{ backgroundColor: 'red' }} item xs={10}>
-
+                <Grid sx={{ ml: "20%" }} item xs={10}>
+                    <MisDireccionesList />
                 </Grid>
 
             </Grid>
