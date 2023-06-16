@@ -1,4 +1,3 @@
-//http://localhost:5173/modificarcontrasena?guid=asdasdaddsddf
 import { SyntheticEvent, useEffect, useState } from "react";
 import {
     Button,
