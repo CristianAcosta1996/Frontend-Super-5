@@ -1,7 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 
-import { ListadoDeStockPage } from "../pages/ListadoDeStockPage";
-import { ConfirmacionComprasPage } from "../pages/ConfirmacionComprasPage";
 import { FinalizarComprasPage } from "../pages/FinalizarComprasPage";
 import { ProductosRoutes } from "../../productos/routes/ProductosRoutes";
 import { ComprasRoutes } from "../../compras/routes/ComprasRoutes";

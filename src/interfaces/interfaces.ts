@@ -26,6 +26,7 @@ export interface Direccion {
   departamento: string;
   longitud: string;
   latitud: string;
+  aclaracion: string;
 }
 export interface Sucursal {
   id: string;
@@ -80,16 +81,6 @@ export interface CompraDTO {
   correctamenteFinalizado?: boolean;
 }
 
-export interface ReclamoDTO {
-  id?: number;
-  tipo: "ATENCION" | "ATENCION" | "DEMORA" | "CALIDAD" | "PRECIO" | "OTRO";
-  estado: "ATENDIDO" | "CREADO";
-  comentario: string;
-  comentarioSucursal: string;
-  venta: {
-    id: number;
-  };
-}
 export interface Usuario {
   id: number;
   usuario: string;
@@ -103,4 +94,15 @@ export interface Usuario {
   telefono: string;
   rol: number;
   fechaNacimiento: string;
+}
+
+export interface ReclamoDTO {
+  id?: number;
+  tipo: "ATENCION" | "DEMORA" | "CALIDAD" | "PRECIO" | "OTRO";
+  estado: "ATENDIDO" | "CREADO";
+  comentario: string;
+  comentarioSucursal?: string;
+  venta: {
+    id: number;
+  };
 }

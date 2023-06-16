@@ -57,6 +57,7 @@ const initialStateSucursal: Sucursal = {
     id: "",
     latitud: "",
     longitud: "",
+    aclaracion: "",
   },
   id: "",
   nombre: "",

@@ -6,8 +6,10 @@ import { TextField } from "@mui/material";
 import { useAddress } from "../hooks/useAddress";
 import { useGetSucursalesQuery } from "../../store/super5/super5Api";
 import { Button } from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useModificarDireccion } from "../hooks/useModificarDireccion";
 
-export default function AddressPage() {
+export default function ModificarDireccion() {
     const [libraries] = useState(['places']);
     const { isLoaded } = useLoadScript({ googleMapsApiKey: "AIzaSyB8FiaESvpDDrcOkwW07BVr5Z-rdumVSds", libraries });
 
@@ -16,17 +18,32 @@ export default function AddressPage() {
 }
 
 function Map() {
+    const navigate = useNavigate();
+    const location = useLocation();
     const [selected, setSelected] = useState({ lat: -34.88361775757272, lng: -56.162513098582345 });
     const [direccion, setDireccion] = useState("");
     const [previous_place, setPrevious_place] = useState("");
-    const [aclaraciones, setAclaraciones] = useState("");
-    const [latLong, setLatLong] = useState({ lat: 0, lng: 0 })
-    const { handleAddAddress } = useAddress();
-    const [firstPin, setFirstPin] = useState(false)
-    const [ciudad, setCiudad] = useState("");
-    const [departamento, setDepartamento] = useState("");
-
+    const [aclaraciones, setAclaraciones] = useState(location.state?.direccionAclaracion);
+    const [latLong, setLatLong] = useState({ lat: 0, lng: 0 });
+    const [firstPin, setFirstPin] = useState(false);
+    const [ciudad, setCiudad] = useState(location.state?.direccionCiudad);
+    const [departamento, setDepartamento] = useState(location.state?.direccionDepartamento);
+    const [id, setId] = useState(location.state?.direccionID);
     const { data: sucursales } = useGetSucursalesQuery();
+    const { handleModificarDireccion } = useModificarDireccion();
+
+    useEffect(() => {
+        if (location) {
+            setFirstPin(true)
+            setSelected({ lat: +location.state.direccionLat, lng: +location.state.direccionLng });
+            setAclaraciones(location.state.direccionAclaracion);
+            setDireccion(location.state.direccionFull);
+            setLatLong(selected);
+            setCiudad(location.state.direccionCiudad);
+            setDepartamento(location.state.direccionDepartamento);
+            setId(location.state.direccionID);
+        }
+    }, [location]);
 
     const addMarker = ({ latLng }) => {
         setFirstPin(true)
@@ -48,8 +65,8 @@ function Map() {
     };
 
     const saveDirection = () => {
-        handleAddAddress(direccion, ciudad, departamento, latLong.lng.toString(), latLong.lat.toString(), aclaraciones)
-
+        handleModificarDireccion(id, direccion, ciudad, departamento, latLong.lng.toString(), latLong.lat.toString(), aclaraciones);
+        navigate("/user/misdirecciones");
     }
 
     return (
@@ -85,6 +102,7 @@ function Map() {
                 type="text"
                 sx={{ backgroundColor: "#fff", borderRadius: 2, minWidth: 800, ml: 2, boxShadow: 5 }}
                 name="Aclaraciones"
+                defaultValue={aclaraciones}
                 onChange={(e) => { setAclaraciones(e.target.value) }}
             />
             <div>

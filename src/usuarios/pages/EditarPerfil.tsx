@@ -1,4 +1,4 @@
-import { Box, Button, Container, Drawer, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField, Toolbar } from "@mui/material";
+import { Box, Button, Container, Drawer, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField, Toolbar, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useModificarComprador } from "../hooks/useModificarComprador";
@@ -21,10 +21,20 @@ export const EditarPerfil = () => {
     const [phone, setPhone] = useState(userData?.telefono);
     const [mail, setMail] = useState(userData?.correo);
     const [fechaNac, setFechaNac] = useState((userData?.fechaNacimiento.toString().slice(0, -19)));
-
     const [nacimiento, setNacimiento] = useState<Dayjs | null>(dayjs(fechaNac));
 
+    useEffect(() => {
+        if (userData) {
+            setName(userData.nombre);
+            setSurname(userData.apellido);
+            setPhone(userData.telefono);
+            setMail(userData.correo);
+            setFechaNac((userData?.fechaNacimiento.toString().slice(0, -19)));
+            setNacimiento(dayjs(fechaNac))
+        }
 
+    }, [userData, fechaNac]);
+    console.log(userData?.direcciones);
 
     const handleDatosPersonales = () => {
         navigate("/user/datospersonales");
@@ -55,10 +65,6 @@ export const EditarPerfil = () => {
             navigate("/user/perfil")
         }
     }
-    const handleFechaNac = (e) => {
-        console.log(e.target.value)
-        setNacimiento(e.target.value);
-    }
 
     const handleCancelar = () => {
         navigate("/user/perfil")
@@ -67,7 +73,11 @@ export const EditarPerfil = () => {
     return (
         <>
 
-            <Grid container spacing={2} marginTop={0} >
+            <Grid container
+                justifyContent={"flex-start"}
+                spacing={2}
+                marginTop={0}
+                xs={12} >
                 <Drawer
                     variant="permanent"
                     sx={{
@@ -112,8 +122,18 @@ export const EditarPerfil = () => {
 
 
 
-                <Grid sx={{ marginLeft: "240px" }} item xs={10}>
-                    <Grid marginLeft={2} item xs={8} mb={3}>
+                <Grid container sx={{ ml: "5%", borderRadius: 4, border: "2px solid #007aff", padding: 1, mt: 2 }} item xs={6}>
+                    <Grid item xs={12}>
+                        <Typography
+                            width={"75%"}
+                            variant="h3"
+                            component={"h2"}
+                            color={"black"}
+                        >
+                            Editar Perfil
+                        </Typography>
+                    </Grid>
+                    <Grid marginLeft={2} mt={2} item xs={5} mb={3}>
                         <TextField
                             size="small"
                             variant="filled"
@@ -128,7 +148,7 @@ export const EditarPerfil = () => {
                             onChange={handleNameChange}
                         />
                     </Grid>
-                    <Grid marginLeft={2} item xs={8} mb={3}>
+                    <Grid marginLeft={2} item xs={5} mb={3} mt={2}>
                         <TextField
                             size="small"
                             variant="filled"
@@ -143,7 +163,7 @@ export const EditarPerfil = () => {
                             onChange={handleSurnameChange}
                         />
                     </Grid>
-                    <Grid marginLeft={2} item xs={8} mb={3}>
+                    <Grid marginLeft={2} item xs={5} mb={3}>
                         <TextField
                             disabled={true}
                             size="small"
@@ -158,7 +178,7 @@ export const EditarPerfil = () => {
                             value={mail}
                         />
                     </Grid>
-                    <Grid marginLeft={2} item xs={8} mb={3}>
+                    <Grid marginLeft={2} item xs={5} mb={3}>
                         <TextField
                             size="small"
                             variant="filled"
@@ -173,7 +193,7 @@ export const EditarPerfil = () => {
                             onChange={handlePhoneChange}
                         />
                     </Grid>
-                    <Grid marginLeft={2} item xs={8} mb={3}>
+                    <Grid marginLeft={2} item xs={5} mb={3}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DateField
                                 variant="filled"
@@ -181,53 +201,52 @@ export const EditarPerfil = () => {
                                 size="small"
                                 label="Fecha de Nacimiento"
                                 value={nacimiento}
-                                onChange={handleFechaNac}
+                                onChange={(newValue) => setNacimiento(newValue)}
                                 format="DD-MM-YYYY"
                             />
 
                         </LocalizationProvider>
                     </Grid>
+                    <Grid xs={8}></Grid>
+                    <Grid item xs={4}>
+                        <Button
+                            onClick={handleGuardar}
+                            size="small"
+                            variant="text"
+                            sx={{
+                                ml: 4,
+                                fontSize: 14,
+                                color: "white",
+                                backgroundColor: "#007aff",
+                                "&:hover": {
+                                    color: "#007aff",
+                                    borderBlockColor: "#007aff",
+                                    border: 1,
+                                },
+                            }}
+                        >
+                            Guardar
+                        </Button>
+                        <Button
+                            onClick={handleCancelar}
+                            size="small"
+                            variant="text"
+                            sx={{
+                                ml: 5,
+                                fontSize: 14,
+                                color: "white",
+                                backgroundColor: "#007aff",
+                                "&:hover": {
+                                    color: "#007aff",
+                                    borderBlockColor: "#007aff",
+                                    border: 1,
+                                },
+                            }}
+                        >
+                            Cancelar
+                        </Button>
+                    </Grid>
 
-                    <Button
-                        onClick={handleGuardar}
-                        size="small"
-                        variant="text"
-                        sx={{
-                            ml: 4,
-                            textTransform: "capitalize",
-                            fontSize: 14,
-                            textDecoration: "underline",
-                            color: "white",
-                            backgroundColor: "#007aff",
-                            "&:hover": {
-                                color: "#007aff",
-                                borderBlockColor: "#007aff",
-                                border: 1,
-                            },
-                        }}
-                    >
-                        Guardar
-                    </Button>
-                    <Button
-                        onClick={handleCancelar}
-                        size="small"
-                        variant="text"
-                        sx={{
-                            ml: 5,
-                            textTransform: "capitalize",
-                            fontSize: 14,
-                            textDecoration: "underline",
-                            color: "white",
-                            backgroundColor: "#007aff",
-                            "&:hover": {
-                                color: "#007aff",
-                                borderBlockColor: "#007aff",
-                                border: 1,
-                            },
-                        }}
-                    >
-                        Cancelar
-                    </Button>
                 </Grid>
 
             </Grid >

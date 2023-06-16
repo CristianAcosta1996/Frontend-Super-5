@@ -1,4 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
+import { Toolbar } from "@mui/material";
+
 import AddressPage from "../pages/AddressPage";
 import { HomePage } from "../../pages/HomePage";
 import { ComprasRoutes } from "../../compras/routes/ComprasRoutes";
@@ -6,12 +8,11 @@ import { Super5Appbar } from "../../components/Super5Appbar";
 import { Perfil } from "../pages/Perfil";
 import { MisDirecciones } from "../pages/MisDirecciones";
 import { MisPedidos } from "../pages/MisPedidos";
-import { Box, Toolbar } from "@mui/material";
 import { EditarPerfil } from "../pages/EditarPerfil";
-
 import { useAppSelector } from "../../hooks/hooks";
 import { SelectorSucursales } from "../../sucursales/components/SelectorSucursales";
-import { Footer } from "../components/Footer";
+import { HacerReclamo } from "../pages/Reclamar";
+import ModificarDireccion from "../pages/ModificarDireccion";
 
 export const RoutesUsuarios = () => {
   const { sucursal } = useAppSelector((state) => state.super5);
@@ -30,7 +31,12 @@ export const RoutesUsuarios = () => {
         <Route path="user/perfil" element={<Perfil />} />
         <Route path="user/perfil/editar" element={<EditarPerfil />} />
         <Route path="user/misdirecciones" element={<MisDirecciones />} />
+        <Route
+          path="user/misdirecciones/modificar"
+          element={<ModificarDireccion />}
+        />
         <Route path="user/mispedidos" element={<MisPedidos />} />
+        <Route path="user/mispedidos/reclamo" element={<HacerReclamo />} />
         <Route path="/*" element={<Navigate replace to="/" />} />
       </Routes>
     </>

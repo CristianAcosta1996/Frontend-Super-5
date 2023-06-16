@@ -1,13 +1,11 @@
-import { Box, Button, Container, Drawer, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField, Toolbar, Typography } from "@mui/material";
+import { Box, Button, Drawer, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField, Toolbar, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useModificarComprador } from "../hooks/useModificarComprador";
 import { useGetUserDataQuery } from "../../store/super5/super5Api";
 import MapIcon from '@mui/icons-material/Map';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import dayjs, { Dayjs } from 'dayjs';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateField } from '@mui/x-date-pickers/DateField';
@@ -15,20 +13,16 @@ import { DateField } from '@mui/x-date-pickers/DateField';
 export const Perfil = () => {
     const navigate = useNavigate();
     const { data: userData } = useGetUserDataQuery();
-    const [reload, setReload] = useState(true);
+
     const [name, setName] = useState(userData?.nombre);
     const [surname, setSurname] = useState(userData?.apellido);
     const [phone, setPhone] = useState(userData?.telefono);
     const [mail, setMail] = useState(userData?.correo);
     const [fechaNac, setFechaNac] = useState((userData?.fechaNacimiento.toString().slice(0, -19)));
-
-    const [nacimiento, setNacimiento] = useState<Dayjs | null>(dayjs(fechaNac));
-
+    const [nacimiento, setNacimiento] = useState<Dayjs>(dayjs(fechaNac));
 
     useEffect(() => {
         if (userData) {
-            console.log("entre al useeffect", userData.nombre);
-
             setName(userData.nombre);
             setSurname(userData.apellido);
             setPhone(userData.telefono);
@@ -37,7 +31,7 @@ export const Perfil = () => {
             setNacimiento(dayjs(fechaNac))
         }
 
-    }, [userData, reload]);
+    }, [userData, fechaNac]);
 
     const handleDatosPersonales = () => {
         navigate("/user/perfil");
@@ -227,7 +221,6 @@ export const Perfil = () => {
                                 mr: 8,
                                 textTransform: "capitalize",
                                 fontSize: 14,
-                                textDecoration: "underline",
                                 color: "white",
                                 backgroundColor: "#007aff",
                                 "&:hover": {
