@@ -1,4 +1,4 @@
-import { SyntheticEvent, useEffect, useState } from "react";
+import { SyntheticEvent } from "react";
 import {
   Alert,
   Box,
@@ -28,7 +28,6 @@ export const LoginPage = () => {
     handleLogin,
     isAuthenticatingLogin,
     isErrorLogin,
-    errorLogin,
     isSuccessLogin,
   } = useAuth();
   const navigate = useNavigate();
@@ -162,7 +161,7 @@ export const LoginPage = () => {
           severity="success"
           className="animate__animated animate__fadeIn"
         >
-          Login exitoso!.
+          Usuario logueado correctamente!
         </Alert>
       )}
       {isAuthenticatingLogin && (

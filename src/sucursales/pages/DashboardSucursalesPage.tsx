@@ -4,7 +4,6 @@ import {
   Home,
   Logout,
   Login,
-  ShoppingBag,
   Person,
   TrendingUp,
   Check,
@@ -30,7 +29,7 @@ import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { useAppSelector } from "../../hooks/hooks";
 import { useAuth } from "../../auth/hooks/useAuth";
 
-const drawerWidth = 170;
+const drawerWidth = 150;
 
 export const DashboardSucursalesPage = () => {
   const navigate = useNavigate();
@@ -99,7 +98,7 @@ export const DashboardSucursalesPage = () => {
         <Avatar
           variant="square"
           src={brandLogo}
-          sx={{ width: "80%", height: 100, alignSelf: "center" }}
+          sx={{ width: "100%", height: 100, alignSelf: "center" }}
         />
         <Divider color="#555" />
         <List>
