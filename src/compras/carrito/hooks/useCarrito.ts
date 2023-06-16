@@ -15,6 +15,7 @@ import {
 import { CompraDTO } from "../../../interfaces/interfaces";
 
 import { useGenerarCompraPaypalMutation } from "../../../store/super5/super5Api";
+import { guardarcompraPaypal } from "../../../utils/localstorage";
 
 export const useCarrito = () => {
   const [open, setOpen] = useState(false);
@@ -52,14 +53,40 @@ export const useCarrito = () => {
 
   const calcularPrecioTotalCarrito = (): number => {
     let contador = 0;
-    carrito.forEach((carritoItem) => {
-      contador += carritoItem.producto.precio * carritoItem.cantidad;
+    carrito.forEach(({ producto: { precio, precioDescuento }, cantidad }) => {
+      contador += !precioDescuento
+        ? precio * cantidad
+        : precioDescuento * cantidad;
     });
     return contador;
   };
 
-  const handlePagarCompra = (): void => {
-    let arregloCompra: CarritoDto[] = [];
+  const handlePagarCompra = (
+    formaEntrega: "SUCURSAL" | "DOMICILIO" = "SUCURSAL",
+    direccionId?: number
+  ): void => {
+    const carritoDto = carrito.map(({ producto, cantidad }) => ({
+      producto_id: +producto.id,
+      cantidad,
+    }));
+
+    const compra: CompraDTO = {
+      carrito: carritoDto,
+      formaEntrega: formaEntrega,
+      sucursal_id: +sucursal.id,
+      direccion_id: formaEntrega === "DOMICILIO" ? direccionId : undefined,
+    };
+    startCompraPaypal(compra)
+      .unwrap()
+      .then((resp: any) => {
+        console.log(resp);
+        dispatch(realizarCompraPaypal(resp));
+        guardarcompraPaypal(resp);
+        window.location.replace(resp.urlPaypal);
+      })
+      .catch(console.log);
+  };
+  /*  /* let arregloCompra: CarritoDto[] = [];
     carrito.forEach(({ producto, cantidad }) => {
       arregloCompra.push({ producto_id: +producto.id, cantidad });
     });
@@ -68,10 +95,18 @@ export const useCarrito = () => {
       formaEntrega: "SUCURSAL",
       sucursal_id: +sucursal.id,
     };
-    startCompraPaypal(compra).then((resp: any) => {
-      dispatch(realizarCompraPaypal(resp));
-    });
-  };
+    startCompraPaypal(compra)
+      .unwrap()
+      .then((resp: any) => {
+        console.log(resp);
+
+        dispatch(realizarCompraPaypal(resp));
+        guardarcompraPaypal(resp);
+        window.location.replace(resp.urlPaypal);
+      })
+      .catch((error) => {
+        alert(JSON.stringify(error.data));
+      }); */
 
   return {
     open,

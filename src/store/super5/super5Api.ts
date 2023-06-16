@@ -7,6 +7,7 @@ import {
   ReclamoDTO,
   Sucursal,
   Token,
+  Usuario,
 } from "../../interfaces/interfaces";
 import { RootState } from "../store";
 
@@ -36,6 +37,14 @@ interface AddressProps {
   latitud: string;
   aclaracion: string;
 }
+interface CrearProductoProps {
+  nombre: string;
+  imagen: string;
+  precio: number;
+  eliminado: boolean;
+  categoriaId: number;
+  descripcion: string;
+}
 
 interface ModificarCompradorProps {
   nombre: string;
@@ -64,7 +73,30 @@ interface UserDataProps {
   usuario: string;
   direcciones: Direccion[];
 }
+interface EliminarProductoProps {
+  id: number;
+}
 
+interface CrearUsuarioSucursalProps {
+  nombre: string;
+  apellido: string;
+  correo: string;
+  contrasenia: string;
+  telefono: number;
+  usuario: string;
+  fechaNacimiento: string;
+  sucursalId: string;
+}
+interface CrearSucursalProps {
+  nombre: string;
+  direccion: {
+    direccion: string;
+    ciudad: string;
+    departamento: string;
+    longitud: string;
+    latitud: string;
+  };
+}
 
 export const super5Api = createApi({
   reducerPath: "super5Api",
@@ -78,7 +110,15 @@ export const super5Api = createApi({
       return headers;
     },
   }),
-  tagTypes: ["VentasPagadas", "VentasConfirmadas", "UserData", "AtenderReclamo", "Direccion"],
+  tagTypes: [
+    "VentasPagadas",
+    "VentasConfirmadas",
+    "UserData",
+    "AtenderReclamo",
+    "Producto",
+    "Sucursal",
+    "Direccion",
+  ],
   endpoints: (builder) => ({
     login: builder.mutation<string, LoginProps>({
       query: (body) => ({
@@ -98,18 +138,24 @@ export const super5Api = createApi({
       }),
       transformResponse: (resp: AuthResponse, meta) => resp.token,
     }),
+    getProductos: builder.query<Producto[], void>({
+      query: () => "producto/obtenerPorSucursal/1",
+      providesTags: ["Producto"],
+    }),
     getProductosPorSucursal: builder.query<Producto[], string>({
       query: (id) => `producto/obtenerPorSucursal/${id}`,
+      providesTags: ["Producto"],
     }),
     getCategorias: builder.query<Categoria[], void>({
       query: () => "producto/listarCategorias",
     }),
     getSucursales: builder.query<Sucursal[], void>({
       query: () => "sucursal/obtener",
+      providesTags: ["Sucursal"],
     }),
     getUserData: builder.query<UserDataProps, void>({
       query: () => "usuario/obtenerUsuario",
-      providesTags: ["UserData"]
+      providesTags: ["UserData"],
     }),
     addAddress: builder.mutation<Token, AddressProps>({
       query: (body) => ({
@@ -117,6 +163,7 @@ export const super5Api = createApi({
         method: "POST",
         body,
       }),
+      invalidatesTags: ["Direccion"],
     }),
     getDirecciones: builder.query<Direccion[], void>({
       query: () => "direccion/listar",
@@ -128,6 +175,7 @@ export const super5Api = createApi({
         method: "POST",
         body,
       }),
+      invalidatesTags: ["Direccion"],
     }),
     generarCompraPaypal: builder.mutation<CompraDTO, CompraDTO>({
       query: (body) => ({
@@ -149,7 +197,7 @@ export const super5Api = createApi({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["UserData"]
+      invalidatesTags: ["UserData"],
     }),
     modificarComprador: builder.mutation<Token, ModificarCompradorProps>({
       query: (body) => ({
@@ -157,7 +205,7 @@ export const super5Api = createApi({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["UserData"]
+      invalidatesTags: ["UserData"],
     }),
     modificarDireccion: builder.mutation<Token, Direccion>({
       query: (body) => ({
@@ -165,7 +213,7 @@ export const super5Api = createApi({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["Direccion"]
+      invalidatesTags: ["Direccion"],
     }),
     modificarStock: builder.mutation<string, ModificarStockProps>({
       query: (body) => ({
@@ -181,6 +229,7 @@ export const super5Api = createApi({
       ) => {
         return response.data;
       },
+      invalidatesTags: ["Producto"],
     }),
     getVentas: builder.query<any[], void>({
       query: () => "venta/obtenerVentasPagas",
@@ -221,6 +270,50 @@ export const super5Api = createApi({
       }),
       invalidatesTags: ["AtenderReclamo"],
     }),
+    crearProducto: builder.mutation<Producto, CrearProductoProps>({
+      query: (body) => ({
+        url: "producto/crear",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Producto"],
+    }),
+    eliminarProducto: builder.mutation<Producto, EliminarProductoProps>({
+      query: (body) => ({
+        url: "producto/eliminar",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Producto"],
+    }),
+    modificarProducto: builder.mutation<Producto, Producto>({
+      query: (body) => ({
+        url: "producto/modificar",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Producto"],
+    }),
+    getUsuarios: builder.query<Usuario[], void>({
+      query: () => "usuario/listar",
+      providesTags: ["UserData"],
+    }),
+    crearSucursal: builder.mutation<Sucursal, CrearSucursalProps>({
+      query: (body) => ({
+        url: "sucursal/crear",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Sucursal"],
+    }),
+    crearUsuarioSucursal: builder.mutation<Usuario, CrearUsuarioSucursalProps>({
+      query: (body) => ({
+        url: "usuario/crearUsuarioSucursal",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["UserData"],
+    }),
   }),
 });
 
@@ -248,4 +341,11 @@ export const {
   useModificarDireccionMutation,
   useGetReclamosQuery,
   useAtenderReclamoMutation,
+  useGetProductosQuery,
+  useCrearProductoMutation,
+  useEliminarProductoMutation,
+  useModificarProductoMutation,
+  useGetUsuariosQuery,
+  useCrearSucursalMutation,
+  useCrearUsuarioSucursalMutation,
 } = super5Api;

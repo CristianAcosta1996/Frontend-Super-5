@@ -20,7 +20,7 @@ export interface Token {
 }
 
 export interface Direccion {
-  id: string;
+  id?: string;
   direccion: string;
   ciudad: string;
   departamento: string;
@@ -81,15 +81,19 @@ export interface CompraDTO {
   correctamenteFinalizado?: boolean;
 }
 
-export interface ReclamoDTO {
-  id?: number;
-  tipo: "ATENCION" | "ATENCION" | "DEMORA" | "CALIDAD" | "PRECIO" | "OTRO";
-  estado: "ATENDIDO" | "CREADO";
-  comentario: string;
-  comentarioSucursal: string;
-  venta: {
-    id: number;
-  };
+export interface Usuario {
+  id: number;
+  usuario: string;
+  contrasenia: null;
+  nombre: string;
+  apellido: string;
+  eliminado: boolean;
+  bloqueado: boolean;
+  googleId: string;
+  correo: string;
+  telefono: string;
+  rol: number;
+  fechaNacimiento: string;
 }
 
 export interface ReclamoDTO {

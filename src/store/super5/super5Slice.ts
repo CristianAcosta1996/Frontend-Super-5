@@ -46,6 +46,7 @@ const initialState = (): Super5InitialState => {
         direccion: "",
         latitud: "",
         longitud: "",
+        aclaracion: "",
       },
     },
     carrito: [],

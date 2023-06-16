@@ -28,6 +28,10 @@ export const setToken = (token: string) => {
   window.localStorage.setItem("token", JSON.stringify(token));
 };
 
+export const limpiarToken = () => {
+  localStorage.removeItem("token");
+};
+
 export const limpiarStorage = () => {
   localStorage.clear();
 };
