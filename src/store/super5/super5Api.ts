@@ -78,7 +78,7 @@ export const super5Api = createApi({
       return headers;
     },
   }),
-  tagTypes: ["VentasPagadas", "VentasConfirmadas", "UserData", "Direccion"],
+  tagTypes: ["VentasPagadas", "VentasConfirmadas", "UserData", "AtenderReclamo", "Direccion"],
   endpoints: (builder) => ({
     login: builder.mutation<string, LoginProps>({
       query: (body) => ({
@@ -209,6 +209,18 @@ export const super5Api = createApi({
       }),
       invalidatesTags: ["VentasConfirmadas"],
     }),
+    getReclamos: builder.query<ReclamoDTO[], void>({
+      query: () => "reclamo/listar",
+      providesTags: ["AtenderReclamo"],
+    }),
+    atenderReclamo: builder.mutation<ReclamoDTO, ReclamoDTO>({
+      query: (body) => ({
+        url: "reclamo/atender",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["AtenderReclamo"],
+    }),
   }),
 });
 
@@ -234,4 +246,6 @@ export const {
   useGetDireccionesQuery,
   useEliminarDireccionMutation,
   useModificarDireccionMutation,
+  useGetReclamosQuery,
+  useAtenderReclamoMutation,
 } = super5Api;

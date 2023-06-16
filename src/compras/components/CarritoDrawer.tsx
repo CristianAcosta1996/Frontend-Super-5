@@ -4,27 +4,17 @@ import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import {
   Avatar,
   Button,
-  Grid,
   IconButton,
   ListItemAvatar,
   Typography,
 } from "@mui/material";
 import {
-  Add,
   AddCircleOutline,
   ArrowBack,
-  Close,
   Delete,
-  PlusOne,
-  RemoveCircle,
   RemoveCircleOutline,
 } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
@@ -35,7 +25,6 @@ import {
   resetearCarrito,
 } from "../../store/super5/super5Slice";
 import { guardarcompraPaypal, limpiarCarrito } from "../../utils/localstorage";
-import { useEffect, useState } from "react";
 import { useCarrito } from "../carrito/hooks/useCarrito";
 
 interface CarritoDrawerProps {
@@ -50,12 +39,12 @@ export const CarritoDrawer = ({
   /* const [open, setOpen] = useState(false); */
   const { carrito } = useAppSelector((state) => state.super5);
   const { sucursal } = useAppSelector((state) => state.super5);
-  const [startCompraPaypal, { data }] = useGenerarCompraPaypalMutation();
+  const [startCompraPaypal] = useGenerarCompraPaypalMutation();
   const dispatch = useAppDispatch();
   const { precioTotalCarrito, quitarItemDelCarrito, agregarItemAlCarrito } =
     useCarrito();
 
-  const handlePagarCompra = (event: any): void => {
+  const handlePagarCompra = (): void => {
     let arregloCompra: CarritoDto[] = [];
     carrito.forEach(({ producto, cantidad }) => {
       arregloCompra.push({ producto_id: +producto.id, cantidad });
@@ -65,11 +54,18 @@ export const CarritoDrawer = ({
       formaEntrega: "SUCURSAL",
       sucursal_id: +sucursal.id,
     };
-    startCompraPaypal(compra).then((resp: any) => {
-      dispatch(realizarCompraPaypal(resp.data));
-      guardarcompraPaypal(resp.data);
-      window.location.replace(resp.data.urlPaypal);
-    });
+    startCompraPaypal(compra)
+      .unwrap()
+      .then((resp: any) => {
+        console.log(resp);
+
+        dispatch(realizarCompraPaypal(resp));
+        guardarcompraPaypal(resp);
+        window.location.replace(resp.urlPaypal);
+      })
+      .catch((error) => {
+        alert(JSON.stringify(error.data));
+      });
   };
 
   const toggleDrawer =
@@ -91,7 +87,7 @@ export const CarritoDrawer = ({
         <ArrowBack />
       </IconButton>
       <List>
-        {carrito.map(({ producto, cantidad }, index) => (
+        {carrito.map(({ producto, cantidad }) => (
           <ListItem key={producto.id} disablePadding sx={{ px: 1 }}>
             <ListItemAvatar>
               <Avatar src={producto.imagen} />
@@ -181,7 +177,7 @@ export const CarritoDrawer = ({
         sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
         anchor="right"
         open={cartOpen}
-        onClose={(event, reason) => {
+        onClose={() => {
           return;
           toggleDrawer();
         }}
