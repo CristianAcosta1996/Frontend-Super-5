@@ -50,7 +50,7 @@ export const CarritoDrawer = ({
     handleClose();
     navigate("compra/procesar-pago");
     return;
-    let arregloCompra: CarritoDto[] = [];
+    /* let arregloCompra: CarritoDto[] = [];
     carrito.forEach(({ producto, cantidad }) => {
       arregloCompra.push({ producto_id: +producto.id, cantidad });
     });
@@ -70,7 +70,7 @@ export const CarritoDrawer = ({
       })
       .catch((error) => {
         alert(JSON.stringify(error.data));
-      });
+      }); */
   };
 
   const toggleDrawer =

@@ -15,23 +15,43 @@ export const FinalizacionCompraPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   useEffect(() => {
-    startGenerarPago(compraPaypal).unwrap().then((resp: any) => {
-      setCompraDto(resp.data);
-      dispatch(limpiarCarrito())
-    }).catch(error=> {
-      console.log(error); 
-      setError(true)
-    });
+    startGenerarPago(compraPaypal)
+      .unwrap()
+      .then((resp: any) => {
+        setCompraDto(resp.data);
+        dispatch(limpiarCarrito());
+      })
+      .catch((error) => {
+        console.log(error);
+        setError(true);
+      });
   }, []);
   return (
-    <Box sx={{display: 'flex', flexDirection: 'column', height: '80vh', justifyContent: "center", alignItems:"center", gap: 1}}>
-      {!error ? <Box sx={{display: "flex", justifyContent: "center", mt: 2}}>
-        <Check fontSize="large" color="success"/>
-        <Typography variant="h6" component="h6" ml={1}>Compra realizada con exito</Typography>
-        </Box>: <Box sx={{display: "flex", justifyContent: "center", mt: 2}}>
-          <Cancel fontSize="large" color="error"/>
-          <Typography variant="h6" component="h6" ml={1}>Fallo intento de compra, comuniquese con la tienda...</Typography>
-          </Box>}
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        height: "80vh",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: 1,
+      }}
+    >
+      {!error ? (
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+          <Check fontSize="large" color="success" />
+          <Typography variant="h6" component="h6" ml={1}>
+            Compra realizada con exito
+          </Typography>
+        </Box>
+      ) : (
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+          <Cancel fontSize="large" color="error" />
+          <Typography variant="h6" component="h6" ml={1}>
+            Fallo intento de compra, comuniquese con la tienda...
+          </Typography>
+        </Box>
+      )}
       <Box>{isLoading ? "Cargando..." : JSON.stringify(compraDto)}</Box>
       <Button
         variant="contained"

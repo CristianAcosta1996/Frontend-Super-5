@@ -163,6 +163,7 @@ export const super5Api = createApi({
         method: "POST",
         body,
       }),
+      invalidatesTags: ["Direccion"],
     }),
     getDirecciones: builder.query<Direccion[], void>({
       query: () => "direccion/listar",
@@ -174,6 +175,7 @@ export const super5Api = createApi({
         method: "POST",
         body,
       }),
+      invalidatesTags: ["Direccion"],
     }),
     generarCompraPaypal: builder.mutation<CompraDTO, CompraDTO>({
       query: (body) => ({

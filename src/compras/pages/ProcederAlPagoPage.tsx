@@ -1,5 +1,12 @@
-import { ConfirmationNumber, Delete, ShoppingCart } from "@mui/icons-material";
 import {
+  ConfirmationNumber,
+  Delete,
+  Person,
+  ShoppingCart,
+} from "@mui/icons-material";
+import {
+  Alert,
+  Autocomplete,
   Avatar,
   Box,
   Button,
@@ -10,94 +17,185 @@ import {
   List,
   ListItem,
   ListItemAvatar,
-  ListItemButton,
-  ListItemSecondaryAction,
   ListItemText,
   Paper,
+  Snackbar,
+  SvgIconTypeMap,
   TextField,
+  ToggleButton,
+  ToggleButtonGroup,
   Tooltip,
   Typography,
   styled,
 } from "@mui/material";
-import { CarritoItem, Producto } from "../../interfaces/interfaces";
+import { CarritoItem, Direccion, Producto } from "../../interfaces/interfaces";
 import { useAppSelector } from "../../hooks/hooks";
+import { OverridableComponent } from "@mui/material/OverridableComponent";
+import { useGetDireccionesQuery } from "../../store/super5/super5Api";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useCarrito } from "../carrito/hooks/useCarrito";
 
 export const ProcederAlPagoPage = () => {
+  const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
   const { carrito } = useAppSelector((state) => state.super5);
+  const [direccion, setDireccion] = useState<Direccion | null>(null);
+  const [tipoEnvio, setTipoEnvio] = useState<"DOMICILIO" | "SUCURSAL" | null>();
+  const {
+    agregarItemAlCarrito,
+    calcularPrecioTotalCarrito,
+    quitarItemDelCarrito,
+    handlePagarCompra,
+  } = useCarrito();
+
+  const handleOnSelectInformacionAdicional = (
+    tipoEnvio: "DOMICILIO" | "SUCURSAL",
+    direccion: Direccion | null
+  ) => {
+    setDireccion(direccion);
+    setTipoEnvio(tipoEnvio);
+  };
+  const handleOnSubmit = (event) => {
+    event.preventDefault();
+    if (tipoEnvio === "DOMICILIO" && !direccion) {
+      setShowSnackbar(true);
+      return;
+    }
+    if (!tipoEnvio || carrito.length <= 0) return;
+    console.log(direccion);
+
+    handlePagarCompra(tipoEnvio, +direccion.id!);
+  };
   return (
-    <Grid container py={5} px={4} gap={1}>
-      <Grid item xs={12} mb={1}>
-        <Grid container alignItems="center">
-          <ShoppingCart fontSize="large" sx={{ color: "#cc0045" }} />
-          <Typography variant="h5" component="h5">
-            Mi Carrito
-          </Typography>
-        </Grid>
-      </Grid>
-      <Grid container gap={4}>
-        <Grid item xs={12} sm={6} p={1}>
-          <Paper>
-            <ProductList products={carrito} />
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={5}>
-          <Paper elevation={4}>
-            <Grid container flexDirection="column" p={1} gap={1}>
-              <Grid item xs={12}>
-                <AplicarCupon />
+    <form onSubmit={handleOnSubmit}>
+      <Grid container py={5} px={4} gap={1}>
+        <Grid container gap={4}>
+          <Grid item xs={12} sm={6}>
+            <Grid container gap={2}>
+              <Grid item xs={12} mb={1}>
+                <SectionTitle title="Mi Carrito" Icon={ShoppingCart} />
+                <ProductList
+                  products={carrito}
+                  modificarCarrito={agregarItemAlCarrito}
+                  quitarProductoDelCarrito={quitarItemDelCarrito}
+                />
               </Grid>
-              <Divider />
-              <Grid container>
-                <Grid container justifyContent="space-between">
-                  <Typography>Subtotal:</Typography>
-                  <Typography>Subtotalprecio</Typography>
-                </Grid>
-                <Grid container justifyContent="space-between">
-                  <Typography>gatoenvio:</Typography>
-                  <Typography>gatoenvioprecio</Typography>
-                </Grid>
-              </Grid>
-              <Divider />
-              <Grid container flexDirection="column" gap={1}>
-                <Grid container justifyContent="space-between">
-                  <Typography>Total</Typography>
-                  <Typography>Totalprecio</Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    sx={{
-                      backgroundColor: "#e6004d",
-                      color: "#fff",
-                      "&: hover": { backgroundColor: "#cc0045", color: "#fff" },
-                    }}
-                  >
-                    Proceder al pago
-                  </Button>
-                </Grid>
-                <Grid item xs={12}>
-                  <Button
-                    fullWidth
-                    variant="outlined"
-                    sx={{
-                      borderColor: "#e6004d",
-                      color: "#e6004d",
-                      "&: hover": {
-                        borderColor: "#cc0045",
-                        color: "#cc0045",
-                      },
-                    }}
-                  >
-                    Seguir comprando
-                  </Button>
-                </Grid>
+              <Grid item xs={12} mb={1}>
+                <SectionTitle title="Informacion adicional" Icon={Person} />
+                <InformacionAdicionalSection
+                  handleOnSelectInformacionAdicional={
+                    handleOnSelectInformacionAdicional
+                  }
+                />
               </Grid>
             </Grid>
-          </Paper>
+          </Grid>
+
+          <Grid item xs={12} sm={5}>
+            <PagoFinal subTotal={calcularPrecioTotalCarrito()} />
+          </Grid>
         </Grid>
       </Grid>
+      <Snackbar
+        open={showSnackbar}
+        autoHideDuration={3000}
+        onClose={() => {
+          setShowSnackbar(false);
+        }}
+      >
+        <Alert severity="error" variant="filled">
+          Es necesario agregar un domicilio antes de realizar la compra
+        </Alert>
+      </Snackbar>
+    </form>
+  );
+};
+interface SectionTitleProps {
+  title: string;
+  Icon: OverridableComponent<SvgIconTypeMap<object, "svg">> & {
+    muiName: string;
+  };
+}
+const SectionTitle = ({ title, Icon }: SectionTitleProps) => {
+  return (
+    <Grid container alignItems="center" mb={1}>
+      <Icon fontSize="large" sx={{ color: "#cc0045" }} />
+      <Typography variant="h5" component="h5">
+        {title}
+      </Typography>
     </Grid>
+  );
+};
+
+const PagoFinal = ({
+  subTotal,
+  precioEnvio,
+}: {
+  subTotal: number;
+  precioEnvio?: number;
+}) => {
+  const navigate = useNavigate();
+  return (
+    <Paper elevation={4}>
+      <Grid container flexDirection="column" p={1} gap={1}>
+        <Grid item xs={12}>
+          <AplicarCupon />
+        </Grid>
+        <Divider />
+        <Grid container>
+          <Grid container justifyContent="space-between">
+            <Typography>Subtotal:</Typography>
+            <Typography>{subTotal}</Typography>
+          </Grid>
+          <Grid container justifyContent="space-between">
+            <Typography>Costo del envio:</Typography>
+            <Typography>{precioEnvio ? precioEnvio : "Gratis"}</Typography>
+          </Grid>
+        </Grid>
+        <Divider />
+        <Grid container flexDirection="column" gap={1}>
+          <Grid container justifyContent="space-between">
+            <Typography>Total</Typography>
+            <Typography>
+              {precioEnvio ? precioEnvio + subTotal : subTotal}
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Button
+              fullWidth
+              variant="contained"
+              sx={{
+                backgroundColor: "#e6004d",
+                color: "#fff",
+                "&: hover": { backgroundColor: "#cc0045", color: "#fff" },
+              }}
+              type="submit"
+            >
+              Proceder al pago
+            </Button>
+          </Grid>
+          <Grid item xs={12}>
+            <Button
+              fullWidth
+              variant="outlined"
+              sx={{
+                borderColor: "#e6004d",
+                color: "#e6004d",
+                "&: hover": {
+                  borderColor: "#cc0045",
+                  color: "#cc0045",
+                },
+              }}
+              onClick={() => {
+                navigate("/");
+              }}
+            >
+              Seguir comprando
+            </Button>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Paper>
   );
 };
 
@@ -132,7 +230,7 @@ const AplicarCupon = () => {
   );
 };
 
-const CustomTextField = styled(TextField)(({ theme }) => ({
+const CustomTextField = styled(TextField)(() => ({
   "& .MuiInputBase-input": {
     height: "10px" /* Adjust the height value as per your requirement */,
   },
@@ -140,143 +238,189 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
 
 interface ProductListProps {
   products: CarritoItem[];
+  modificarCarrito: (producto: Producto, cantidad: number) => void;
+  quitarProductoDelCarrito: (producto: Producto) => void;
 }
 
-const ProductList = ({ products }: ProductListProps) => {
+const ProductList = ({
+  products,
+  modificarCarrito,
+  quitarProductoDelCarrito,
+}: ProductListProps) => {
   return (
-    <List sx={{ py: { xs: 0, sm: 1 }, px: 0 }}>
-      {products.map(({ cantidad, producto }) => (
-        <>
-          <ListItem
-            key={producto.id}
-            sx={{
-              px: { xs: 0, sm: 1 },
-              flex: 1,
-              flexDirection: { xs: "column", sm: "row" },
-            }}
-          >
-            <ListItemAvatar sx={{ minWidth: { xs: 43, sm: 56 } }}>
-              <Avatar
-                src={producto.imagen}
-                sx={{ width: { xs: 60, sm: 40 }, height: { xs: 60, sm: 40 } }}
-              />
-            </ListItemAvatar>
-            <ListItemText>
-              <Typography variant="caption">{producto.descripcion}</Typography>
-              <Box
-                sx={{
-                  flex: 1,
-                  display: "flex",
-                  justifyContent: { xs: "center", sm: "flex-start" },
-                }}
-              >
-                <ButtonGroup size="small">
-                  <Button>-1</Button>
-                  <Button>0</Button>
-                  <Button>+1</Button>
-                </ButtonGroup>
-              </Box>
-            </ListItemText>
-            <Box
+    <Paper>
+      <List sx={{ py: { xs: 0, sm: 1 }, px: 0 }}>
+        {products.map(({ cantidad, producto }, index) => (
+          <Box key={producto.id}>
+            <ListItem
+              key={producto.id}
               sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "flex-end",
-                height: "100%",
-                alignSelf: { sm: "flex-end", xs: "center" },
+                px: { xs: 0, sm: 1 },
+                flex: 1,
+                flexDirection: { xs: "column", sm: "row" },
               }}
             >
-              <Box sx={{ position: "absolute", top: 0, right: { xs: 0 } }}>
-                <Tooltip title="Eliminar">
-                  <IconButton size="small">
-                    <Delete fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-              </Box>
-              <Typography
-                variant="caption"
-                component="span"
-                mr={{ xs: 1, sm: 0 }}
+              <ListItemAvatar sx={{ minWidth: { xs: 43, sm: 56 } }}>
+                <Avatar
+                  src={producto.imagen}
+                  sx={{ width: { xs: 60, sm: 40 }, height: { xs: 60, sm: 40 } }}
+                />
+              </ListItemAvatar>
+              <ListItemText>
+                <Typography variant="caption">
+                  {producto.descripcion}
+                </Typography>
+
+                <Box
+                  sx={{
+                    flex: 1,
+                    display: "flex",
+                    justifyContent: { xs: "center", sm: "flex-start" },
+                  }}
+                >
+                  <ButtonGroup size="small">
+                    <Button
+                      onClick={() => {
+                        modificarCarrito(producto, cantidad - 1);
+                      }}
+                    >
+                      -1
+                    </Button>
+                    <Button>{cantidad}</Button>
+                    <Button
+                      onClick={() => {
+                        modificarCarrito(producto, cantidad + 1);
+                      }}
+                    >
+                      +1
+                    </Button>
+                  </ButtonGroup>
+                </Box>
+              </ListItemText>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "flex-end",
+                  height: "100%",
+                  alignSelf: { sm: "flex-end", xs: "center" },
+                }}
               >
-                {producto.precioDescuento || producto.precio}
-              </Typography>
-            </Box>
-          </ListItem>
-          <Divider />
-        </>
-      ))}
-    </List>
+                <Box sx={{ position: "absolute", top: 0, right: { xs: 1 } }}>
+                  <Tooltip title="Eliminar">
+                    <IconButton
+                      size="small"
+                      onClick={() => {
+                        quitarProductoDelCarrito(producto);
+                      }}
+                    >
+                      <Delete fontSize="small" sx={{ color: "#cc0045" }} />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+                <Typography
+                  variant="caption"
+                  component="span"
+                  mr={{ xs: 1, sm: 0 }}
+                  sx={{ color: "#cc0045" }}
+                >
+                  {producto.precioDescuento || producto.precio}
+                </Typography>
+              </Box>
+            </ListItem>
+            {!(index === products.length - 1) && <Divider />}
+          </Box>
+        ))}
+      </List>
+    </Paper>
   );
 };
 
-/* 
-<ListItemText>a</ListItemText>
-              <ButtonGroup size="small">
-                <Button>-1</Button>
-                <Button>0</Button>
-                <Button>+1</Button>
-              </ButtonGroup>
+const InformacionAdicionalSection = ({
+  handleOnSelectInformacionAdicional,
+}: {
+  handleOnSelectInformacionAdicional: (
+    tipoEnvio: "DOMICILIO" | "SUCURSAL",
+    direccion: Direccion | null
+  ) => void;
+}) => {
+  const { isLoading, data } = useGetDireccionesQuery();
+  const [tipoEnvio, setTipoEnvio] = useState<"DOMICILIO" | "SUCURSAL">(
+    "DOMICILIO"
+  );
+  const [direccion, setDireccion] = useState<Direccion | null>(null);
 
+  useEffect(() => {
+    handleOnSelectInformacionAdicional(tipoEnvio, direccion);
+  }, [tipoEnvio, direccion]);
 
-              --
-               <Tooltip title="Eliminar">
-                  <IconButton size="small">
-                    <Delete fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-*/
-
-/* 
- <List>
-      {products.map(({ cantidad, producto }) => (
-        <ListItem key={producto.id} sx={{ padding: 1, position: "relative" }}>
-          <ListItemAvatar>
-            <Avatar src={producto.imagen} />
-          </ListItemAvatar>
-          <ListItemText>
-            <Typography variant="caption">{producto.descripcion}</Typography>
-            <Box
-              sx={{
-                flex: 1,
-
-                display: "flex",
-              }}
-            >
-              <ButtonGroup size="small">
-                <Button>-1</Button>
-                <Button>0</Button>
-                <Button>+1</Button>
-              </ButtonGroup>
-            </Box>
-          </ListItemText>
-          <Box
-            sx={{
-              position: "absolute",
-              top: 0,
-              right: 0,
-              transform: "translate(-15%,-20%);",
-            }}
-          >
-            <Tooltip title="Eliminar">
-              <IconButton size="small">
-                <Delete fontSize="small" />
-              </IconButton>
-            </Tooltip>
-          </Box>
-          <Box
-            sx={{
-              position: "absolute",
-              top: "100%",
-              right: 10,
-              transform: "translate(0%,-120%);",
-            }}
-          >
-            <Typography variant="caption" component="span">
-              precio
-            </Typography>
-          </Box>
-        </ListItem>
-      ))}
-    </List>
-
-*/
+  const navigate = useNavigate();
+  const handleCambioTipoEnvio = (
+    _: React.MouseEvent<HTMLElement>,
+    newTipoEnvio: "DOMICILIO" | "SUCURSAL"
+  ) => {
+    setTipoEnvio(newTipoEnvio);
+    handleOnSelectInformacionAdicional(tipoEnvio, direccion);
+  };
+  return (
+    <Paper>
+      <Box
+        sx={{
+          py: 2,
+          px: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          gap: 2,
+        }}
+      >
+        <StyledToggleButtonGroup
+          color="primary"
+          size="small"
+          value={tipoEnvio}
+          exclusive
+          onChange={handleCambioTipoEnvio}
+        >
+          <ToggleButton value="DOMICILIO">Domicilio</ToggleButton>
+          <ToggleButton value="SUCURSAL">Sucursal</ToggleButton>
+        </StyledToggleButtonGroup>
+        <Typography>Seleccionar direccion:</Typography>
+        <Autocomplete
+          disabled={tipoEnvio !== "DOMICILIO"}
+          value={direccion || null}
+          onChange={(_, newDireccion) => {
+            setDireccion(newDireccion);
+          }}
+          getOptionLabel={(props) => props.direccion}
+          loading={isLoading}
+          noOptionsText="No hay direcciones"
+          options={data || []}
+          renderInput={(props) => (
+            <CustomTextField2 {...props} label="Mis direcciones" />
+          )}
+        />
+        <Button
+          disabled={tipoEnvio !== "DOMICILIO"}
+          size="small"
+          onClick={() => {
+            navigate("/user/address");
+          }}
+          sx={{
+            alignSelf: "flex-start",
+            backgroundColor: "#e6004d",
+            color: "#fff",
+            "&: hover": { backgroundColor: "#cc0045", color: "#fff" },
+          }}
+        >
+          Agregar direccion
+        </Button>
+      </Box>
+    </Paper>
+  );
+};
+const CustomTextField2 = styled(TextField)(() => ({}));
+const StyledToggleButtonGroup = styled(ToggleButtonGroup)(() => ({
+  /*  "& .MuiToggleButtonGroup-groupedHorizontal": {
+    color: "#cc0045",
+  }, */
+}));
