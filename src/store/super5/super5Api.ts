@@ -221,7 +221,7 @@ export const super5Api = createApi({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["UserData"],
+      invalidatesTags: ["UserData", "AtenderReclamo"],
     }),
     modificarComprador: builder.mutation<Token, ModificarCompradorProps>({
       query: (body) => ({

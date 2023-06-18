@@ -54,8 +54,8 @@ export const MisDirecciones = () => {
                             </ListItem>
 
                             <ListItem sx={{ backgroundColor: "#ff0056" }} disablePadding>
-                                <ListItemButton onClick={handleMisDirecciones} >
-                                    <ListItemIcon>
+                                <ListItemButton sx={{ color: "#fff" }} onClick={handleMisDirecciones} >
+                                    <ListItemIcon sx={{ color: "#fff" }}>
                                         <MapIcon />
                                     </ListItemIcon>
                                     <ListItemText primary={"Mis Direcciones"} />
