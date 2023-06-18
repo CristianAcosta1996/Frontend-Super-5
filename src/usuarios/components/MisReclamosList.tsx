@@ -51,7 +51,7 @@ export const MisReclamosList = () => {
     return (
         <>
             <Box
-                sx={{ height: "97vh", width: "820px" }}
+                sx={{ height: "78vh", width: "823px" }}
                 className="animate__animated animate__fadeIn"
             >
                 <DataGrid columns={columns} rows={reclamos || []} autoPageSize />

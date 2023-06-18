@@ -74,7 +74,7 @@ export const MisDireccionesList = () => {
     return (
         <>
             <Box
-                sx={{ height: "97vh" }}
+                sx={{ height: "78vh", width: "920px" }}
                 className="animate__animated animate__fadeIn"
             >
                 <DataGrid

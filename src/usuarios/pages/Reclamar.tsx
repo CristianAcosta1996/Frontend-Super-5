@@ -1,7 +1,6 @@
-import { Autocomplete, Box, Button, Container, Drawer, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField, Toolbar, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Autocomplete, Box, Button, Container, Drawer, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField, TextareaAutosize, Toolbar, Typography } from "@mui/material";
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useCrearReclamoMutation } from "../../store/super5/super5Api";
 import { useCrearReclamo } from "../hooks/useCrearReclamo";
 
 export const HacerReclamo = () => {
@@ -52,23 +51,18 @@ export const HacerReclamo = () => {
     return (
         <>
 
-            <Grid container
-                justifyContent={"flex-start"}
-                spacing={2}
-                marginTop={0}
-                ml={0}
-            >
+            <Grid container sx={{ ml: "5%", borderRadius: 4, border: "2px solid #007aff", padding: 1, mt: 2 }} xs={4}>
                 <Grid item xs={12}>
                     <Typography
                         width={"75%"}
-                        variant="h5"
+                        variant="h3"
                         component={"h2"}
                         color={"black"}
                     >
                         Crear Reclamo
                     </Typography>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item sx={{ mt: 2, mb: 2 }} xs={4}>
                     <Autocomplete
                         options={tipoReclamo.map(({ title }) => {
                             return { label: title }
@@ -98,62 +92,58 @@ export const HacerReclamo = () => {
                 </Grid>
 
                 <Grid marginLeft={0} item xs={5} mb={3} mt={2}>
-                    <TextField
-                        size="small"
-                        variant="filled"
-                        label="Comentario"
-                        type="text"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        sx={{ backgroundColor: "#fff", borderRadius: 2, width: 200 }}
+                    <TextareaAutosize
+                        placeholder="Escriba su reclamo"
                         name="comentario"
                         value={comentario}
                         onChange={handleComentario}
                     />
                 </Grid>
                 <Grid xs={12}></Grid>
-                <Grid item xs={4}>
-                    <Button
-                        onClick={handleGuardar}
-                        size="small"
-                        variant="text"
-                        sx={{
+                <Grid item xs={12}>
+                    <div>
+                        <Button
+                            onClick={handleGuardar}
+                            size="small"
+                            variant="text"
+                            sx={{
 
-                            textTransform: "capitalize",
-                            fontSize: 14,
-                            textDecoration: "underline",
-                            color: "white",
-                            backgroundColor: "#007aff",
-                            "&:hover": {
-                                color: "#007aff",
-                                borderBlockColor: "#007aff",
-                                border: 1,
-                            },
-                        }}
-                    >
-                        Guardar
-                    </Button>
-                    <Button
-                        onClick={handleCancelar}
-                        size="small"
-                        variant="text"
-                        sx={{
-                            ml: 5,
-                            textTransform: "capitalize",
-                            fontSize: 14,
-                            textDecoration: "underline",
-                            color: "white",
-                            backgroundColor: "#007aff",
-                            "&:hover": {
-                                color: "#007aff",
-                                borderBlockColor: "#007aff",
-                                border: 1,
-                            },
-                        }}
-                    >
-                        Cancelar
-                    </Button>
+                                textTransform: "capitalize",
+                                fontSize: 14,
+                                textDecoration: "underline",
+                                color: "white",
+                                backgroundColor: "#007aff",
+                                "&:hover": {
+                                    color: "#007aff",
+                                    borderBlockColor: "#007aff",
+                                    border: 1,
+                                },
+                            }}
+                        >
+                            Guardar
+                        </Button>
+                        <Button
+                            onClick={handleCancelar}
+                            size="small"
+                            variant="text"
+                            sx={{
+                                ml: 5,
+                                textTransform: "capitalize",
+                                fontSize: 14,
+                                textDecoration: "underline",
+                                color: "white",
+                                backgroundColor: "#007aff",
+                                "&:hover": {
+                                    color: "#007aff",
+                                    borderBlockColor: "#007aff",
+                                    border: 1,
+                                },
+                            }}
+                        >
+                            Cancelar
+                        </Button>
+                    </div>
+
                 </Grid>
 
             </Grid>

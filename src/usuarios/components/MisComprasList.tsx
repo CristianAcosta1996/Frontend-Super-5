@@ -81,7 +81,7 @@ export const MisComprasList = () => {
   return (
     <>
       <Box
-        sx={{ height: "97vh" }}
+        sx={{ height: "78vh", width: "1030px" }}
         className="animate__animated animate__fadeIn"
       >
         <DataGrid columns={columns} rows={compras || []} autoPageSize />
