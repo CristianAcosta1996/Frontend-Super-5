@@ -135,7 +135,7 @@ export const super5Api = createApi({
         url: "auth/login",
         method: "POST",
         body,
-      }),
+      }), invalidatesTags: ["UserData"],
       transformResponse: (response: AuthResponse, meta, arg) => {
         return response.token;
       },
@@ -193,7 +193,7 @@ export const super5Api = createApi({
       query: () => "direccion/listar",
       providesTags: ["Direccion"],
     }),
-    eliminarDireccion: builder.mutation<any, any>({
+    eliminarDireccion: builder.mutation<Direccion, any>({
       query: (body) => ({
         url: "direccion/eliminar",
         method: "POST",

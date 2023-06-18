@@ -104,20 +104,16 @@ const ReclamoButton = ({ params }: { params: GridRenderCellParams }) => {
     }
 
     const handleEliminar = () => {
-        console.log("eliminar direccion",
-            params.row.direccion,
-            params.row.ciudad,
-            params.row.departamento,
-            params.row.longitud,
-            params.row.latitud,
-            params.row.aclaracion)
+
         handleEliminarDireccion(
+            params.row.id,
             params.row.direccion,
             params.row.ciudad,
             params.row.departamento,
             params.row.longitud,
             params.row.latitud,
-            params.row.aclaracion,);
+            params.row.aclaracion,
+            true);
     }
     return (
         <>

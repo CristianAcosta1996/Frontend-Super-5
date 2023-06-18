@@ -6,7 +6,7 @@ import {
   GridValueFormatterParams,
   GridValueGetterParams,
 } from "@mui/x-data-grid";
-import { useGetComprasQuery } from "../../store/super5/super5Api";
+import { useGetComprasQuery, useGetProductosQuery } from "../../store/super5/super5Api";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import { useNavigate } from "react-router-dom";
 
@@ -28,7 +28,7 @@ const columns: GridColDef[] = [
     type: "Date",
     valueFormatter: (params: GridValueFormatterParams) => {
       const fechaFormateada = new Date(params.value);
-      return `${fechaFormateada.getDay()}/${fechaFormateada.getMonth()}/${fechaFormateada.getFullYear()}-${fechaFormateada.getHours()}:${fechaFormateada.getMinutes()}:${fechaFormateada.getMinutes()}`;
+      return `${fechaFormateada.getDay()}/${fechaFormateada.getMonth()}/${fechaFormateada.getFullYear()} - ${fechaFormateada.getHours()}:${fechaFormateada.getMinutes()}`;
     },
   },
   {
@@ -64,6 +64,7 @@ const columns: GridColDef[] = [
     },
   },
 ];
+
 
 export const MisComprasList = () => {
   const { data: compras } = useGetComprasQuery();

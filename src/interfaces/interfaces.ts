@@ -27,6 +27,7 @@ export interface Direccion {
   longitud: string;
   latitud: string;
   aclaracion: string;
+  eliminado: boolean;
 }
 export interface Sucursal {
   id: string;

@@ -66,8 +66,8 @@ const Slider = ({ imagenes }: SliderProps) => {
       navigation
       pagination={{ clickable: true }}
       scrollbar={{ draggable: true }}
-      onSwiper={(swiper) => {}}
-      onSlideChange={() => {}}
+      onSwiper={(swiper) => { }}
+      onSlideChange={() => { }}
     >
       {imagenes.map((imagen) => (
         <SwiperSlide key={imagen}>

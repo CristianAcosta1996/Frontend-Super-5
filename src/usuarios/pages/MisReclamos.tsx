@@ -4,15 +4,11 @@ import { useNavigate } from "react-router-dom";
 import MapIcon from '@mui/icons-material/Map';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
-import { MisComprasList } from "../components/MisComprasList";
-import { useGetDireccionesQuery } from "../../store/super5/super5Api";
-import { MisDireccionesList } from "../components/MisDireccionesList";
+import { MisReclamosList } from "../components/MisReclamosList";
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 
-export const MisDirecciones = () => {
+export const MisReclamos = () => {
     const navigate = useNavigate();
-
-    const direcciones = useGetDireccionesQuery();
 
     const handleDatosPersonales = () => {
         navigate("/user/perfil");
@@ -53,7 +49,7 @@ export const MisDirecciones = () => {
                                 </ListItemButton>
                             </ListItem>
 
-                            <ListItem sx={{ backgroundColor: "#ff0056" }} disablePadding>
+                            <ListItem disablePadding>
                                 <ListItemButton onClick={handleMisDirecciones} >
                                     <ListItemIcon>
                                         <MapIcon />
@@ -64,15 +60,15 @@ export const MisDirecciones = () => {
 
                             <ListItem disablePadding>
                                 <ListItemButton onClick={handleMisPedidos}>
-                                    <ListItemIcon>
+                                    <ListItemIcon >
                                         <CreditCardIcon />
                                     </ListItemIcon>
                                     <ListItemText primary={"Mis Pedidos"} />
                                 </ListItemButton>
                             </ListItem>
-                            <ListItem disablePadding>
-                                <ListItemButton onClick={handleMisReclamos}>
-                                    <ListItemIcon>
+                            <ListItem sx={{ backgroundColor: "#ff0056" }} disablePadding>
+                                <ListItemButton sx={{ color: "#fff" }} onClick={handleMisReclamos}>
+                                    <ListItemIcon sx={{ color: "#fff" }}>
                                         <ContactSupportIcon />
                                     </ListItemIcon>
                                     <ListItemText primary={"Mis Reclamos"} />
@@ -84,7 +80,7 @@ export const MisDirecciones = () => {
 
 
                 <Grid sx={{ ml: "20%" }} item xs={10}>
-                    <MisDireccionesList />
+                    <MisReclamosList />
                 </Grid>
 
             </Grid>
