@@ -11,6 +11,7 @@ import {
   Box,
   Button,
   ButtonGroup,
+  Container,
   Divider,
   Grid,
   IconButton,
@@ -36,8 +37,19 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCarrito } from "../carrito/hooks/useCarrito";
 
+const showSnackbarInitialState = {
+  isError: false,
+  show: false,
+  message: "",
+};
+
 export const ProcederAlPagoPage = () => {
-  const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
+  const [showSnackbar, setShowSnackbar] = useState<{
+    isError: boolean;
+    show: boolean;
+    message: string;
+  }>(showSnackbarInitialState);
+  const { status } = useAppSelector((state) => state.auth);
   const { carrito } = useAppSelector((state) => state.super5);
   const [direccion, setDireccion] = useState<Direccion | null>(null);
   const [tipoEnvio, setTipoEnvio] = useState<"DOMICILIO" | "SUCURSAL" | null>();
@@ -46,7 +58,18 @@ export const ProcederAlPagoPage = () => {
     calcularPrecioTotalCarrito,
     quitarItemDelCarrito,
     handlePagarCompra,
+    isError,
+    error,
   } = useCarrito();
+
+  useEffect(() => {
+    if (!error) return;
+    setShowSnackbar({
+      isError: true,
+      message: error,
+      show: true,
+    });
+  }, [error, isError]);
 
   const handleOnSelectInformacionAdicional = (
     tipoEnvio: "DOMICILIO" | "SUCURSAL",
@@ -57,14 +80,49 @@ export const ProcederAlPagoPage = () => {
   };
   const handleOnSubmit = (event) => {
     event.preventDefault();
-    if (tipoEnvio === "DOMICILIO" && !direccion) {
-      setShowSnackbar(true);
+    if (status === "not-authenticated") {
+      setShowSnackbar({
+        isError: true,
+        message:
+          "Debe estar logueado para poder realizar una compra, por favor ingrese con su cuenta o registrese",
+        show: true,
+      });
       return;
     }
-    if (!tipoEnvio || carrito.length <= 0) return;
+    if (!tipoEnvio || carrito.length <= 0) {
+      setShowSnackbar({
+        isError: true,
+        message:
+          "Debe seleccionar el tipo de envio ademas tener productos en el carrito para proceder con la compra",
+        show: true,
+      });
+      return;
+    }
     console.log(direccion);
-
-    handlePagarCompra(tipoEnvio, +direccion.id!);
+    if (!direccion && tipoEnvio === "DOMICILIO") {
+      setShowSnackbar({
+        isError: true,
+        message:
+          " Es necesario agregar un domicilio antes de realizar la compra",
+        show: true,
+      });
+      return;
+    }
+    if (tipoEnvio === "DOMICILIO") {
+      const id = direccion?.id;
+      if (!id) {
+        setShowSnackbar({
+          isError: true,
+          message:
+            " Es necesario agregar un domicilio antes de realizar la compra",
+          show: true,
+        });
+        return;
+      }
+      handlePagarCompra(tipoEnvio, +id);
+    } else {
+      handlePagarCompra(tipoEnvio);
+    }
   };
   return (
     <form onSubmit={handleOnSubmit}>
@@ -97,14 +155,21 @@ export const ProcederAlPagoPage = () => {
         </Grid>
       </Grid>
       <Snackbar
-        open={showSnackbar}
-        autoHideDuration={3000}
+        open={showSnackbar?.show}
+        autoHideDuration={4000}
         onClose={() => {
-          setShowSnackbar(false);
+          setShowSnackbar((prev) => ({
+            isError: prev.isError,
+            message: prev.message,
+            show: false,
+          }));
         }}
       >
-        <Alert severity="error" variant="filled">
-          Es necesario agregar un domicilio antes de realizar la compra
+        <Alert
+          severity={showSnackbar.isError ? "error" : "success"}
+          variant="filled"
+        >
+          {showSnackbar.message}
         </Alert>
       </Snackbar>
     </form>
@@ -232,7 +297,7 @@ const AplicarCupon = () => {
 
 const CustomTextField = styled(TextField)(() => ({
   "& .MuiInputBase-input": {
-    height: "10px" /* Adjust the height value as per your requirement */,
+    height: "10px",
   },
 }));
 
@@ -249,6 +314,13 @@ const ProductList = ({
 }: ProductListProps) => {
   return (
     <Paper>
+      {products.length <= 0 ? (
+        <Typography variant="body1" component="h6" pt={2} pl={2}>
+          No hay productos para mostrar
+        </Typography>
+      ) : (
+        ""
+      )}
       <List sx={{ py: { xs: 0, sm: 1 }, px: 0 }}>
         {products.map(({ cantidad, producto }, index) => (
           <Box key={producto.id}>

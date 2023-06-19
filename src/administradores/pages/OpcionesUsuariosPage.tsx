@@ -1,6 +1,6 @@
 import { Grid } from "@mui/material";
 import { OpcionCard } from "../components/OpcionCard";
-import { List, PersonAdd } from "@mui/icons-material";
+import { List, PersonAdd, PersonRemove } from "@mui/icons-material";
 
 export const OpcionesUsuariosPage = () => {
   return (
@@ -17,6 +17,11 @@ export const OpcionesUsuariosPage = () => {
         title="Crear usuario sucursal"
         Icon={PersonAdd}
         redirectTo="crear"
+      />
+      <OpcionCard
+        title="Bloquear / Eliminar usuarios"
+        Icon={PersonRemove}
+        redirectTo="bloquear"
       />
     </Grid>
   );

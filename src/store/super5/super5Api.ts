@@ -4,6 +4,7 @@ import {
   CompraDTO,
   Direccion,
   Producto,
+  PromocionDTO,
   ReclamoDTO,
   Sucursal,
   Token,
@@ -95,6 +96,20 @@ interface CrearSucursalProps {
     departamento: string;
     longitud: string;
     latitud: string;
+  };
+}
+
+interface EliminarOBloquearUsuarioProps {
+  correo: string;
+}
+
+interface CrearPromocionProductoProps {
+  fechaDesde: string;
+  fechaHasta: string;
+  tipoPromo: "PRODUCTO";
+  porcDescuentoProducto: number;
+  producto: {
+    id: number;
   };
 }
 
@@ -314,10 +329,40 @@ export const super5Api = createApi({
       }),
       invalidatesTags: ["UserData"],
     }),
+    eliminarUsuario: builder.mutation<Usuario, EliminarOBloquearUsuarioProps>({
+      query: (body) => ({
+        url: "usuario/eliminar",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["UserData"],
+    }),
+    bloquearUsuario: builder.mutation<Usuario, EliminarOBloquearUsuarioProps>({
+      query: (body) => ({
+        url: "usuario/bloquear",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["UserData"],
+    }),
+    crearPromocionProducto: builder.mutation<
+      PromocionDTO,
+      CrearPromocionProductoProps
+    >({
+      query: (body) => ({
+        url: "promocion/crearPromocionProducto",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Producto"],
+    }),
   }),
 });
 
 export const {
+  useCrearPromocionProductoMutation,
+  useEliminarUsuarioMutation,
+  useBloquearUsuarioMutation,
   useLoginMutation,
   useSignupMutation,
   useGetProductosPorSucursalQuery,

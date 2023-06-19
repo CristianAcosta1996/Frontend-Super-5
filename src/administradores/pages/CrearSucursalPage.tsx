@@ -42,8 +42,31 @@ export const CrearSucursalPage = () => {
   const [longitud, setLongitud] = useState<number>();
   const [latitud, setLatitud] = useState<number>();
   const [aclaracion, setAclaracion] = useState<string>("");
+  const [formattedAddress, setFormattedAddress] = useState<string>("");
+  const [libraries] = useState<
+    ("places" | "drawing" | "geometry" | "localContext" | "visualization")[]
+  >(["places"]);
+
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: "AIzaSyB8FiaESvpDDrcOkwW07BVr5Z-rdumVSds",
+    libraries,
+  });
 
   const [startCrearSucursal, { isLoading }] = useCrearSucursalMutation();
+
+  const handleOnDireccionSelected = (coordenadas, formatted_address) => {
+    setFormattedAddress(formatted_address);
+    const direccionFragmentada = formatted_address.split(",").slice(0, -1);
+    const departamentoMap = direccionFragmentada.slice(-1)[0];
+    const ciudadMap = direccionFragmentada.slice(-2, -1)[0];
+    const calleMap = direccionFragmentada.slice(0, -2).join(",");
+
+    setDepartamento(departamentoMap);
+    setCiudad(ciudadMap);
+    setDireccion(calleMap);
+    setLongitud(coordenadas.lng);
+    setLatitud(coordenadas.lat);
+  };
 
   const handleOnSubmit = (event) => {
     event.preventDefault();
@@ -88,6 +111,12 @@ export const CrearSucursalPage = () => {
         });
       });
   };
+  if (!isLoaded)
+    return (
+      <Container>
+        <CircularProgress />
+      </Container>
+    );
   return (
     <form onSubmit={handleOnSubmit}>
       <Snackbar
@@ -153,13 +182,19 @@ export const CrearSucursalPage = () => {
             <Grid item xs={12} sm={10} my={1}>
               <Typography>Direccion:</Typography>
             </Grid>
-            <TextFieldGridItem
+            {/*  <TextFieldGridItem
               label="Direccion"
               value={direccion}
               handleOnChange={(event) => {
                 setDireccion(event.target.value);
               }}
-            />
+            /> */}
+            <Grid item xs={12} sm={5} my={1}>
+              <GoogleAutocomplete
+                handlePlaceSelect={handleOnDireccionSelected}
+                defaultValue={formattedAddress}
+              />
+            </Grid>
             <TextFieldGridItem
               label="Ciudad"
               value={ciudad}
@@ -230,20 +265,7 @@ export const CrearSucursalPage = () => {
         </Grid>
         <PopupMap
           open={showDialog}
-          handleOnSelected={(coordenadas, formatted_address) => {
-            const direccionFragmentada = formatted_address
-              .split(",")
-              .slice(0, -1);
-            const departamentoMap = direccionFragmentada.slice(-1)[0];
-            const ciudadMap = direccionFragmentada.slice(-2, -1)[0];
-            const calleMap = direccionFragmentada.slice(0, -2).join(",");
-
-            setDepartamento(departamentoMap);
-            setCiudad(ciudadMap);
-            setDireccion(calleMap);
-            setLongitud(coordenadas.lng);
-            setLatitud(coordenadas.lat);
-          }}
+          handleOnSelected={handleOnDireccionSelected}
           handleOnClose={() => {
             setShowDialog(false);
           }}
@@ -301,26 +323,11 @@ const PopupMap = ({
   open = false,
   handleOnClose,
 }: PopupMapProps) => {
-  const [libraries] = useState<
-    ("places" | "drawing" | "geometry" | "localContext" | "visualization")[]
-  >(["places"]);
-
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: "AIzaSyB8FiaESvpDDrcOkwW07BVr5Z-rdumVSds",
-    libraries,
-  });
-  if (!isLoaded)
-    return (
-      <Container>
-        <CircularProgress />
-      </Container>
-    );
-
   return (
     <Dialog
       open={open}
       onClose={handleOnClose}
-      maxWidth="sm"
+      maxWidth="md"
       fullWidth
       PaperProps={{
         style: { backgroundColor: "transparent", boxShadow: "none" },
@@ -333,7 +340,6 @@ const PopupMap = ({
       >
         <IconButton
           onClick={handleOnClose}
-          color="error"
           sx={{
             width: 25,
             height: 25,
@@ -348,13 +354,15 @@ const PopupMap = ({
               backgroundImage:
                 "linear-gradient(90deg, rgba(89,41,57,1) 0%, rgba(255,0,86,1) 100%);",
             },
-            transform: "translate(-50%,40%);",
+            transform: "translate(-50%,30%);",
           }}
         >
           <Clear sx={{ color: "#fff" }} />
         </IconButton>
-        <Map handleOnSelected={handleOnSelected} />
-        <GoogleAutocomplete handlePlaceSelect={handleOnSelected} />
+        <Map
+          handleOnSelected={handleOnSelected}
+          handleOnClose={handleOnClose}
+        />
       </DialogContent>
     </Dialog>
   );
@@ -367,11 +375,13 @@ type Coordenadas = {
 
 const Map = ({
   handleOnSelected,
+  handleOnClose,
 }: {
   handleOnSelected: (
     coordenadas: Coordenadas,
     formatted_address: string
   ) => void;
+  handleOnClose: () => void;
 }) => {
   const [coord, setCoord] = useState<Coordenadas>();
   const [center] = useState({
@@ -396,6 +406,7 @@ const Map = ({
           },
           direccionFormateada
         );
+        handleOnClose();
       })
       .catch(console.error);
   };
@@ -413,7 +424,7 @@ const Map = ({
         clickableIcons={false}
         zoom={13}
         center={center}
-        mapContainerStyle={{ width: "100%", height: 300 }}
+        mapContainerStyle={{ width: "100%", height: 450 }}
       >
         {coord && <Marker position={coord} />}
       </GoogleMap>
@@ -423,11 +434,13 @@ const Map = ({
 
 const GoogleAutocomplete = ({
   handlePlaceSelect,
+  defaultValue,
 }: {
   handlePlaceSelect: (
     coordenadas: Coordenadas,
     formatted_address: string
   ) => void;
+  defaultValue: string;
 }) => {
   const [placeSelected, setPlaceSelected] = useState<{
     place_id: string;
@@ -480,7 +493,7 @@ const GoogleAutocomplete = ({
       noOptionsText="No hay opciones"
       getOptionLabel={({ description }) => description}
       loading={loading}
-      inputValue={value}
+      inputValue={value || defaultValue || ""}
       onInputChange={(_, newInput) => {
         setValue(newInput || "");
       }}

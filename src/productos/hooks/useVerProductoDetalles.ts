@@ -17,9 +17,9 @@ export const useVerProductoDetalles = () => {
   const modificarStock = (productoId: number, nuevoStock: number) => {
     startModificarStock({ cantidad: nuevoStock, productoId })
       .unwrap()
-      .then((resp) => console.log(resp, "success"))
+      .then((resp) => console.log(resp))
       .catch((error) => {
-        console.log(error, "error");
+        console.log(error);
       });
   };
 

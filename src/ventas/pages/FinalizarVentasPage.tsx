@@ -183,6 +183,7 @@ const PopupAction = ({ params }: { params: GridRenderCellParams }) => {
         }}
       >
         <IconButton
+          size="small"
           color="success"
           sx={{
             bgcolor: "#2E7D32",

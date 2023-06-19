@@ -18,16 +18,10 @@ import {
   RemoveCircleOutline,
 } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
-import { CarritoDto, CompraDTO } from "../../interfaces/interfaces";
-import { useGenerarCompraPaypalMutation } from "../../store/super5/super5Api";
-import {
-  realizarCompraPaypal,
-  resetearCarrito,
-} from "../../store/super5/super5Slice";
-import { guardarcompraPaypal, limpiarCarrito } from "../../utils/localstorage";
+import { resetearCarrito } from "../../store/super5/super5Slice";
+import { limpiarCarrito } from "../../utils/localstorage";
 import { useCarrito } from "../carrito/hooks/useCarrito";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 
 interface CarritoDrawerProps {
   cartOpen: boolean;
@@ -39,9 +33,9 @@ export const CarritoDrawer = ({
   handleClose,
 }: CarritoDrawerProps) => {
   const { carrito } = useAppSelector((state) => state.super5);
-  const { sucursal } = useAppSelector((state) => state.super5);
+
   const navigate = useNavigate();
-  const [startCompraPaypal] = useGenerarCompraPaypalMutation();
+
   const dispatch = useAppDispatch();
   const { precioTotalCarrito, quitarItemDelCarrito, agregarItemAlCarrito } =
     useCarrito();
@@ -50,32 +44,10 @@ export const CarritoDrawer = ({
     handleClose();
     navigate("compra/procesar-pago");
     return;
-    /* let arregloCompra: CarritoDto[] = [];
-    carrito.forEach(({ producto, cantidad }) => {
-      arregloCompra.push({ producto_id: +producto.id, cantidad });
-    });
-    const compra: CompraDTO = {
-      carrito: arregloCompra,
-      formaEntrega: "SUCURSAL",
-      sucursal_id: +sucursal.id,
-    };
-    startCompraPaypal(compra)
-      .unwrap()
-      .then((resp: any) => {
-        console.log(resp);
-
-        dispatch(realizarCompraPaypal(resp));
-        guardarcompraPaypal(resp);
-        window.location.replace(resp.urlPaypal);
-      })
-      .catch((error) => {
-        alert(JSON.stringify(error.data));
-      }); */
   };
 
   const toggleDrawer =
     () => (event: React.KeyboardEvent | React.MouseEvent) => {
-      console.log("entre");
       if (
         event.type === "keydown" &&
         ((event as React.KeyboardEvent).key === "Tab" ||
@@ -184,8 +156,9 @@ export const CarritoDrawer = ({
         anchor="right"
         open={cartOpen}
         onClose={() => {
+          /* toggleDrawer(); */
+          handleClose();
           return;
-          toggleDrawer();
         }}
       >
         {list()}
@@ -193,4 +166,3 @@ export const CarritoDrawer = ({
     </div>
   );
 };
-/* ELIMINAR TODO DEL ESTADO DE REDUX AL LOGOUT  */

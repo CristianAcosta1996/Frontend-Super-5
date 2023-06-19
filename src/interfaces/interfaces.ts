@@ -106,3 +106,17 @@ export interface ReclamoDTO {
     id: number;
   };
 }
+
+export interface PromocionDTO {
+  id: number;
+  nombre: string | null;
+  fechaDesde: string;
+  fechaHasta: string;
+  tipoPromo: "PRODUCTO";
+  porcDescuentoProducto: number;
+  cuponDescuentoVenta: string | null;
+  aplicado: boolean | null;
+  importeDescuentoVenta: number;
+  producto: Producto;
+  cliente: Usuario;
+}

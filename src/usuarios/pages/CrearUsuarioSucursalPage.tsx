@@ -7,11 +7,24 @@ import {
   TextField,
   Typography,
   Button,
+  Autocomplete,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { ChangeEventHandler, HTMLInputTypeAttribute, useState } from "react";
-import { useCrearUsuarioSucursalMutation } from "../../store/super5/super5Api";
+import {
+  useCrearUsuarioSucursalMutation,
+  useGetSucursalesQuery,
+} from "../../store/super5/super5Api";
+import { Sucursal } from "../../interfaces/interfaces";
 
 export const CrearUsuarioSucursalPage = () => {
+  const [showMessage, setShowMessage] = useState<{
+    isSuccess: boolean;
+    message: string;
+    show: boolean;
+  } | null>();
+
   const [nombre, setNombre] = useState();
   const [apellido, setApellido] = useState();
   const [correo, setCorreo] = useState();
@@ -19,9 +32,10 @@ export const CrearUsuarioSucursalPage = () => {
   const [telefono, setTelefono] = useState();
   const [usuario, setUsuario] = useState();
   const [fechaNacimiento, setFechaNacimiento] = useState();
-  const [sucursalId, setSucursalId] = useState();
+  const [sucursal, setSucursal] = useState<Sucursal | null>();
 
   const [startCrearUsuarioSucursal] = useCrearUsuarioSucursalMutation();
+  const { isLoading, data } = useGetSucursalesQuery();
 
   const handleOnSubmit = (event) => {
     event.preventDefault();
@@ -33,7 +47,7 @@ export const CrearUsuarioSucursalPage = () => {
       !telefono ||
       !usuario ||
       !fechaNacimiento ||
-      !sucursalId
+      !sucursal
     )
       return;
 
@@ -43,13 +57,27 @@ export const CrearUsuarioSucursalPage = () => {
       contrasenia,
       correo,
       fechaNacimiento,
-      sucursalId,
+      sucursalId: sucursal.id,
       telefono,
       usuario,
     })
       .unwrap()
-      .then(console.log)
-      .catch(console.log);
+      .then((resp) => {
+        console.log(resp);
+        setShowMessage({
+          isSuccess: true,
+          message: "Usuario sucursal creado!",
+          show: true,
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+        setShowMessage({
+          isSuccess: false,
+          message: `${error.data}, vuelva a intentarlo mas tarde`,
+          show: true,
+        });
+      });
   };
 
   return (
@@ -83,6 +111,27 @@ export const CrearUsuarioSucursalPage = () => {
           justifyContent="center"
           gap={3}
         >
+          <Grid item xs={12} sm={5} my={1}>
+            <Autocomplete
+              size="small"
+              loading={isLoading}
+              value={sucursal || null}
+              onChange={(_, newValue) => {
+                setSucursal(newValue);
+              }}
+              getOptionLabel={(option) => option.nombre}
+              noOptionsText="No hay sucursales"
+              options={data || []}
+              renderInput={(params) => (
+                <CustomTextField
+                  {...params}
+                  label="Sucursal"
+                  fullWidth
+                  variant="filled"
+                />
+              )}
+            />
+          </Grid>
           {[
             {
               label: "nombre",
@@ -140,14 +189,6 @@ export const CrearUsuarioSucursalPage = () => {
               },
               type: "date",
             },
-            {
-              label: "sucursalId",
-              value: sucursalId,
-              handleOnChange: (event) => {
-                setSucursalId(event.target.value);
-              },
-              type: "text",
-            },
           ].map((elem) => (
             <TextFieldGridItem
               key={elem.label}
@@ -194,6 +235,29 @@ export const CrearUsuarioSucursalPage = () => {
           </Button>
         </Grid>
       </Grid>
+      <Snackbar
+        open={showMessage?.show}
+        autoHideDuration={3000}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        onClose={() => {
+          setShowMessage((prev) => {
+            if (prev) {
+              return {
+                isSuccess: prev.isSuccess,
+                message: prev.message,
+                show: false,
+              };
+            }
+            return null;
+          });
+        }}
+      >
+        <Alert
+          severity={showMessage && showMessage.isSuccess ? "success" : "error"}
+        >
+          {showMessage && showMessage.message}
+        </Alert>
+      </Snackbar>
     </form>
   );
 };
