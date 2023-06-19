@@ -74,6 +74,12 @@ interface UserDataProps {
   usuario: string;
   direcciones: Direccion[];
 }
+interface ModificarContrasenaProps {
+  guid: string;
+  contrasena: string;
+  contrasenaRepeticion: string;
+}
+
 interface EliminarProductoProps {
   id: number;
 }
@@ -113,6 +119,10 @@ interface CrearPromocionProductoProps {
   };
 }
 
+interface RecuperarContrasenaProps {
+  correo: string;
+}
+
 export const super5Api = createApi({
   reducerPath: "super5Api",
   baseQuery: fetchBaseQuery({
@@ -133,6 +143,7 @@ export const super5Api = createApi({
     "Producto",
     "Sucursal",
     "Direccion",
+    "Compras",
   ],
   endpoints: (builder) => ({
     login: builder.mutation<string, LoginProps>({
@@ -141,6 +152,7 @@ export const super5Api = createApi({
         method: "POST",
         body,
       }),
+      invalidatesTags: ["UserData"],
       transformResponse: (response: AuthResponse, meta, arg) => {
         return response.token;
       },
@@ -152,6 +164,20 @@ export const super5Api = createApi({
         body,
       }),
       transformResponse: (resp: AuthResponse, meta) => resp.token,
+    }),
+    recuperarContrasena: builder.mutation<string, RecuperarContrasenaProps>({
+      query: (body) => ({
+        url: "auth/generarRecuperacionContrasena",
+        method: "POST",
+        body,
+      }),
+    }),
+    modificarContrasena: builder.mutation<any, ModificarContrasenaProps>({
+      query: (body) => ({
+        url: "auth/modificarContrasena",
+        method: "POST",
+        body,
+      }),
     }),
     getProductos: builder.query<Producto[], void>({
       query: () => "producto/obtenerPorSucursal/1",
@@ -184,7 +210,7 @@ export const super5Api = createApi({
       query: () => "direccion/listar",
       providesTags: ["Direccion"],
     }),
-    eliminarDireccion: builder.mutation<any, any>({
+    eliminarDireccion: builder.mutation<Direccion, any>({
       query: (body) => ({
         url: "direccion/eliminar",
         method: "POST",
@@ -212,7 +238,7 @@ export const super5Api = createApi({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["UserData"],
+      invalidatesTags: ["UserData", "AtenderReclamo"],
     }),
     modificarComprador: builder.mutation<Token, ModificarCompradorProps>({
       query: (body) => ({
@@ -252,6 +278,7 @@ export const super5Api = createApi({
     }),
     getCompras: builder.query<any[], void>({
       query: () => "venta/listar",
+      providesTags: ["Compras"],
     }),
     getVentasConfirmadas: builder.query<any[], void>({
       query: () => "venta/obtenerVentasConfirmadas",
@@ -272,6 +299,14 @@ export const super5Api = createApi({
         body,
       }),
       invalidatesTags: ["VentasConfirmadas"],
+    }),
+    cancelarCompra: builder.mutation<CompraDTO, CompraDTO>({
+      query: (body) => ({
+        url: "venta/cancelar",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Compras"],
     }),
     getReclamos: builder.query<ReclamoDTO[], void>({
       query: () => "reclamo/listar",
@@ -386,6 +421,8 @@ export const {
   useModificarDireccionMutation,
   useGetReclamosQuery,
   useAtenderReclamoMutation,
+  useRecuperarContrasenaMutation,
+  useModificarContrasenaMutation,
   useGetProductosQuery,
   useCrearProductoMutation,
   useEliminarProductoMutation,
@@ -393,4 +430,5 @@ export const {
   useGetUsuariosQuery,
   useCrearSucursalMutation,
   useCrearUsuarioSucursalMutation,
+  useCancelarCompraMutation,
 } = super5Api;

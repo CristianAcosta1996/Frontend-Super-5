@@ -9,8 +9,6 @@ import MenuItem from "@mui/material/MenuItem";
 import { Avatar, Badge, Button, Tooltip, Typography } from "@mui/material";
 import Menu from "@mui/material/Menu";
 import IconButton from "@mui/material/IconButton";
-
-import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import {
   Edit,
