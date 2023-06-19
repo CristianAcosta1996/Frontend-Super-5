@@ -6,6 +6,7 @@ import { TextField } from "@mui/material";
 import { useAddress } from "../hooks/useAddress";
 import { useGetSucursalesQuery } from "../../store/super5/super5Api";
 import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export default function AddressPage() {
     const [libraries] = useState(['places']);
@@ -25,6 +26,8 @@ function Map() {
     const [firstPin, setFirstPin] = useState(false)
     const [ciudad, setCiudad] = useState("");
     const [departamento, setDepartamento] = useState("");
+
+    const navigate = useNavigate();
 
     const { data: sucursales } = useGetSucursalesQuery();
 
@@ -48,8 +51,12 @@ function Map() {
     };
 
     const saveDirection = () => {
-        handleAddAddress(direccion, ciudad, departamento, latLong.lng.toString(), latLong.lat.toString(), aclaraciones)
-
+        if (!direccion) {
+            alert("La dirección no puede ser vacía")
+            return
+        }
+        handleAddAddress(direccion, ciudad, departamento, latLong.lng.toString(), latLong.lat.toString(), aclaraciones);
+        navigate("/");
     }
 
     return (
@@ -80,10 +87,10 @@ function Map() {
                 <PlacesAutocomplete setFirstPin={setFirstPin} setLatLong={setLatLong} setCiudad={setCiudad} setDepartamento={setDepartamento} previous_place={previous_place} setPrevious_place={setPrevious_place} setDireccion={setDireccion} direccion={direccion} setSelected={setSelected} />
             </div>
             <TextField
-                variant="filled"
+                variant="outlined"
                 label="Aclaraciones"
                 type="text"
-                sx={{ backgroundColor: "#fff", borderRadius: 2, minWidth: 800, ml: 2, boxShadow: 5 }}
+                sx={{ backgroundColor: "#fff", borderRadius: 2, minWidth: 800, ml: 2, mt: 1 }}
                 name="Aclaraciones"
                 onChange={(e) => { setAclaraciones(e.target.value) }}
             />
@@ -167,14 +174,14 @@ const PlacesAutocomplete = ({ setFirstPin, setLatLong, setCiudad, setDepartament
                 return { label: description, place_id }
             })}
             isOptionEqualToValue={(option, direccion) => option.description === direccion}
-            sx={{ width: 800, ml: 2, boxShadow: 5 }}
+            sx={{ width: 800, ml: 2, mt: 1 }}
             value={direccion}
             renderInput={(params) => {
                 if (params.inputProps.value) {
                     checkValue(params.inputProps.value)
                 }
 
-                return <TextField {...params} label="Ej. Asuncion 1531, Montevideo" />
+                return <TextField {...params} label="Ej. Asuncion 1531, Montevideo..." />
             }}
         />
     )

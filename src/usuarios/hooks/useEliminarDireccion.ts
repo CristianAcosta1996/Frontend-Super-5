@@ -6,22 +6,25 @@ export const useEliminarDireccion = () => {
     ] = useEliminarDireccionMutation();
 
     const handleEliminarDireccion = async (
-
+        id: string,
         direccion: string,
         ciudad: string,
         departamento: string,
         longitud: string,
         latitud: string,
         aclaracion: string,
+        eliminado: boolean,
 
     ) => {
         startEliminarDireccion({
+            id,
             direccion,
             ciudad,
             departamento,
             longitud,
             latitud,
             aclaracion,
+            eliminado,
         }).unwrap()
             .then((resp) => {
                 console.log(resp);

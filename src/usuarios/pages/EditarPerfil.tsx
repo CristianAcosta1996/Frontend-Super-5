@@ -122,7 +122,7 @@ export const EditarPerfil = () => {
 
 
 
-                <Grid container sx={{ ml: "5%", borderRadius: 4, border: "2px solid #007aff", padding: 1, mt: 2 }} item xs={6}>
+                <Grid container sx={{ ml: "5%", borderRadius: 4, border: "2px solid #007aff", padding: 1, mt: 2 }} item xs={5}>
                     <Grid item xs={12}>
                         <Typography
                             width={"75%"}
@@ -207,14 +207,14 @@ export const EditarPerfil = () => {
 
                         </LocalizationProvider>
                     </Grid>
-                    <Grid xs={8}></Grid>
-                    <Grid item xs={4}>
+                    <Grid xs={7} item></Grid>
+                    <Grid item xs={5} >
                         <Button
                             onClick={handleGuardar}
                             size="small"
                             variant="text"
                             sx={{
-                                ml: 4,
+                                ml: 2,
                                 fontSize: 14,
                                 color: "white",
                                 backgroundColor: "#007aff",
@@ -232,7 +232,7 @@ export const EditarPerfil = () => {
                             size="small"
                             variant="text"
                             sx={{
-                                ml: 5,
+                                ml: 2,
                                 fontSize: 14,
                                 color: "white",
                                 backgroundColor: "#007aff",

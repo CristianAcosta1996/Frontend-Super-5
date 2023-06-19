@@ -1,10 +1,10 @@
-import { Box, Button, Container, Drawer, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField, Toolbar } from "@mui/material";
-import { useState, useEffect } from "react";
+import { Box, Drawer, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import MapIcon from '@mui/icons-material/Map';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import { MisComprasList } from "../components/MisComprasList";
+import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 
 export const MisPedidos = () => {
     const navigate = useNavigate();
@@ -18,7 +18,9 @@ export const MisPedidos = () => {
     const handleMisPedidos = () => {
         navigate("/user/mispedidos")
     }
-
+    const handleMisReclamos = () => {
+        navigate("/user/misreclamos")
+    }
 
 
     return (
@@ -63,12 +65,20 @@ export const MisPedidos = () => {
                                     <ListItemText primary={"Mis Pedidos"} />
                                 </ListItemButton>
                             </ListItem>
+                            <ListItem disablePadding>
+                                <ListItemButton onClick={handleMisReclamos}>
+                                    <ListItemIcon >
+                                        <ContactSupportIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary={"Mis Reclamos"} />
+                                </ListItemButton>
+                            </ListItem>
                         </List>
                     </Box>
                 </Drawer>
 
 
-                <Grid sx={{ ml: "20%" }} item xs={10}>
+                <Grid sx={{ ml: "18%" }} item xs={10}>
                     <MisComprasList />
                 </Grid>
 

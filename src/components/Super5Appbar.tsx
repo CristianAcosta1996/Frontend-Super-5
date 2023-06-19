@@ -77,11 +77,6 @@ export const Super5Appbar = () => {
         sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
       >
         <Toolbar variant="dense">
-          <Tooltip title="Categorias">
-            <IconButton color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-              <MenuIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
 
           <Box sx={{ flexGrow: 1 }}>
             <Avatar variant="square" src={brandLogo} sx={{ width: 120 }} />
