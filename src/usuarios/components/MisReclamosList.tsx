@@ -30,7 +30,7 @@ const columns: GridColDef[] = [
     {
         field: "tipo",
         headerName: "Tipo",
-        width: 80,
+        width: 100,
 
     },
     {
@@ -51,7 +51,7 @@ export const MisReclamosList = () => {
     return (
         <>
             <Box
-                sx={{ height: "78vh", width: "823px" }}
+                sx={{ height: "78vh", width: "842px" }}
                 className="animate__animated animate__fadeIn"
             >
                 <DataGrid columns={columns} rows={reclamos || []} autoPageSize />
