@@ -1,6 +1,7 @@
 import {
     Box,
     IconButton,
+    Tooltip,
 } from "@mui/material";
 import {
     DataGrid,
@@ -9,11 +10,14 @@ import {
     GridValueGetterParams,
 } from "@mui/x-data-grid";
 import {
+    useCancelarCompraMutation,
     useGetDireccionesQuery
 } from "../../store/super5/super5Api";
 import { useNavigate } from "react-router-dom";
 import { Delete, Edit } from "@mui/icons-material";
 import { useEliminarDireccion } from "../hooks/useEliminarDireccion";
+import { useState } from "react";
+import { PopupMessage } from "../../components/PopupMessage";
 
 const columns: GridColDef[] = [
     {
@@ -58,14 +62,21 @@ const columns: GridColDef[] = [
         },
     },
     {
-        field: "actions",
+        field: "modificar",
         headerName: "Modificar",
         width: 80,
         renderCell: (params: GridRenderCellParams) => {
             return <ReclamoButton params={params} />;
         },
     },
-
+    {
+        field: "eliminar",
+        headerName: "Eliminar",
+        width: 80,
+        renderCell: (params: GridRenderCellParams) => {
+            return <EliminarDireccion params={params} />;
+        },
+    },
 ];
 
 export const MisDireccionesList = () => {
@@ -74,7 +85,7 @@ export const MisDireccionesList = () => {
     return (
         <>
             <Box
-                sx={{ height: "78vh", width: "920px" }}
+                sx={{ height: "78vh", width: "980px" }}
                 className="animate__animated animate__fadeIn"
             >
                 <DataGrid
@@ -120,10 +131,63 @@ const ReclamoButton = ({ params }: { params: GridRenderCellParams }) => {
             <IconButton title="Modificar" onClick={handleModificar}>
                 <Edit />
             </IconButton>
-            <IconButton title="Eliminar" onClick={handleEliminar}>
-                <Delete />
-            </IconButton>
         </>
 
     )
 }
+
+const EliminarDireccion = ({ params }: { params: GridRenderCellParams }) => {
+    const [showPopup, setShowPopup] = useState<boolean>(false);
+    const { handleEliminarDireccion } = useEliminarDireccion();
+    const handleEliminar = () => {
+
+        handleEliminarDireccion(
+            params.row.id,
+            params.row.direccion,
+            params.row.ciudad,
+            params.row.departamento,
+            params.row.longitud,
+            params.row.latitud,
+            params.row.aclaracion,
+            true);
+    }
+    return (
+        <Box>
+            <PopupMessage
+                description="¿Está seguro de que desea eliminar la dirección?"
+                title="Eliminar Dirección"
+                handleClose={() => {
+                    setShowPopup(false);
+                }}
+                open={showPopup}
+                dialogContent={() => {
+                    return <></>;
+                }}
+                actions={[
+                    {
+                        actionName: "Cancelar",
+                        handleAction: () => {
+                            setShowPopup(false);
+                        },
+                        buttonColor: "error",
+                    },
+                    {
+                        actionName: "Confirmar",
+                        handleAction: handleEliminar,
+                        buttonColor: "success",
+                    },
+                ]}
+            />
+            <Tooltip
+                title="Confirmar"
+                onClick={() => {
+                    setShowPopup(true);
+                }}
+            >
+                <IconButton>
+                    <Delete />
+                </IconButton>
+            </Tooltip>
+        </Box>
+    );
+};

@@ -6,6 +6,7 @@ import { TextField } from "@mui/material";
 import { useAddress } from "../hooks/useAddress";
 import { useGetSucursalesQuery } from "../../store/super5/super5Api";
 import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export default function AddressPage() {
     const [libraries] = useState(['places']);
@@ -25,6 +26,8 @@ function Map() {
     const [firstPin, setFirstPin] = useState(false)
     const [ciudad, setCiudad] = useState("");
     const [departamento, setDepartamento] = useState("");
+
+    const navigate = useNavigate();
 
     const { data: sucursales } = useGetSucursalesQuery();
 
@@ -52,8 +55,8 @@ function Map() {
             alert("La dirección no puede ser vacía")
             return
         }
-        handleAddAddress(direccion, ciudad, departamento, latLong.lng.toString(), latLong.lat.toString(), aclaraciones)
-
+        handleAddAddress(direccion, ciudad, departamento, latLong.lng.toString(), latLong.lat.toString(), aclaraciones);
+        navigate("/");
     }
 
     return (

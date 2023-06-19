@@ -1,10 +1,7 @@
-import { useGetSucursalesQuery } from "../../store/super5/super5Api";
+export const SelectorSucursales = (id: string, sucursalesData: any) => {
+    const miSucursal = sucursalesData?.find((sucursal: any) => {
+        return sucursal.id === id;
+    });
 
-export const SelectorSucursales = (id: string) => {
-    const { data: sucursales } = useGetSucursalesQuery();
-    const miSucursal = sucursales?.find((sucursal) => {
-        sucursal.id === id
-        return sucursal.nombre
-    })
-    return miSucursal?.nombre
+    return miSucursal?.nombre;
 };

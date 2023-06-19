@@ -78,7 +78,7 @@ export const MisPedidos = () => {
                 </Drawer>
 
 
-                <Grid sx={{ ml: "20%" }} item xs={10}>
+                <Grid sx={{ ml: "18%" }} item xs={10}>
                     <MisComprasList />
                 </Grid>
 

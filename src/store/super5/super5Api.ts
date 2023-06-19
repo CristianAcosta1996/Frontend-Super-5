@@ -128,6 +128,7 @@ export const super5Api = createApi({
     "Producto",
     "Sucursal",
     "Direccion",
+    "Compras"
   ],
   endpoints: (builder) => ({
     login: builder.mutation<string, LoginProps>({
@@ -261,6 +262,7 @@ export const super5Api = createApi({
     }),
     getCompras: builder.query<any[], void>({
       query: () => "venta/listar",
+      providesTags: ["Compras"],
     }),
     getVentasConfirmadas: builder.query<any[], void>({
       query: () => "venta/obtenerVentasConfirmadas",
@@ -281,6 +283,14 @@ export const super5Api = createApi({
         body,
       }),
       invalidatesTags: ["VentasConfirmadas"],
+    }),
+    cancelarCompra: builder.mutation<CompraDTO, CompraDTO>({
+      query: (body) => ({
+        url: "venta/cancelar",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Compras"],
     }),
     getReclamos: builder.query<ReclamoDTO[], void>({
       query: () => "reclamo/listar",
@@ -374,4 +384,5 @@ export const {
   useGetUsuariosQuery,
   useCrearSucursalMutation,
   useCrearUsuarioSucursalMutation,
+  useCancelarCompraMutation
 } = super5Api;
