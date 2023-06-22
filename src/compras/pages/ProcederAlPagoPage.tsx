@@ -119,6 +119,7 @@ export const ProcederAlPagoPage = () => {
         });
         return;
       }
+      console.log(id);
       handlePagarCompra(tipoEnvio, +id);
     } else {
       handlePagarCompra(tipoEnvio);
