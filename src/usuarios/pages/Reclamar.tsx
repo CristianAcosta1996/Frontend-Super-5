@@ -2,6 +2,7 @@ import { Autocomplete, Box, Button, Container, Drawer, Grid, List, ListItem, Lis
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useCrearReclamo } from "../hooks/useCrearReclamo";
+import Textarea from '@mui/joy/Textarea';
 
 export const HacerReclamo = () => {
     const navigate = useNavigate();
@@ -16,7 +17,7 @@ export const HacerReclamo = () => {
 
     const handleGuardar = () => {
         if (!elTipaso) {
-            alert("Seleccione un tipo de reclamo valido")
+            alert("Seleccione un tipo de reclamo válido")
         }
         if (elTipaso) {
             handleCrearReclamo(compra, elTipaso.title, comentario);
@@ -92,12 +93,13 @@ export const HacerReclamo = () => {
                 </Grid>
 
                 <Grid marginLeft={0} item xs={5} mb={3} mt={2}>
-                    <TextareaAutosize
+                    <Textarea
                         placeholder="Escriba su reclamo"
                         name="comentario"
                         value={comentario}
                         onChange={handleComentario}
                     />
+
                 </Grid>
                 <Grid xs={12}></Grid>
                 <Grid item xs={12}>

@@ -172,14 +172,14 @@ const EliminarDireccion = ({ params }: { params: GridRenderCellParams }) => {
                         buttonColor: "error",
                     },
                     {
-                        actionName: "Confirmar",
+                        actionName: "Eliminar",
                         handleAction: handleEliminar,
                         buttonColor: "success",
                     },
                 ]}
             />
             <Tooltip
-                title="Confirmar"
+                title="Eliminar"
                 onClick={() => {
                     setShowPopup(true);
                 }}
