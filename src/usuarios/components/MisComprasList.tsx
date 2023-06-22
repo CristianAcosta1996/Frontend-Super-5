@@ -141,7 +141,7 @@ const PopupAction = ({ params }: { params: GridRenderCellParams }) => {
             buttonColor: "error",
           },
           {
-            actionName: "Confirmar",
+            actionName: "Eliminar",
             handleAction: () => {
               startCancelarCompra(params.row)
                 .unwrap()
@@ -154,7 +154,7 @@ const PopupAction = ({ params }: { params: GridRenderCellParams }) => {
         ]}
       />
       <Tooltip
-        title="Confirmar"
+        title="Eliminar"
         onClick={() => {
           setShowPopup(true);
         }}
