@@ -9,8 +9,6 @@ import MenuItem from "@mui/material/MenuItem";
 import { Avatar, Badge, Button, Tooltip, Typography } from "@mui/material";
 import Menu from "@mui/material/Menu";
 import IconButton from "@mui/material/IconButton";
-
-import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import {
   Edit,
@@ -77,7 +75,6 @@ export const Super5Appbar = () => {
         sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
       >
         <Toolbar variant="dense">
-
           <Box sx={{ flexGrow: 1 }}>
             <Avatar variant="square" src={brandLogo} sx={{ width: 120 }} />
           </Box>
@@ -145,7 +142,11 @@ export const Super5Appbar = () => {
           <IconButton color="inherit" onClick={handleCarrito}>
             <Badge
               badgeContent={
-                (carrito.length >= 1 && carrito.length) || undefined
+                (carrito.length >= 1 &&
+                  carrito
+                    .map((item) => item.cantidad)
+                    .reduce((prev, current) => prev + current)) ||
+                undefined
               }
               color="error"
             >

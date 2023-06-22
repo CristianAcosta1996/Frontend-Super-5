@@ -20,10 +20,11 @@ import { guardarcompraPaypal } from "../../../utils/localstorage";
 export const useCarrito = () => {
   const [open, setOpen] = useState(false);
   const [precioTotalCarrito, setPrecioTotalCarrito] = useState<number>(0);
+  const [error, setError] = useState<string>("");
   const dispatch = useAppDispatch();
 
   const { carrito } = useAppSelector((state) => state.super5);
-  const [startCompraPaypal, { data }] = useGenerarCompraPaypalMutation();
+  const [startCompraPaypal, { isError }] = useGenerarCompraPaypalMutation();
   const { sucursal } = useAppSelector((state) => state.super5);
 
   useEffect(() => {
@@ -84,31 +85,15 @@ export const useCarrito = () => {
         guardarcompraPaypal(resp);
         window.location.replace(resp.urlPaypal);
       })
-      .catch(console.log);
+      .catch((err) => {
+        console.log(err);
+        setError(err.data);
+      });
   };
-  /*  /* let arregloCompra: CarritoDto[] = [];
-    carrito.forEach(({ producto, cantidad }) => {
-      arregloCompra.push({ producto_id: +producto.id, cantidad });
-    });
-    const compra: CompraDTO = {
-      carrito: arregloCompra,
-      formaEntrega: "SUCURSAL",
-      sucursal_id: +sucursal.id,
-    };
-    startCompraPaypal(compra)
-      .unwrap()
-      .then((resp: any) => {
-        console.log(resp);
-
-        dispatch(realizarCompraPaypal(resp));
-        guardarcompraPaypal(resp);
-        window.location.replace(resp.urlPaypal);
-      })
-      .catch((error) => {
-        alert(JSON.stringify(error.data));
-      }); */
 
   return {
+    isError,
+    error,
     open,
     handleOnClose,
     agregarItemAlCarrito,

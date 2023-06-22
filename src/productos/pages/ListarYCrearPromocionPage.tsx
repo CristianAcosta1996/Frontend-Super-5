@@ -1,12 +1,11 @@
 import {
+  Box,
+  Typography,
+  Snackbar,
   Alert,
   Avatar,
-  Box,
-  Button,
   IconButton,
-  Snackbar,
   Tooltip,
-  Typography,
 } from "@mui/material";
 import {
   DataGrid,
@@ -14,20 +13,18 @@ import {
   GridRenderCellParams,
   GridTreeNodeWithRender,
 } from "@mui/x-data-grid";
-import { useGetProductosQuery } from "../../store/super5/super5Api";
-
 import { useLocation, useNavigate } from "react-router-dom";
-import { Edit } from "@mui/icons-material";
+import { useGetProductosQuery } from "../../store/super5/super5Api";
 import { useState } from "react";
+import { Add, Create, CreateOutlined, Edit } from "@mui/icons-material";
 
-export const ListarYModificarProductoPage = () => {
+export const ListarYCrearPromocionPage = () => {
   const { data: productos, isLoading } = useGetProductosQuery();
   const location = useLocation();
 
   const [showSnackbar, setShowSnackbar] = useState<boolean>(
     location.state !== null
   );
-
   return (
     <Box className="animate__animated animate__fadeIn" sx={{ height: "98vh" }}>
       <DataGrid
@@ -138,12 +135,12 @@ const columns: GridColDef[] = [
     sortable: false,
     type: "actions",
     renderCell: (params) => {
-      return <ModificarProductoActions params={params} />;
+      return <CrearPromocionActions params={params} />;
     },
   },
 ];
 
-const ModificarProductoActions = ({
+const CrearPromocionActions = ({
   params,
 }: {
   params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>;
@@ -151,15 +148,15 @@ const ModificarProductoActions = ({
   const navigate = useNavigate();
 
   const handleOnClick = () => {
-    navigate(`/administrador/productos/modificar/${params.row.id}`, {
+    navigate(`/administrador/productos/crear-promocion/${params.row.id}`, {
       state: params.row,
     });
   };
   return (
     <>
-      <Tooltip title="Modificar producto">
-        <IconButton onClick={handleOnClick}>
-          <Edit />
+      <Tooltip title="Crear promocion">
+        <IconButton onClick={handleOnClick} size="small">
+          <Add fontSize="small" />
         </IconButton>
       </Tooltip>
     </>

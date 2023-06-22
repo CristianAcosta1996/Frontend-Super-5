@@ -57,9 +57,6 @@ export const realizarCompraPaypal = ({
 }): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch) => {
     dispatch(realizarCompraPaypalSlice(compra));
-
-    console.log(compra);
-    /* window.location.replace(compra.urlPaypal || ""); */
   };
 };
 

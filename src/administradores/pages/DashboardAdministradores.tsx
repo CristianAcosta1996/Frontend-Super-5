@@ -5,6 +5,7 @@ import {
   Login,
   Person,
   Store,
+  TrendingUp,
 } from "@mui/icons-material";
 import {
   Avatar,
@@ -118,6 +119,13 @@ export const DashboardAdministradores = () => {
               navigate("/administrador/sucursal");
             }}
             Icon={Store}
+          />
+          <DashboardListItem
+            titulo="Estadistica"
+            handleOnClick={() => {
+              navigate("/administrador/estadisticas");
+            }}
+            Icon={TrendingUp}
           />
         </List>
       </Drawer>

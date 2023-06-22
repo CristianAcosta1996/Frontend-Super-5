@@ -34,6 +34,11 @@ export const OpcionesProductosPage = () => {
         Icon={Add}
         redirectTo="productos/crear-categoria"
       />
+      <OpcionCard
+        title="Crear promocion"
+        Icon={Add}
+        redirectTo="productos/crear-promocion"
+      />
     </Grid>
   );
 };

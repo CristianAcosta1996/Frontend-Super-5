@@ -106,10 +106,23 @@ export const ModificarProductoPage = () => {
   return (
     <Box
       className="animate__animated animate__fadeIn"
-      sx={{ bgcolor: "#333", color: "#fff" }}
+      sx={{
+        width: "100%",
+        minHeight: "98vh",
+
+        display: "flex",
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
     >
       <form onSubmit={handleOnSubmit}>
         <Grid
+          sx={{
+            bgcolor: "#333",
+            color: "#fff",
+            borderRadius: 1,
+          }}
           container
           p={2}
           justifyContent="space-between"

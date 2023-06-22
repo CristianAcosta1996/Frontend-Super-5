@@ -4,6 +4,7 @@ import {
   CompraDTO,
   Direccion,
   Producto,
+  PromocionDTO,
   ReclamoDTO,
   Sucursal,
   Token,
@@ -104,6 +105,20 @@ interface CrearSucursalProps {
   };
 }
 
+interface EliminarOBloquearUsuarioProps {
+  correo: string;
+}
+
+interface CrearPromocionProductoProps {
+  fechaDesde: string;
+  fechaHasta: string;
+  tipoPromo: "PRODUCTO";
+  porcDescuentoProducto: number;
+  producto: {
+    id: number;
+  };
+}
+
 interface RecuperarContrasenaProps {
   correo: string;
 }
@@ -128,7 +143,7 @@ export const super5Api = createApi({
     "Producto",
     "Sucursal",
     "Direccion",
-    "Compras"
+    "Compras",
   ],
   endpoints: (builder) => ({
     login: builder.mutation<string, LoginProps>({
@@ -136,7 +151,8 @@ export const super5Api = createApi({
         url: "auth/login",
         method: "POST",
         body,
-      }), invalidatesTags: ["UserData"],
+      }),
+      invalidatesTags: ["UserData"],
       transformResponse: (response: AuthResponse, meta, arg) => {
         return response.token;
       },
@@ -154,14 +170,14 @@ export const super5Api = createApi({
         url: "auth/generarRecuperacionContrasena",
         method: "POST",
         body,
-      })
+      }),
     }),
     modificarContrasena: builder.mutation<any, ModificarContrasenaProps>({
       query: (body) => ({
         url: "auth/modificarContrasena",
         method: "POST",
         body,
-      })
+      }),
     }),
     getProductos: builder.query<Producto[], void>({
       query: () => "producto/obtenerPorSucursal/1",
@@ -348,10 +364,40 @@ export const super5Api = createApi({
       }),
       invalidatesTags: ["UserData"],
     }),
+    eliminarUsuario: builder.mutation<Usuario, EliminarOBloquearUsuarioProps>({
+      query: (body) => ({
+        url: "usuario/eliminar",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["UserData"],
+    }),
+    bloquearUsuario: builder.mutation<Usuario, EliminarOBloquearUsuarioProps>({
+      query: (body) => ({
+        url: "usuario/bloquear",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["UserData"],
+    }),
+    crearPromocionProducto: builder.mutation<
+      PromocionDTO,
+      CrearPromocionProductoProps
+    >({
+      query: (body) => ({
+        url: "promocion/crearPromocionProducto",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Producto"],
+    }),
   }),
 });
 
 export const {
+  useCrearPromocionProductoMutation,
+  useEliminarUsuarioMutation,
+  useBloquearUsuarioMutation,
   useLoginMutation,
   useSignupMutation,
   useGetProductosPorSucursalQuery,
@@ -384,5 +430,5 @@ export const {
   useGetUsuariosQuery,
   useCrearSucursalMutation,
   useCrearUsuarioSucursalMutation,
-  useCancelarCompraMutation
+  useCancelarCompraMutation,
 } = super5Api;

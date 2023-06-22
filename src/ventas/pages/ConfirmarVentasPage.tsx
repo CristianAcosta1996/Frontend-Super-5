@@ -39,7 +39,7 @@ const columns: GridColDef[] = [
     type: "Date",
     valueFormatter: (params: GridValueFormatterParams) => {
       const fechaFormateada = new Date(params.value);
-      return `${fechaFormateada.getDay()}/${fechaFormateada.getMonth()}/${fechaFormateada.getFullYear()}-${fechaFormateada.getHours()}:${fechaFormateada.getMinutes()}:${fechaFormateada.getMinutes()}`;
+      return fechaFormateada.toLocaleDateString("es-ES");
     },
   },
   {
@@ -153,6 +153,7 @@ const PopupAction = ({ params }: { params: GridRenderCellParams }) => {
         }}
       >
         <IconButton
+          size="small"
           color="success"
           sx={{
             bgcolor: "#2E7D32",
