@@ -1,10 +1,9 @@
-import { Delete, Edit, Preview } from "@mui/icons-material";
+import { Edit, Preview } from "@mui/icons-material";
 import { Box, IconButton, Tooltip } from "@mui/material";
 import { useProductosActions } from "../hooks/useProductosActions";
 
 export const ProductosActions = ({ params }) => {
-  const { handleOnEliminar, handleOnModificar, handleOnVerDetalles } =
-    useProductosActions();
+  const { handleOnModificar, handleOnVerDetalles } = useProductosActions();
 
   return (
     <Box>
@@ -24,11 +23,6 @@ export const ProductosActions = ({ params }) => {
           }}
         >
           <Preview />
-        </IconButton>
-      </Tooltip>
-      <Tooltip title="Eliminar">
-        <IconButton onClick={handleOnEliminar}>
-          <Delete />
         </IconButton>
       </Tooltip>
     </Box>
