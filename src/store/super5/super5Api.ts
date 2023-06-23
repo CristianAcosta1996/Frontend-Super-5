@@ -152,7 +152,12 @@ export const super5Api = createApi({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["UserData"],
+      invalidatesTags: [
+        "UserData",
+        "Compras",
+        "VentasConfirmadas",
+        "VentasPagadas",
+      ],
       transformResponse: (response: AuthResponse, meta, arg) => {
         return response.token;
       },
@@ -164,6 +169,12 @@ export const super5Api = createApi({
         body,
       }),
       transformResponse: (resp: AuthResponse, meta) => resp.token,
+      invalidatesTags: [
+        "UserData",
+        "Compras",
+        "VentasConfirmadas",
+        "VentasPagadas",
+      ],
     }),
     recuperarContrasena: builder.mutation<string, RecuperarContrasenaProps>({
       query: (body) => ({
