@@ -39,7 +39,7 @@ const columns: GridColDef[] = [
     type: "Date",
     valueFormatter: (params: GridValueFormatterParams) => {
       const fechaFormateada = new Date(params.value);
-      return fechaFormateada.toLocaleDateString("es-ES");
+      return fechaFormateada.toLocaleString("es-ES");
     },
   },
   {

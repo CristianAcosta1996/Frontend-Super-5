@@ -131,17 +131,10 @@ export const DashboardSucursalesPage = () => {
             }}
           />
           <DashboardListItem
-            Icon={Person}
-            titulo="Usuario"
-            handleOnClick={() => {
-              navigate("/sucursal/usuario");
-            }}
-          />
-          <DashboardListItem
             Icon={TrendingUp}
             titulo="Analitica"
             handleOnClick={() => {
-              navigate("/sucursal/usuario");
+              navigate("/sucursal/estadisticas");
             }}
           />
         </List>
