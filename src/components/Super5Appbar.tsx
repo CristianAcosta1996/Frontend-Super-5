@@ -78,7 +78,9 @@ export const Super5Appbar = () => {
           <Box sx={{ flexGrow: 1 }}>
             <Avatar variant="square" src={brandLogo} sx={{ width: 120 }} />
           </Box>
-          <Box sx={{ backgroundColor: "007aff", mt: 1, flex: 1 }}>
+          <Box
+            sx={{ backgroundColor: "007aff", mt: 1, mr: { sm: 1 }, flex: 1 }}
+          >
             <ProductAutocomplete />
           </Box>
           <Tooltip title="Inicio">
