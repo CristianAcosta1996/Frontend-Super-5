@@ -64,7 +64,8 @@ export const useCarrito = () => {
 
   const handlePagarCompra = (
     formaEntrega: "SUCURSAL" | "DOMICILIO" = "SUCURSAL",
-    direccionId?: number
+    direccionId?: number,
+    promocion_id?: number
   ): void => {
     const carritoDto = carrito.map(({ producto, cantidad }) => ({
       producto_id: +producto.id,
@@ -76,7 +77,10 @@ export const useCarrito = () => {
       formaEntrega: formaEntrega,
       sucursal_id: +sucursal.id,
       direccion_id: formaEntrega === "DOMICILIO" ? direccionId : undefined,
+      promocion_id,
     };
+    console.log(compra);
+
     startCompraPaypal(compra)
       .unwrap()
       .then((resp: any) => {

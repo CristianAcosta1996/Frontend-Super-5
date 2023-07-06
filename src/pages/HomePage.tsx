@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Box,
   Grid,
@@ -32,17 +33,29 @@ export const HomePage = () => {
   return (
     <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <Grid container sx={{ flex: 1 }}>
-        <Grid item xs={12}>
+        <Grid item xs={12} mb={2}>
           <Slider imagenes={imagenes} />
-        </Grid>
-        <Grid item xs={12}>
-          <img src="https://i.ibb.co/5n2KKht/oferta-Limpieza.png" />
         </Grid>
         <Grid item xs={0} sm={1} />
         <Grid item xs={12} mt={1} sm={10}>
-          {categorias?.map((categoria) => (
-            <ProductosSlide key={categoria.id} categoria={categoria} />
-          ))}
+          {categorias?.map((categoria) => {
+            if (+categoria.id === 6) {
+              return (
+                <React.Fragment key={categoria.id}>
+                  <Grid
+                    container
+                    bgcolor="#03507D"
+                    justifyContent="center"
+                    mb={1}
+                  >
+                    <img src="https://i.ibb.co/5n2KKht/oferta-Limpieza.png" />
+                  </Grid>
+                  <ProductosSlide key={categoria.id} categoria={categoria} />
+                </React.Fragment>
+              );
+            }
+            return <ProductosSlide key={categoria.id} categoria={categoria} />;
+          })}
         </Grid>
         <Grid item xs={0} sm={1} />
       </Grid>
@@ -66,19 +79,26 @@ const Slider = ({ imagenes }: SliderProps) => {
       navigation
       pagination={{ clickable: true }}
       scrollbar={{ draggable: true }}
-      onSwiper={(swiper) => { }}
-      onSlideChange={() => { }}
+      onSwiper={(swiper) => {}}
+      onSlideChange={() => {}}
     >
       {imagenes.map((imagen) => (
         <SwiperSlide key={imagen}>
           <Box
             sx={{
               width: "100%",
+              height: 400,
+              /* Borrar el height si no arreglamos las imagenes del carrousel */
             }}
           >
             <img
               src={`${imagen}`}
-              style={{ width: "100%", height: "100%", objectFit: "fill" }}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit:
+                  "cover" /* objectFit: "fill" cambiarlo en caso de no arreglar las imagenes*/,
+              }}
             />
           </Box>
         </SwiperSlide>

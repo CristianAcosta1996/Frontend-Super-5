@@ -11,6 +11,7 @@ import {
   Box,
   Button,
   ButtonGroup,
+  CircularProgress,
   Container,
   Divider,
   Grid,
@@ -29,10 +30,18 @@ import {
   Typography,
   styled,
 } from "@mui/material";
-import { CarritoItem, Direccion, Producto } from "../../interfaces/interfaces";
+import {
+  CarritoItem,
+  Direccion,
+  Producto,
+  PromocionDTO,
+} from "../../interfaces/interfaces";
 import { useAppSelector } from "../../hooks/hooks";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
-import { useGetDireccionesQuery } from "../../store/super5/super5Api";
+import {
+  useGetDireccionesQuery,
+  useValidarCuponMutation,
+} from "../../store/super5/super5Api";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCarrito } from "../carrito/hooks/useCarrito";
@@ -53,6 +62,7 @@ export const ProcederAlPagoPage = () => {
   const { carrito } = useAppSelector((state) => state.super5);
   const [direccion, setDireccion] = useState<Direccion | null>(null);
   const [tipoEnvio, setTipoEnvio] = useState<"DOMICILIO" | "SUCURSAL" | null>();
+  const [cupon, setCupon] = useState<PromocionDTO | null>(null);
   const {
     agregarItemAlCarrito,
     calcularPrecioTotalCarrito,
@@ -78,6 +88,11 @@ export const ProcederAlPagoPage = () => {
     setDireccion(direccion);
     setTipoEnvio(tipoEnvio);
   };
+
+  const handleOnSelectCupon = (newCupon: PromocionDTO | null) => {
+    setCupon(newCupon);
+  };
+
   const handleOnSubmit = (event) => {
     event.preventDefault();
     if (status === "not-authenticated") {
@@ -119,9 +134,18 @@ export const ProcederAlPagoPage = () => {
         });
         return;
       }
-      console.log(id);
+
+      if (cupon) {
+        handlePagarCompra(tipoEnvio, +id, cupon.id);
+        return;
+      }
+
       handlePagarCompra(tipoEnvio, +id);
     } else {
+      if (cupon) {
+        handlePagarCompra(tipoEnvio, undefined, cupon.id);
+        return;
+      }
       handlePagarCompra(tipoEnvio);
     }
   };
@@ -151,7 +175,18 @@ export const ProcederAlPagoPage = () => {
           </Grid>
 
           <Grid item xs={12} sm={5}>
-            <PagoFinal subTotal={calcularPrecioTotalCarrito()} />
+            <PagoFinal
+              subTotal={calcularPrecioTotalCarrito()}
+              handleOnSuccessAplicarCupon={handleOnSelectCupon}
+              handleSnackbar={(newShowSnackbar: {
+                isError: boolean;
+                show: boolean;
+                message: string;
+              }) => {
+                setShowSnackbar(newShowSnackbar);
+              }}
+              cupon={cupon}
+            />
           </Grid>
         </Grid>
       </Grid>
@@ -196,16 +231,44 @@ const SectionTitle = ({ title, Icon }: SectionTitleProps) => {
 const PagoFinal = ({
   subTotal,
   precioEnvio,
+  handleOnSuccessAplicarCupon,
+  handleSnackbar,
+  cupon,
 }: {
   subTotal: number;
   precioEnvio?: number;
+  handleOnSuccessAplicarCupon: (promocion: PromocionDTO | null) => void;
+  handleSnackbar: (newShowSnackbar: {
+    isError: boolean;
+    show: boolean;
+    message: string;
+  }) => void;
+  cupon: PromocionDTO | null;
 }) => {
   const navigate = useNavigate();
+  const calcularTotal = () => {
+    if (!cupon) {
+      if (!precioEnvio) return subTotal;
+      return precioEnvio + subTotal;
+    }
+
+    if (!precioEnvio) {
+      const calculoDePrecio = subTotal - cupon.importeDescuentoVenta;
+      return calculoDePrecio <= 0 ? 0 : calculoDePrecio;
+    }
+
+    const calculoDePrecioTotal =
+      subTotal - cupon.importeDescuentoVenta - precioEnvio;
+    return calculoDePrecioTotal <= 0 ? 0 : calculoDePrecioTotal;
+  };
   return (
     <Paper elevation={4}>
       <Grid container flexDirection="column" p={1} gap={1}>
         <Grid item xs={12}>
-          <AplicarCupon />
+          <AplicarCupon
+            handleOnSucces={handleOnSuccessAplicarCupon}
+            handleSnackbar={handleSnackbar}
+          />
         </Grid>
         <Divider />
         <Grid container>
@@ -213,6 +276,12 @@ const PagoFinal = ({
             <Typography>Subtotal:</Typography>
             <Typography>{subTotal}</Typography>
           </Grid>
+          {cupon && !cupon.aplicado && (
+            <Grid container justifyContent="space-between">
+              <Typography>Cupon:</Typography>
+              <Typography>{cupon?.importeDescuentoVenta}</Typography>
+            </Grid>
+          )}
           <Grid container justifyContent="space-between">
             <Typography>Costo del envio:</Typography>
             <Typography>{precioEnvio ? precioEnvio : "Gratis"}</Typography>
@@ -222,9 +291,7 @@ const PagoFinal = ({
         <Grid container flexDirection="column" gap={1}>
           <Grid container justifyContent="space-between">
             <Typography>Total</Typography>
-            <Typography>
-              {precioEnvio ? precioEnvio + subTotal : subTotal}
-            </Typography>
+            <Typography>{calcularTotal()}</Typography>
           </Grid>
           <Grid item xs={12}>
             <Button
@@ -265,7 +332,21 @@ const PagoFinal = ({
   );
 };
 
-const AplicarCupon = () => {
+type AplicarCuponProps = {
+  handleSnackbar: (newShowSnackbar: {
+    isError: boolean;
+    show: boolean;
+    message: string;
+  }) => void;
+  handleOnSucces: (promocion: PromocionDTO | null) => void;
+};
+
+const AplicarCupon = ({
+  handleOnSucces,
+  handleSnackbar,
+}: AplicarCuponProps) => {
+  const [startValidarCupon, { isLoading }] = useValidarCuponMutation();
+  const [cupon, setCupon] = useState<string>("");
   return (
     <Box
       sx={{
@@ -281,13 +362,41 @@ const AplicarCupon = () => {
           color: "#e6004d",
         }}
       />
-      <CustomTextField fullWidth size="small" variant="outlined" />
+      {isLoading ? (
+        <Box sx={{ display: "flex", justifyContent: "center", flex: 1 }}>
+          <CircularProgress size={20} />
+        </Box>
+      ) : (
+        <CustomTextField
+          fullWidth
+          size="small"
+          variant="outlined"
+          value={cupon}
+          onChange={(event) => {
+            setCupon(event.target.value);
+          }}
+        />
+      )}
       <Button
         size="small"
         sx={{
           backgroundColor: "#e6004d",
           color: "#fff",
           "&: hover": { backgroundColor: "#cc0045", color: "#fff" },
+        }}
+        onClick={() => {
+          startValidarCupon({ cuponDescuentoVenta: cupon })
+            .unwrap()
+            .then((resp) => {
+              console.log(resp);
+              if (typeof resp === "string") return;
+              handleOnSucces(resp);
+            })
+            .catch((err) => {
+              console.log(err);
+              handleSnackbar({ isError: true, show: true, message: err.data });
+              handleOnSucces(null);
+            });
         }}
       >
         aplicar
