@@ -108,7 +108,7 @@ export const CarritoDrawer = ({
           </ListItem>
         ))}
         {carrito.length === 0 && (
-          <Typography variant="h6" textAlign="center">
+          <Typography variant="h6" textAlign="center" sx={{ color: "#555" }}>
             No hay nada que mostrar en el carrito
           </Typography>
         )}

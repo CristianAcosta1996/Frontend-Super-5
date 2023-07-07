@@ -1,4 +1,4 @@
-import { Bar } from "react-chartjs-2";
+import { Bar, Line } from "react-chartjs-2";
 import { useEffect, useState } from "react";
 import { useGetComprasQuery } from "../../store/super5/super5Api";
 import {
@@ -21,11 +21,23 @@ ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale);
 export const EstadisticasPage = () => {
   const { data: ventas, isLoading } = useGetComprasQuery();
   const [top10Products, setTop10Products] = useState<any>();
+  const [top5Buyers, setTop5Buyers] = useState<any>();
+  const [ventasPorSucursal, setVentasPorSucursal] = useState<any>();
   const [tipoEstadistica, setTipoEstadistica] = useState<
-    "Top10" | "VentasEstado"
+    "Top10" | "VentasEstado" | "Top5Compradores" | "VentasPorSucursal"
   >("VentasEstado");
 
   const [dataBar, setDataBar] = useState<any>({
+    labels: [],
+    datasets: [
+      {
+        label: "",
+        data: [],
+      },
+    ],
+  });
+
+  const [dataLineChart, setDataLineChart] = useState<any>({
     labels: [],
     datasets: [
       {
@@ -74,30 +86,168 @@ export const EstadisticasPage = () => {
       ],
     });
   }, [top10Products]);
+  /* 
+  
+  ----------------------------------------
+  
+  */
+
+  useEffect(() => {
+    if (!ventas || tipoEstadistica !== "Top5Compradores") return;
+    try {
+      const buyersTop5 = getTop5Buyers(ventas);
+      setTop5Buyers(buyersTop5);
+      /* if (!top10Products) return; */
+    } catch (err) {
+      console.log(err);
+    }
+  }, [ventas, tipoEstadistica]);
+
+  useEffect(() => {
+    if (tipoEstadistica !== "Top5Compradores") return;
+    setDataBar({
+      labels: Object.keys(top5Buyers),
+      datasets: [
+        {
+          label: "Top 5 compradores",
+          data: Object.values(top5Buyers),
+        },
+      ],
+    });
+  }, [top5Buyers]);
 
   const getTop10Products = (data: any[] | undefined) => {
-    const productData: { [key: string]: number } = {};
+    const productData: {
+      [key: string]: { cantidad: number; producto: string };
+    } = {};
     if (!data) return;
     data.forEach((order: any) => {
       order.carrito.forEach((item: any) => {
-        const { producto_id, cantidad } = item;
+        const { producto_id, cantidad, producto } = item;
         if (productData[producto_id]) {
-          productData[producto_id] += cantidad;
+          productData[producto_id].cantidad += cantidad;
         } else {
-          productData[producto_id] = cantidad;
+          productData[producto_id] = { cantidad, producto };
         }
       });
     });
     const topProducts = Object.entries(productData)
-      .sort(([, cantidadA], [, cantidadB]) => cantidadB - cantidadA)
+      .sort(
+        ([, { cantidad: cantidadA }], [, { cantidad: cantidadB }]) =>
+          cantidadB - cantidadA
+      )
       .slice(0, 10)
-      .reduce((obj, [producto_id, cantidad]) => {
-        obj[producto_id] = cantidad;
+      .reduce((obj, [producto_id, { cantidad, producto }]) => {
+        obj[producto] = cantidad;
         return obj;
       }, {});
 
     return topProducts;
   };
+
+  const getTop5Buyers = (data) => {
+    const buyerData: {
+      [comprador_id: string]: { count: number; nombreComprador: string };
+    } = {};
+    if (!data) return [];
+
+    data.forEach((order) => {
+      const { comprador_id, nombreComprador } = order;
+
+      if (buyerData[comprador_id]) {
+        buyerData[comprador_id].count += 1;
+      } else {
+        buyerData[comprador_id] = {
+          count: 1,
+          nombreComprador,
+        };
+      }
+    });
+
+    const topBuyers = Object.entries(buyerData)
+      .sort(([, { count: countA }], [, { count: countB }]) => countB - countA)
+      .slice(0, 5)
+      .reduce((obj, [comprador_id, { count, nombreComprador }]) => {
+        obj[nombreComprador] = count;
+        return obj;
+      }, {});
+
+    return topBuyers;
+  };
+  /* 
+  ----------------------------------------------
+  */
+
+  const countSalesByMonth = (sales: any[]) => {
+    const salesByMonth: { [sucursalID: number]: { [month: string]: number } } =
+      {};
+
+    sales.forEach((sale) => {
+      const sucursalID = sale.sucursal_id;
+      const month = new Date(sale.fechaCompra).toLocaleString("default", {
+        month: "long",
+      });
+
+      if (salesByMonth[sucursalID]) {
+        if (salesByMonth[sucursalID][month]) {
+          salesByMonth[sucursalID][month]++;
+        } else {
+          salesByMonth[sucursalID][month] = 1;
+        }
+      } else {
+        salesByMonth[sucursalID] = {
+          [month]: 1,
+        };
+      }
+    });
+
+    return salesByMonth;
+  };
+
+  useEffect(() => {
+    if (!ventas || tipoEstadistica !== "VentasPorSucursal") return;
+    try {
+      const ventasSucursal = countSalesByMonth(ventas);
+      setVentasPorSucursal(ventasSucursal);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [ventas, tipoEstadistica]);
+
+  useEffect(() => {
+    if (tipoEstadistica !== "VentasPorSucursal") return;
+
+    const labels = Object.keys(ventasPorSucursal).reduce(
+      (allLabels, sucursalID) => {
+        const sucursalData = ventasPorSucursal[sucursalID];
+        const months = Object.keys(sucursalData);
+        return Array.from(new Set([...allLabels, ...months]));
+      },
+      [] as string[]
+    );
+
+    const datasets = Object.entries(ventasPorSucursal).map(
+      ([sucursalID, sucursalData], index) => {
+        const data = labels.map((month) => sucursalData![month] || 0).reverse();
+        console.log(data);
+
+        return {
+          label: `Sucursal ${sucursalID}`,
+          data,
+          fill: false,
+          borderColor: `rgba(${index * 50}, ${index * 100}, ${index * 150}, 1)`,
+        };
+      }
+    );
+
+    console.log("datasets", datasets);
+    console.log("labels", labels);
+
+    setDataLineChart({
+      labels: labels.reverse(),
+      datasets: datasets,
+    });
+  }, [ventasPorSucursal]);
 
   if (isLoading) return <CircularProgress />;
   return (
@@ -121,12 +271,22 @@ export const EstadisticasPage = () => {
           size="small"
           onChange={(
             _: React.MouseEvent<HTMLElement>,
-            newTipoEstadistica: "Top10" | "VentasEstado"
+            newTipoEstadistica:
+              | "Top10"
+              | "VentasEstado"
+              | "Top5Compradores"
+              | "VentasPorSucursal"
           ) => {
             if (newTipoEstadistica === null) return;
             setTipoEstadistica(newTipoEstadistica);
           }}
         >
+          <ToggleButton value="Top5Compradores" onClick={() => {}}>
+            Top 5 compradores
+          </ToggleButton>
+          <ToggleButton value="VentasPorSucursal" onClick={() => {}}>
+            Ventas por sucursal
+          </ToggleButton>
           <ToggleButton
             value="Top10"
             onClick={() => {
@@ -145,7 +305,11 @@ export const EstadisticasPage = () => {
           </ToggleButton>
         </ToggleButtonGroup>
         <Box sx={{ py: 2 }}>
-          <BarChart data={dataBar} />
+          {tipoEstadistica === "VentasPorSucursal" ? (
+            <Line data={dataLineChart} />
+          ) : (
+            <BarChart data={dataBar} />
+          )}
         </Box>
       </Box>
     </>

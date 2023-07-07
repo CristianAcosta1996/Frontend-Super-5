@@ -42,7 +42,7 @@ const columns: GridColDef[] = [
     type: "Date",
     valueFormatter: (params: GridValueFormatterParams) => {
       const fechaFormateada = new Date(params.value);
-      return `${fechaFormateada.getDay()}/${fechaFormateada.getMonth()}/${fechaFormateada.getFullYear()}-${fechaFormateada.getHours()}:${fechaFormateada.getMinutes()}:${fechaFormateada.getMinutes()}`;
+      return fechaFormateada.toLocaleString("es-ES");
     },
   },
   {

@@ -111,13 +111,13 @@ export interface ReclamoDTO {
 export interface PromocionDTO {
   id: number;
   nombre: string | null;
-  fechaDesde: string;
+  fechaDesde: string | null;
   fechaHasta: string;
-  tipoPromo: "PRODUCTO";
-  porcDescuentoProducto: number;
+  tipoPromo: "PRODUCTO" | null;
+  porcDescuentoProducto: number | null;
   cuponDescuentoVenta: string | null;
   aplicado: boolean | null;
   importeDescuentoVenta: number;
-  producto: Producto;
-  cliente: Usuario;
+  producto: Producto | null;
+  cliente: Usuario | null;
 }

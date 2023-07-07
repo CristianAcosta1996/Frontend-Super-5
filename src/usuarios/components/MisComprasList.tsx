@@ -6,13 +6,18 @@ import {
   GridValueFormatterParams,
   GridValueGetterParams,
 } from "@mui/x-data-grid";
-import { useCancelarCompraMutation, useGetComprasQuery, useGetProductosQuery, useGetSucursalesQuery } from "../../store/super5/super5Api";
+import {
+  useCancelarCompraMutation,
+  useGetComprasQuery,
+  useGetProductosQuery,
+  useGetSucursalesQuery,
+} from "../../store/super5/super5Api";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { SelectorSucursales } from "../hooks/useGetSucursalPorID";
-import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
+import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
 import { PopupMessage } from "../../components/PopupMessage";
 
 export const MisComprasList = () => {
@@ -36,7 +41,7 @@ export const MisComprasList = () => {
       type: "Date",
       valueFormatter: (params: GridValueFormatterParams) => {
         const fechaFormateada = new Date(params.value);
-        return `${fechaFormateada.getDay()}/${fechaFormateada.getMonth()}/${fechaFormateada.getFullYear()} - ${fechaFormateada.getHours()}:${fechaFormateada.getMinutes()}`;
+        return fechaFormateada.toLocaleString("es-ES");
       },
     },
     {
@@ -59,7 +64,10 @@ export const MisComprasList = () => {
       width: 270,
       type: "string",
       valueGetter: (params: GridValueGetterParams) => {
-        return `${params.row.nombreDireccion || "SUCURSAL " + SelectorSucursales(params.row.sucursal_id, sucursales)}`;
+        return `${
+          params.row.nombreDireccion ||
+          "SUCURSAL " + SelectorSucursales(params.row.sucursal_id, sucursales)
+        }`;
       },
     },
     {
@@ -146,7 +154,9 @@ const PopupAction = ({ params }: { params: GridRenderCellParams }) => {
               startCancelarCompra(params.row)
                 .unwrap()
                 .then(() => alert("Compra cancelada con éxito"))
-                .catch(() => alert("Solo puede cancelar compras en estado PAGO"));
+                .catch(() =>
+                  alert("Solo puede cancelar compras en estado PAGO")
+                );
               setShowPopup(false);
             },
             buttonColor: "success",
@@ -187,28 +197,37 @@ const CarritoField = ({ params }: { params: GridRenderCellParams }) => {
   const obtenerProductosPorID = (id: string) => {
     const productoNombre = productos?.find((producto) => {
       if (producto.id === id) {
-        return producto
+        return producto;
       }
-    })
-    return productoNombre
-  }
+    });
+    return productoNombre;
+  };
 
   const aMostrar = params.row.carrito?.map((carrito) => {
-    return { nombre: obtenerProductosPorID(carrito.producto_id)?.nombre, cantidad: carrito.cantidad }
-  })
+    return {
+      nombre: obtenerProductosPorID(carrito.producto_id)?.nombre,
+      cantidad: carrito.cantidad,
+    };
+  });
 
   return (
     <>
-      <IconButton onClick={() => setOpen(true)}><ShoppingCartIcon /></IconButton>
+      <IconButton onClick={() => setOpen(true)}>
+        <ShoppingCartIcon />
+      </IconButton>
       <Dialog onClose={() => setOpen(false)} open={open}>
         <Box
           sx={{ height: "97vh" }}
           className="animate__animated animate__fadeIn"
         >
-          <DataGrid getRowId={(row) => row.nombre} columns={columnas} rows={aMostrar || []} autoPageSize />
+          <DataGrid
+            getRowId={(row) => row.nombre}
+            columns={columnas}
+            rows={aMostrar || []}
+            autoPageSize
+          />
         </Box>
       </Dialog>
-
     </>
   );
 };

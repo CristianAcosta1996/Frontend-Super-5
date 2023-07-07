@@ -14,7 +14,7 @@ const columns: GridColDef[] = [
     width: 65,
     renderCell: (params) => <Avatar src={params.row.imagen} />,
   },
-  { field: "nombre", headerName: "Nombre", width: 120 },
+  { field: "nombre", headerName: "Nombre", width: 200 },
   {
     field: "precio",
     headerName: "Precio",
@@ -62,7 +62,7 @@ const columns: GridColDef[] = [
   {
     field: "descripcion",
     headerName: "Descripcion",
-    width: 170,
+    width: 200,
     description: "Descripcion del producto",
   },
   {

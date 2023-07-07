@@ -402,10 +402,28 @@ export const super5Api = createApi({
       }),
       invalidatesTags: ["Producto"],
     }),
+    validarCupon: builder.mutation<
+      PromocionDTO | string,
+      { cuponDescuentoVenta: string }
+    >({
+      query: (body) => ({
+        url: "promocion/validarCupon",
+        method: "POST",
+        body,
+        responseHandler: async (response) => {
+          if (!response.ok) {
+            const error = await response.text();
+            return error;
+          }
+          return response.json();
+        },
+      }),
+    }),
   }),
 });
 
 export const {
+  useValidarCuponMutation,
   useCrearPromocionProductoMutation,
   useEliminarUsuarioMutation,
   useBloquearUsuarioMutation,

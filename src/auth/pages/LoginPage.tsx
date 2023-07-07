@@ -160,6 +160,7 @@ export const LoginPage = () => {
           variant="filled"
           severity="success"
           className="animate__animated animate__fadeIn"
+          aria-label="successful-login-message"
         >
           Usuario logueado correctamente!
         </Alert>

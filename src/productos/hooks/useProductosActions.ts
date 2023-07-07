@@ -16,12 +16,7 @@ export const useProductosActions = () => {
     });
   };
 
-  const handleOnEliminar = (): void => {
-    console.log("handle eliminar");
-  };
-
   return {
-    handleOnEliminar,
     handleOnModificar,
     handleOnVerDetalles,
   };
