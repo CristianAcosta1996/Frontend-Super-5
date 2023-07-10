@@ -4,13 +4,23 @@ import {
   useGetCategoriasQuery,
   useLazyGetProductosPorSucursalQuery,
 } from "../store/super5/super5Api";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppSelector } from "../hooks/hooks";
+import { useNavigate } from "react-router-dom";
 
 export default function ProductAutocomplete() {
   const { sucursal } = useAppSelector((state) => state.super5);
-
+  const navigate = useNavigate();
   const { data: categorias } = useGetCategoriasQuery();
+
+  const handleChange = (e, selectedOption) => {
+    if (productos) {
+      const seleccionado = productos.find(producto => producto.id == selectedOption.id)
+      if (seleccionado) {
+        navigate(`/producto/${seleccionado.id}`, { state: seleccionado })
+      }
+    }
+  }
 
   const [
     startGettingProducts,
@@ -35,7 +45,9 @@ export default function ProductAutocomplete() {
 
   return (
     <Autocomplete
+      clearOnEscape
       fullWidth
+      onChange={handleChange}
       size="small"
       forcePopupIcon={false}
       loadingText={"Cargando productos..."}
@@ -44,14 +56,15 @@ export default function ProductAutocomplete() {
       id="combo-box-demo"
       options={
         productos
-          ? productos?.map(({ descripcion, precio, categoriaId }) => {
+          ? productos?.map(({ descripcion, precio, categoriaId, id }) => {
             const nombreCategoria = getNombreCategoria(categoriaId);
             return {
               label: `${descripcion + " $" + precio}`,
               nombreCategoria,
+              id
             };
           })
-          : [{ label: "Cargando productos", nombreCategoria: "Sin categoria" }]
+          : [{ label: "Cargando productos", nombreCategoria: "Sin categoria", id: "0" }]
       }
       sx={{ backgroundColor: "white", borderRadius: "5px" }}
       renderInput={(params) => {
