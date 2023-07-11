@@ -129,7 +129,13 @@ const PlacesAutocomplete = ({ setFirstPin, setLatLong, setCiudad, setDepartament
         setValue,
         suggestions: { status, data },
         clearSuggestions
-    } = usePlacesAutocomplete();
+    } = usePlacesAutocomplete({
+        requestOptions: {
+            /* Define search scope here */
+            componentRestrictions: { country: ["uy"] },
+        },
+        debounce: 300,
+    });
 
     const handleSelect = () => {
         setFirstPin(true);
