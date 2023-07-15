@@ -124,11 +124,10 @@ const IdentificacionDelProducto = ({
                 color: "#fff",
               }}
             >
-              {`%${
-                precioDescuento
+              {`%${precioDescuento
                   ? ((precio - precioDescuento) / precio) * 100
                   : ""
-              }`}
+                }`}
             </Typography>
           )}
         </Grid>
