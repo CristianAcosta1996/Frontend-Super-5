@@ -73,7 +73,7 @@ export default function ProductAutocomplete() {
       id="combo-box-demo"
       renderOption={(props, option) => (
         <li {...props}>
-          <div>
+          <div style={{ width: "600px" }}>
             {option.label}
           </div>
           <BotonDeAgregarProducto opcionBoton={option} />
@@ -124,11 +124,11 @@ const BotonDeAgregarProducto = ({ opcionBoton }) => {
     <>
       {cantidad === 0 ? (
         <Button
+          size="small"
           variant="contained"
           sx={{
-            ml: 1,
             mr: 0,
-            width: "120px",
+            width: "200px",
             backgroundColor: "#e6004d",
             color: "#fff",
             "&: hover": { backgroundColor: "#cc0045", color: "#fff" },
@@ -153,7 +153,7 @@ const BotonDeAgregarProducto = ({ opcionBoton }) => {
             }}
           >
             <Button
-              size="large"
+              size="small"
               sx={{
                 borderColor: "black",
                 color: "#ff0056",
@@ -180,7 +180,7 @@ const BotonDeAgregarProducto = ({ opcionBoton }) => {
                 fontSize: "14px",
                 color: "#ff0056",
               }}
-              size="large"
+              size="small"
               disableRipple
               disableFocusRipple
             >
@@ -192,7 +192,7 @@ const BotonDeAgregarProducto = ({ opcionBoton }) => {
                 color: "#ff0056",
                 fontSize: "14px",
               }}
-              size="large"
+              size="small"
               onClick={(e) => {
                 e.stopPropagation();
                 if (theProduct)
