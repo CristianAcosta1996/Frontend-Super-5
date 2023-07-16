@@ -1,4 +1,4 @@
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { FirebaseAuth } from "./firebase.config";
 
 const googleProvider = new GoogleAuthProvider();
@@ -23,5 +23,17 @@ export const signInWithGoogle = async () => {
       ok: false,
       errorMessage: errorMessage,
     };
+  }
+};
+
+export const logoutWithGoogle = () => {
+  try {
+    signOut(FirebaseAuth)
+      .then((resp) => {
+        console.log("sesion cerrada exitosamente");
+      })
+      .catch(console.log);
+  } catch (error) {
+    console.log(error);
   }
 };

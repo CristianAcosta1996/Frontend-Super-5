@@ -144,6 +144,7 @@ export const super5Api = createApi({
     "Sucursal",
     "Direccion",
     "Compras",
+    "Categorias",
   ],
   endpoints: (builder) => ({
     login: builder.mutation<string, LoginProps>({
@@ -200,6 +201,7 @@ export const super5Api = createApi({
     }),
     getCategorias: builder.query<Categoria[], void>({
       query: () => "producto/listarCategorias",
+      providesTags: ["Categorias"],
     }),
     getSucursales: builder.query<Sucursal[], void>({
       query: () => "sucursal/obtener",
@@ -419,6 +421,14 @@ export const super5Api = createApi({
         },
       }),
     }),
+    crearCategoria: builder.mutation<Categoria, { nombre: string }>({
+      query: (body) => ({
+        url: "producto/crearCategoria",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Categorias"],
+    }),
   }),
 });
 
@@ -460,4 +470,5 @@ export const {
   useCrearSucursalMutation,
   useCrearUsuarioSucursalMutation,
   useCancelarCompraMutation,
+  useCrearCategoriaMutation,
 } = super5Api;

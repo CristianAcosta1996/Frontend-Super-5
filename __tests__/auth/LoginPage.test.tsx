@@ -14,12 +14,13 @@ jest.mock(
 describe("Pruebas en el componente <LoginPage/>", () => {
   test("Loguear un usuario correctamente", () => {
     const handleLoginMock = jest.fn();
+
     (useAuth as jest.Mock).mockReturnValue({
       handleGoogleLogin: jest.fn(),
       handleLogin: handleLoginMock,
       isAuthenticatingLogin: false,
       isErrorLogin: false,
-      isSuccessLogin: true,
+      isSuccessLogin: false,
     });
 
     render(<LoginPage />);
@@ -38,10 +39,31 @@ describe("Pruebas en el componente <LoginPage/>", () => {
     expect(handleLoginMock).toBeCalled();
     expect(handleLoginMock).toBeCalledTimes(1);
     expect(handleLoginMock).toBeCalledWith(correo, password);
+  });
+
+  test("Mostrar mensaje de usuario logueado correctamente", () => {
+    const handleLoginMock = jest.fn();
+    (useAuth as jest.Mock).mockReturnValue({
+      handleGoogleLogin: jest.fn(),
+      handleLogin: handleLoginMock,
+      isAuthenticatingLogin: false,
+      isErrorLogin: false,
+      isSuccessLogin: true,
+    });
+
+    render(<LoginPage />);
 
     const successfulLoginMessage = screen.getByLabelText(
       "successful-login-message"
     );
     expect(successfulLoginMessage).toBeTruthy();
+    expect(successfulLoginMessage.textContent).toBe(
+      "Usuario logueado correctamente!"
+    );
+  });
+
+  test("comparar <LoginPage /> con su snapshot", () => {
+    const { container } = render(<LoginPage />);
+    expect(container).toMatchSnapshot();
   });
 });

@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Box,
-  Grid,
-  Link,
-  List,
-  ListItemButton,
-  ListItemText,
-  Typography,
-} from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from "swiper";
 
 import slide1 from "../assets/1.svg";

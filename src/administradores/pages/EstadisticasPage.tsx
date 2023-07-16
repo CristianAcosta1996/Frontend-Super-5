@@ -217,6 +217,9 @@ export const EstadisticasPage = () => {
   useEffect(() => {
     if (tipoEstadistica !== "VentasPorSucursal") return;
 
+    /* console.log("ventasPorSucursal:", ventasPorSucursal);
+    console.log(Object.keys(ventasPorSucursal)); */
+
     const labels = Object.keys(ventasPorSucursal).reduce(
       (allLabels, sucursalID) => {
         const sucursalData = ventasPorSucursal[sucursalID];
@@ -226,10 +229,39 @@ export const EstadisticasPage = () => {
       [] as string[]
     );
 
+    const monthSortKey = (month) => {
+      const monthOrder = {
+        January: 1,
+        February: 2,
+        March: 3,
+        April: 4,
+        May: 5,
+        June: 6,
+        July: 7,
+        August: 8,
+        September: 9,
+        October: 10,
+        November: 11,
+        December: 12,
+      };
+
+      return monthOrder[month];
+    };
+
+    const labelsOrdenadosPorMes = (labels) => {
+      const sortedMonths = labels.sort(
+        (a, b) => monthSortKey(a) - monthSortKey(b)
+      );
+      return sortedMonths;
+    };
+
     const datasets = Object.entries(ventasPorSucursal).map(
       ([sucursalID, sucursalData], index) => {
-        const data = labels.map((month) => sucursalData![month] || 0).reverse();
-        console.log(data);
+        /* const data = labels.map((month) => sucursalData![month] || 0).reverse(); */
+
+        const data = labelsOrdenadosPorMes(labels).map(
+          (month) => sucursalData![month] || 0
+        );
 
         return {
           label: `Sucursal ${sucursalID}`,
@@ -240,11 +272,9 @@ export const EstadisticasPage = () => {
       }
     );
 
-    console.log("datasets", datasets);
-    console.log("labels", labels);
-
     setDataLineChart({
-      labels: labels.reverse(),
+      /* labels: labels.reverse(), */
+      labels: labelsOrdenadosPorMes(labels),
       datasets: datasets,
     });
   }, [ventasPorSucursal]);
@@ -304,7 +334,7 @@ export const EstadisticasPage = () => {
             Cantidad de ventas por estado
           </ToggleButton>
         </ToggleButtonGroup>
-        <Box sx={{ py: 2 }}>
+        <Box sx={{ py: 2, width: 600, height: 400 }}>
           {tipoEstadistica === "VentasPorSucursal" ? (
             <Line data={dataLineChart} />
           ) : (
@@ -317,9 +347,7 @@ export const EstadisticasPage = () => {
 };
 
 const BarChart = ({ data }) => {
-  return (
-    <Bar data={data} style={{ width: "100%", minWidth: 400, minHeight: 400 }} />
-  );
+  return <Bar data={data} />;
 };
 
 const cantidadPorEstado = <T, V extends { estado: string }>(
