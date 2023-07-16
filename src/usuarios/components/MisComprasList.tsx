@@ -11,10 +11,11 @@ import {
   useGetComprasQuery,
   useGetProductosQuery,
   useGetSucursalesQuery,
+  useLazyGetProductosPorSucursalQuery,
 } from "../../store/super5/super5Api";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { SelectorSucursales } from "../hooks/useGetSucursalPorID";
 import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
@@ -64,10 +65,9 @@ export const MisComprasList = () => {
       width: 270,
       type: "string",
       valueGetter: (params: GridValueGetterParams) => {
-        return `${
-          params.row.nombreDireccion ||
+        return `${params.row.nombreDireccion ||
           "SUCURSAL " + SelectorSucursales(params.row.sucursal_id, sucursales)
-        }`;
+          }`;
       },
     },
     {
@@ -178,8 +178,13 @@ const PopupAction = ({ params }: { params: GridRenderCellParams }) => {
 };
 
 const CarritoField = ({ params }: { params: GridRenderCellParams }) => {
-  const { data: productos } = useGetProductosQuery();
   const [open, setOpen] = useState(false);
+
+  const [startGettingProducts, { data: productos, isLoading: isLoadingProductos }] = useLazyGetProductosPorSucursalQuery();
+
+  useEffect(() => {
+    startGettingProducts(params.row.sucursal_id);
+  }, []);
 
   const columnas: GridColDef[] = [
     {
