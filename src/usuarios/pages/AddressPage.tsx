@@ -12,7 +12,7 @@ export default function AddressPage() {
     const [libraries] = useState(['places']);
     const { isLoaded } = useLoadScript({ googleMapsApiKey: "AIzaSyB8FiaESvpDDrcOkwW07BVr5Z-rdumVSds", libraries });
 
-    if (!isLoaded) return <div>Loading...</div>;
+    if (!isLoaded) return <div>Cargando mapa...</div>;
     return <Map />;
 }
 
@@ -132,7 +132,7 @@ const PlacesAutocomplete = ({ setFirstPin, setLatLong, setCiudad, setDepartament
     } = usePlacesAutocomplete({
         requestOptions: {
             /* Define search scope here */
-            componentRestrictions: { country: ["uy"] },
+            componentRestrictions: { country: ["UY"] },
         },
         debounce: 300,
     });

@@ -21,12 +21,7 @@ interface ProductoCardProps {
 }
 
 export const ProductoCard = ({ producto }: ProductoCardProps) => {
-  const { aumentarCantidadProducto, cantidad, reducirCantidadProducto } =
-    useProducto(producto.id);
-
   const navigate = useNavigate();
-
-  const { agregarItemAlCarrito, quitarItemDelCarrito } = useCarrito();
 
   if (!producto.aplicaDescuento) {
     return (
@@ -95,86 +90,7 @@ export const ProductoCard = ({ producto }: ProductoCardProps) => {
               marginTop: 0,
             }}
           >
-            <ButtonGroup variant="outlined" aria-label="outlined button group">
-              <Box
-                aria-label="cantidadProducto"
-                sx={{
-                  color: "#ff0056",
-                  display: "flex",
-                  alignItems: "center",
-                  borderColor: "black",
-                }}
-              >
-                <Button
-                  size="small"
-                  sx={{
-                    borderColor: "black",
-                    color: "#ff0056",
-                    borderRight: 1,
-                    fontSize: "14px",
-                  }}
-                  onClick={() => {
-                    if (cantidad < 1) return;
-                    if (cantidad === 1) {
-                      quitarItemDelCarrito(producto);
-                      return;
-                    }
-                    agregarItemAlCarrito(producto, cantidad - 1);
-                    reducirCantidadProducto();
-                  }}
-                >
-                  -
-                </Button>
-                <Button
-                  sx={{
-                    borderColor: "black",
-                    fontSize: "14px",
-                    color: "#ff0056",
-                  }}
-                  size="small"
-                  disableRipple
-                  disableFocusRipple
-                >
-                  {cantidad}
-                </Button>
-                <Button
-                  sx={{
-                    borderColor: "black",
-                    color: "#ff0056",
-                    fontSize: "14px",
-                  }}
-                  size="small"
-                  onClick={() => {
-                    agregarItemAlCarrito(producto, cantidad + 1);
-                    aumentarCantidadProducto();
-                  }}
-                >
-                  +
-                </Button>
-              </Box>
-            </ButtonGroup>
-          </CardActions>
-
-          <CardActions sx={{ paddingTop: 1, width: "100%", marginTop: 0 }}>
-            <Button
-              sx={{
-                backgroundColor: "#ff0056",
-                color: "white",
-                gap: 1,
-                "&:hover": {
-                  color: "#ff0056",
-                  borderBlockColor: "#ff0056",
-                  border: 2,
-                },
-              }}
-              size="small"
-              fullWidth
-              onClick={() => {
-                agregarItemAlCarrito(producto, cantidad);
-              }}
-            >
-              <ShoppingCart fontSize="small" /> Agregar
-            </Button>
+            <BotonDeAgregarProducto producto={producto} />
           </CardActions>
         </Grid>
       </Card>
@@ -264,88 +180,94 @@ export const ProductoCard = ({ producto }: ProductoCardProps) => {
             marginTop: 0,
           }}
         >
-          <ButtonGroup variant="outlined" aria-label="outlined button group">
-            <Box
-              aria-label="cantidadProducto"
-              sx={{
-                color: "#ff0056",
-                display: "flex",
-                alignItems: "center",
-                borderColor: "black",
-              }}
-            >
-              <Button
-                size="small"
-                sx={{
-                  borderColor: "black",
-                  color: "#ff0056",
-                  borderRight: 1,
-                  fontSize: "14px",
-                }}
-                onClick={() => {
-                  if (cantidad < 1) return;
-                  if (cantidad === 1) {
-                    quitarItemDelCarrito(producto);
-                    return;
-                  }
-                  agregarItemAlCarrito(producto, cantidad - 1);
-                  reducirCantidadProducto();
-                }}
-              >
-                -
-              </Button>
-              <Button
-                sx={{
-                  borderColor: "black",
-                  fontSize: "14px",
-                  color: "#ff0056",
-                }}
-                size="small"
-                disableRipple
-                disableFocusRipple
-              >
-                {cantidad}
-              </Button>
-              <Button
-                sx={{
-                  borderColor: "black",
-                  color: "#ff0056",
-                  fontSize: "14px",
-                }}
-                size="small"
-                onClick={() => {
-                  agregarItemAlCarrito(producto, cantidad + 1);
-                  aumentarCantidadProducto();
-                }}
-              >
-                +
-              </Button>
-            </Box>
-          </ButtonGroup>
-        </CardActions>
-
-        <CardActions sx={{ paddingTop: 1, width: "100%", marginTop: 0 }}>
-          <Button
-            sx={{
-              backgroundColor: "#ff0056",
-              color: "white",
-              gap: 1,
-              "&:hover": {
-                color: "#ff0056",
-                borderBlockColor: "#ff0056",
-                border: 2,
-              },
-            }}
-            size="small"
-            fullWidth
-            onClick={() => {
-              agregarItemAlCarrito(producto, cantidad);
-            }}
-          >
-            <ShoppingCart fontSize="small" /> Agregar
-          </Button>
+          <BotonDeAgregarProducto producto={producto} />
         </CardActions>
       </Grid>
     </Card>
+  );
+};
+
+const BotonDeAgregarProducto = ({ producto }: { producto: Producto }) => {
+  const { aumentarCantidadProducto, cantidad, reducirCantidadProducto } =
+    useProducto(producto.id);
+  const { agregarItemAlCarrito, quitarItemDelCarrito } = useCarrito();
+  return (
+    <div style={{ marginTop: 14 }}>
+      {cantidad === 0 ? (
+        <Button
+          size="large"
+          fullWidth
+          variant="contained"
+          sx={{
+            backgroundColor: "#e6004d",
+            color: "#fff",
+            "&: hover": { backgroundColor: "#cc0045", color: "#fff" },
+          }}
+          onClick={() => {
+            agregarItemAlCarrito(producto, 1);
+          }}
+        >
+          <ShoppingCart /> Agregar
+        </Button>
+      ) : (
+        <ButtonGroup variant="outlined" aria-label="outlined button group">
+          <Box
+            aria-label="cantidadProducto"
+            sx={{
+              color: "#ff0056",
+              display: "flex",
+              alignItems: "center",
+              borderColor: "black",
+            }}
+          >
+            <Button
+              size="large"
+              sx={{
+                borderColor: "black",
+                color: "#ff0056",
+                borderRight: 1,
+                fontSize: "14px",
+              }}
+              onClick={() => {
+                if (cantidad === 1) {
+                  quitarItemDelCarrito(producto);
+                  return;
+                }
+                agregarItemAlCarrito(producto, cantidad - 1);
+                reducirCantidadProducto();
+              }}
+            >
+              -
+            </Button>
+            <Button
+              sx={{
+                borderColor: "black",
+                fontSize: "14px",
+                color: "#ff0056",
+              }}
+              size="large"
+              disableRipple
+              disableFocusRipple
+            >
+              {cantidad}
+            </Button>
+            <Button
+              sx={{
+                borderColor: "black",
+                color: "#ff0056",
+                fontSize: "14px",
+              }}
+              size="large"
+              onClick={() => {
+                agregarItemAlCarrito(producto, cantidad + 1);
+                aumentarCantidadProducto();
+              }}
+            >
+              +
+            </Button>
+          </Box>
+        </ButtonGroup>
+      )}
+    </div>
   );
 };
