@@ -17,8 +17,11 @@ import {
   useGetSucursalesQuery,
 } from "../../store/super5/super5Api";
 import { Sucursal } from "../../interfaces/interfaces";
+import { useNavigate } from "react-router-dom";
 
 export const CrearUsuarioSucursalPage = () => {
+  const navigate = useNavigate();
+
   const [showMessage, setShowMessage] = useState<{
     isSuccess: boolean;
     message: string;
@@ -213,6 +216,9 @@ export const CrearUsuarioSucursalPage = () => {
               color: "#fff",
             }}
             size="small"
+            onClick={() => {
+              navigate(-1);
+            }}
           >
             Cancelar
           </Button>

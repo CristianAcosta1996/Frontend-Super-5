@@ -1,8 +1,12 @@
 import { AnyAction, ThunkAction } from "@reduxjs/toolkit";
 import { checkingCredentials, login, logout } from "./authSlice";
 import { RootState } from "../store";
-import { signInWithGoogle } from "../../firebase/firebase.providers";
+import {
+  logoutWithGoogle,
+  signInWithGoogle,
+} from "../../firebase/firebase.providers";
 import { getToken, limpiarToken, setToken } from "../../utils/localstorage";
+import { TipoUsuario } from "../../interfaces/interfaces";
 
 export const startEmailAndPasswordLogin = (
   token: string
@@ -63,6 +67,7 @@ export const startGoogleSignIn = (): ThunkAction<
         googleUser: true,
         telefono: null,
         sucursal: -1,
+        tipoUsuario: TipoUsuario.Comprador,
       })
     );
   };
@@ -75,6 +80,7 @@ export const startLogout = (): ThunkAction<
   AnyAction
 > => {
   return async (dispatch) => {
+    logoutWithGoogle();
     dispatch(logout({ errorMessage: null }));
     limpiarToken();
     /* si esta logueado con google llamar a firbease.auth.signout */

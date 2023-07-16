@@ -23,6 +23,7 @@ import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
 import { useState, useEffect, ChangeEventHandler } from "react";
 import usePlacesAutocomplete from "use-places-autocomplete";
 import { useCrearSucursalMutation } from "../../store/super5/super5Api";
+import { useNavigate } from "react-router-dom";
 const googleMapApi = "https://maps.googleapis.com/maps/api/geocode/json";
 const googleMapKey = "AIzaSyB8FiaESvpDDrcOkwW07BVr5Z-rdumVSds";
 
@@ -53,6 +54,7 @@ export const CrearSucursalPage = () => {
   });
 
   const [startCrearSucursal, { isLoading }] = useCrearSucursalMutation();
+  const navigate = useNavigate();
 
   const handleOnDireccionSelected = (coordenadas, formatted_address) => {
     setFormattedAddress(formatted_address);
@@ -239,7 +241,14 @@ export const CrearSucursalPage = () => {
           gap={1}
           pr={1}
         >
-          <Button sx={{ color: "#fff" }}>Cancelar</Button>
+          <Button
+            sx={{ color: "#fff" }}
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
+            Cancelar
+          </Button>
           <Button sx={{ color: "#fff" }} type="submit">
             Crear
           </Button>

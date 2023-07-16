@@ -13,13 +13,16 @@ export const Super5Routes = () => {
   return (
     <>
       <Routes>
-        {(tipoUsuario === TipoUsuario.Invitado) && (
-          <Route path="modificarcontrasena/*" element={<ModificarContrasena />} />
+        {tipoUsuario === TipoUsuario.Invitado && (
+          <Route
+            path="modificarcontrasena/*"
+            element={<ModificarContrasena />}
+          />
         )}
         {(tipoUsuario === TipoUsuario.Comprador ||
           tipoUsuario === TipoUsuario.Invitado) && (
-            <Route path="*" element={<RoutesUsuarios />} />
-          )}
+          <Route path="*" element={<RoutesUsuarios />} />
+        )}
         {tipoUsuario === TipoUsuario.Sucursal && (
           <>
             <Route path="sucursal/*" element={<DashboardSucursalesPage />} />
