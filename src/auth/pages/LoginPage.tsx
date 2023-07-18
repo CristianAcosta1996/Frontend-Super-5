@@ -30,6 +30,7 @@ export const LoginPage = () => {
     isErrorLogin,
     isSuccessLogin,
   } = useAuth();
+
   const navigate = useNavigate();
 
   const { username, password, handleInputChange, reset } =
@@ -133,7 +134,9 @@ export const LoginPage = () => {
             <SocialMediaLoginLabel />
             <Grid container justifyContent="center">
               <IconButton
-                onClick={() => handleGoogleLogin()}
+                onClick={() => {
+                  handleGoogleLogin();
+                }}
                 sx={{
                   backgroundColor: "#fff",
                   color: "rgb(0,130,255)",

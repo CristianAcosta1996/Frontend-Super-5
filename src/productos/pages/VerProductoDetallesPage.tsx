@@ -16,8 +16,10 @@ import { ArrowBack, Check, Clear } from "@mui/icons-material";
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 import "../css/VerProductoDetallesPage.css";
 import { useVerProductoDetalles } from "../hooks/useVerProductoDetalles";
+import { useNavigate } from "react-router-dom";
 
 export const VerProductoDetallesPage = () => {
+  const navigate = useNavigate();
   const {
     editable,
     goBack,
@@ -212,6 +214,7 @@ export const VerProductoDetallesPage = () => {
                       }}
                       onClick={() => {
                         modificarStock(+producto.id, +value);
+                        setValue("");
                       }}
                     >
                       <Check />
@@ -226,13 +229,18 @@ export const VerProductoDetallesPage = () => {
       <Snackbar
         anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
         open={showSnackbar}
-        autoHideDuration={3000}
+        autoHideDuration={2000}
         onClose={(
           _: Event | SyntheticEvent<any, Event>,
           reason?: SnackbarCloseReason
         ) => {
           if (reason === "clickaway") return;
           setShowSnackbar(false);
+          if (!isError) {
+            setTimeout(() => {
+              navigate(-1);
+            }, 1000);
+          }
         }}
       >
         <Alert severity={isError ? "error" : "success"} variant="filled">

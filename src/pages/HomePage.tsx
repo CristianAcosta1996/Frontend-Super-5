@@ -2,11 +2,11 @@ import React from "react";
 import { Box, Grid } from "@mui/material";
 import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from "swiper";
 
-import slide1 from "../assets/1.svg";
-import slide2 from "../assets/2.svg";
-import slide3 from "../assets/3.svg";
-import slide4 from "../assets/4.svg";
-import slide5 from "../assets/5.svg";
+import slide1 from "../assets/svgs/1.svg";
+import slide2 from "../assets/svgs/2.svg";
+import slide3 from "../assets/svgs/3.svg";
+import slide4 from "../assets/svgs/4.svg";
+import slide5 from "../assets/svgs/5.svg";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 

@@ -5,9 +5,14 @@ const googleProvider = new GoogleAuthProvider();
 
 export const signInWithGoogle = async () => {
   try {
+    googleProvider.setCustomParameters({ prompt: "select_account" });
     const result = await signInWithPopup(FirebaseAuth, googleProvider);
-    /* const credentials = GoogleAuthProvider.credentialFromResult(result); */
+    const credentials = GoogleAuthProvider.credentialFromResult(result);
     const { displayName, email, photoURL, uid } = result.user;
+
+    /*  console.log("credentials:", credentials);
+    console.log("result.user:", result.user);
+    console.log("result completo:", result); */
 
     return {
       ok: true,
@@ -26,14 +31,6 @@ export const signInWithGoogle = async () => {
   }
 };
 
-export const logoutWithGoogle = () => {
-  try {
-    signOut(FirebaseAuth)
-      .then((resp) => {
-        console.log("sesion cerrada exitosamente");
-      })
-      .catch(console.log);
-  } catch (error) {
-    console.log(error);
-  }
+export const logoutWithGoogle = async () => {
+  await signOut(FirebaseAuth);
 };
