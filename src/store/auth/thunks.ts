@@ -1,5 +1,5 @@
 import { AnyAction, ThunkAction } from "@reduxjs/toolkit";
-import { checkingCredentials, login, logout } from "./authSlice";
+import { checkingCredentials, login, logout, addToken } from "./authSlice";
 import { RootState } from "../store";
 import {
   logoutWithGoogle,
@@ -41,6 +41,7 @@ export const startGoogleSignIn = (): ThunkAction<
 > => {
   return async (dispatch) => {
     dispatch(checkingCredentials()); // status === 'checking'
+
     const result = await signInWithGoogle();
     if (!result.ok) {
       dispatch(logout({ errorMessage: result.errorMessage }));
@@ -83,17 +84,17 @@ export const startLogout = (): ThunkAction<
     logoutWithGoogle();
     dispatch(logout({ errorMessage: null }));
     limpiarToken();
+
     /* si esta logueado con google llamar a firbease.auth.signout */
     /* llamar a logout y eliminar la info de localstorage */
   };
 };
-/* 
-export const startRegistrarUsuario = ({
-  token,
-}): ThunkAction<void, RootState, unknown, AnyAction> => {
+
+export const startAddToken = (
+  token: string
+): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch) => {
-    dispatch(checkingCredentials());
-    startEmailAndPasswordLogin(token);
+    dispatch(addToken(token));
+    setToken(token);
   };
 };
- */

@@ -123,6 +123,12 @@ interface RecuperarContrasenaProps {
   correo: string;
 }
 
+interface LoginGoogleProps {
+  correo: string;
+  nombre: string;
+  googleId: string;
+}
+
 export const super5Api = createApi({
   reducerPath: "super5Api",
   baseQuery: fetchBaseQuery({
@@ -150,6 +156,22 @@ export const super5Api = createApi({
     login: builder.mutation<string, LoginProps>({
       query: (body) => ({
         url: "auth/login",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: [
+        "UserData",
+        "Compras",
+        "VentasConfirmadas",
+        "VentasPagadas",
+      ],
+      transformResponse: (response: AuthResponse, meta, arg) => {
+        return response.token;
+      },
+    }),
+    loginGoogle: builder.mutation<string, LoginGoogleProps>({
+      query: (body) => ({
+        url: "auth/google",
         method: "POST",
         body,
       }),
@@ -191,8 +213,9 @@ export const super5Api = createApi({
         body,
       }),
     }),
+    //TODO: Probar este endpoint
     getProductos: builder.query<Producto[], void>({
-      query: () => "producto/obtenerPorSucursal/1",
+      query: () => "producto/listar",
       providesTags: ["Producto"],
     }),
     getProductosPorSucursal: builder.query<Producto[], string>({
@@ -471,4 +494,5 @@ export const {
   useCrearUsuarioSucursalMutation,
   useCancelarCompraMutation,
   useCrearCategoriaMutation,
+  useLoginGoogleMutation,
 } = super5Api;

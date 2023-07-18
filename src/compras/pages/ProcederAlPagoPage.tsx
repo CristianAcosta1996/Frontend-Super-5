@@ -466,7 +466,7 @@ const ProductList = ({
                         modificarCarrito(producto, cantidad - 1);
                       }}
                     >
-                      -1
+                      -
                     </Button>
                     <Button>{cantidad}</Button>
                     <Button
@@ -474,7 +474,7 @@ const ProductList = ({
                         modificarCarrito(producto, cantidad + 1);
                       }}
                     >
-                      +1
+                      +
                     </Button>
                   </ButtonGroup>
                 </Box>

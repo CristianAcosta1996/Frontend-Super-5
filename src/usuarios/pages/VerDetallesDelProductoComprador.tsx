@@ -14,15 +14,20 @@ import {
 } from "@mui/material";
 import { useLocation, useParams } from "react-router-dom";
 import { Producto } from "../../interfaces/interfaces";
-import { ProductosSlide } from "../../productos/components/ProductosSlide";
 import { Footer } from "../components/Footer";
 import { useProducto } from "../../productos/hooks/useProducto";
 import { useCarrito } from "../../compras/carrito/hooks/useCarrito";
+import { ProductosSlideRecomendados } from "../../productos/components/ProductosSlideRecomendados";
+import { useEffect } from "react";
 
 export const VerDetallesDelProductoComprador = () => {
   const { id } = useParams();
   const location = useLocation();
   const producto: Producto = location.state;
+
+  useEffect(() => {
+    scrollTo(0, 0);
+  }, [producto]);
 
   if (!producto)
     return <Skeleton variant="rectangular" width="100%" height="100vh" />;
@@ -50,12 +55,15 @@ export const VerDetallesDelProductoComprador = () => {
           <DescripcionDelProducto descripcion={producto.descripcion} />
         </Grid>
         <Grid container flex={1}>
-          <ProductosSlide
-            categoria={{
-              id: producto.categoriaId + "",
-              nombre: "Productos similares",
-            }}
-          />
+          <Grid item xs={12}>
+            <ProductosSlideRecomendados
+              categoria={{
+                id: producto.categoriaId + "",
+                nombre: "Productos similares",
+              }}
+              productoId={producto.id}
+            />
+          </Grid>
         </Grid>
       </Grid>
       <Footer />
@@ -124,10 +132,11 @@ const IdentificacionDelProducto = ({
                 color: "#fff",
               }}
             >
-              {`%${precioDescuento
+              {`%${
+                precioDescuento
                   ? ((precio - precioDescuento) / precio) * 100
                   : ""
-                }`}
+              }`}
             </Typography>
           )}
         </Grid>

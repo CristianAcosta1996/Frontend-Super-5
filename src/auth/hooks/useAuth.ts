@@ -41,12 +41,8 @@ export const useAuth = () => {
   const [startRecuperarContrasena] = useRecuperarContrasenaMutation();
   const [startModificarContrasena] = useModificarContrasenaMutation();
 
-  const handleRecuperarContrasena = async (
-    email: string
-  ) => {
-    startRecuperarContrasena(
-      { correo: email }
-    )
+  const handleRecuperarContrasena = async (email: string) => {
+    startRecuperarContrasena({ correo: email })
       .unwrap()
       .then()
       .catch((error) => {
@@ -57,15 +53,16 @@ export const useAuth = () => {
   const handleModificarContrasena = async (
     guid: string,
     contrasena: string,
-    contrasenaRepeticion: string) => {
+    contrasenaRepeticion: string
+  ) => {
     startModificarContrasena({
       guid,
       contrasena,
-      contrasenaRepeticion
+      contrasenaRepeticion,
     })
       .unwrap()
       .then((resp) => {
-        alert(resp)
+        alert(resp);
       })
       .catch((error) => {
         console.error(error);
@@ -93,7 +90,7 @@ export const useAuth = () => {
       });
   };
 
-  const handleGoogleLogin = () => {
+  const handleGoogleLogin = async () => {
     dispatch(startGoogleSignIn());
   };
 
@@ -104,7 +101,7 @@ export const useAuth = () => {
     nombre: string,
     apellido: string,
     phone: string,
-    birthDate: Date,
+    birthDate: Date
   ) => {
     startRegistrarUsuario({
       nombre,
@@ -147,6 +144,6 @@ export const useAuth = () => {
     dataLogin,
     dataSignup,
     handleRecuperarContrasena,
-    handleModificarContrasena
+    handleModificarContrasena,
   };
 };
