@@ -113,7 +113,7 @@ export const ProcederAlPagoPage = () => {
       });
       return;
     }
-    console.log(direccion);
+
     if (!direccion && tipoEnvio === "DOMICILIO") {
       setShowSnackbar({
         isError: true,
@@ -388,7 +388,6 @@ const AplicarCupon = ({
           startValidarCupon({ cuponDescuentoVenta: cupon })
             .unwrap()
             .then((resp) => {
-              console.log(resp);
               if (typeof resp === "string") return;
               handleOnSucces(resp);
             })

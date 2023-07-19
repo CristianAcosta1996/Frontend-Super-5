@@ -24,21 +24,19 @@ const initialStateForm = {
 };
 
 export const ModificarContrasena = () => {
-
   const navigate = useNavigate();
   const { handleModificarContrasena } = useAuth();
-  const { password1, password2, handleInputChange, reset } = useForm(initialStateForm);
+  const { password1, password2, handleInputChange, reset } =
+    useForm(initialStateForm);
   const [miGuid, setMiGuid] = useState("");
 
   useEffect(() => {
     const url = new URL(window.location.href);
     const params = new URLSearchParams(url.search);
-    const Guid = params.get('Guid');
+    const Guid = params.get("Guid");
 
     if (Guid) {
       // Do something with the extracted value
-
-      console.log("este es el Guid", Guid);
       setMiGuid(Guid);
     }
   }, []);
@@ -46,9 +44,9 @@ export const ModificarContrasena = () => {
   const handleFormSubmit = async (event: SyntheticEvent) => {
     event.preventDefault();
     if (!password1 || !password2) return;
-    if (password1 != password2) alert("Las contraseñas deben coincidir")
+    if (password1 != password2) alert("Las contraseñas deben coincidir");
     if (miGuid) {
-      handleModificarContrasena(miGuid, password1, password2)
+      handleModificarContrasena(miGuid, password1, password2);
       alert("Contraseña actualizada con éxito");
     }
     navigate("/auth/login");
@@ -103,16 +101,15 @@ export const ModificarContrasena = () => {
               <ConfirmarButton
                 titulo="Confirmar"
                 type="submit"
-                disabled={false} />
+                disabled={false}
+              />
             </Grid>
           </Grid>
         </Grid>
       </form>
-
     </FormLayout>
   );
 };
-
 
 interface ConfirmarButtonProps {
   titulo: string;

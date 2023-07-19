@@ -89,7 +89,6 @@ export const ModificarProductoPage = () => {
     })
       .unwrap()
       .then((resp) => {
-        console.log(resp);
         navigate("/administrador/productos/modificar", {
           state: { accionExitosa: true, mensajeError: null },
         });

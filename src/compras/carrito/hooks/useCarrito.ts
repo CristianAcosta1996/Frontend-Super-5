@@ -79,12 +79,10 @@ export const useCarrito = () => {
       direccion_id: formaEntrega === "DOMICILIO" ? direccionId : undefined,
       promocion_id,
     };
-    console.log(compra);
 
     startCompraPaypal(compra)
       .unwrap()
       .then((resp: any) => {
-        console.log(resp);
         dispatch(realizarCompraPaypal(resp));
         guardarcompraPaypal(resp);
         window.location.replace(resp.urlPaypal);
