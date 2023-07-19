@@ -25,7 +25,6 @@ export const AppRouter = () => {
       const nombreCompleto = displayName?.split(" ");
       const nombre = nombreCompleto ? nombreCompleto[0] : "";
       const apellido = nombreCompleto ? nombreCompleto[1] : "";
-
       if (token) {
         dispatch(
           login({
@@ -43,7 +42,6 @@ export const AppRouter = () => {
         );
         return;
       }
-
       if (!email || !displayName) return;
       startGoogleLogin({
         correo: email,

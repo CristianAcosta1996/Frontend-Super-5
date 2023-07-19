@@ -159,7 +159,6 @@ const EliminarProductoAction = ({
             startEliminarProducto({ id: params.row.id })
               .unwrap()
               .then((resp) => {
-                console.log(resp);
                 updateData({
                   isSuccess: true,
                   message: "Producto eliminado correctamente",

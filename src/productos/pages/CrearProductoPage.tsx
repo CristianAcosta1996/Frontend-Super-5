@@ -85,7 +85,6 @@ export const CrearProductoPage = () => {
     })
       .unwrap()
       .then((resp) => {
-        console.log(resp);
         setShowSnackbar(true);
         setMessage("Producto creado correctamente!");
       })

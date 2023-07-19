@@ -27,7 +27,6 @@ import ContactSupportIcon from "@mui/icons-material/ContactSupport";
 export const Perfil = () => {
   const navigate = useNavigate();
   const { data: userData } = useGetUserDataQuery();
-  console.log(userData);
 
   const [name, setName] = useState(userData?.nombre);
   const [surname, setSurname] = useState(userData?.apellido);
@@ -79,20 +78,12 @@ export const Perfil = () => {
   };
 
   const handleFechaNac = (e) => {
-    console.log(e.target.value);
-    console.log(fechaNac);
     setFechaNac(e.target.value);
   };
 
   return (
     <>
-      <Grid
-        container
-        justifyContent={"flex-start"}
-        spacing={2}
-        marginTop={0}
-        xs={12}
-      >
+      <Grid container justifyContent={"flex-start"} spacing={2} marginTop={0}>
         <Grid item xs={2}>
           <Drawer
             variant="permanent"
@@ -148,133 +139,133 @@ export const Perfil = () => {
           </Drawer>
         </Grid>
 
-        <Grid
-          container
-          sx={{
-            ml: "5%",
-            borderRadius: 4,
-            border: "2px solid #007aff",
-            padding: 1,
-            mt: 2,
-          }}
-          item
-          xs={6}
-        >
-          <Grid item xs={12}>
-            <Typography
-              width={"75%"}
-              variant="h3"
-              component={"h2"}
-              color={"black"}
-            >
-              Perfil
-            </Typography>
-          </Grid>
-          <Grid marginLeft={2} mt={2} item xs={5} mb={3}>
-            <TextField
-              disabled={true}
-              size="small"
-              variant="filled"
-              label="Nombre"
-              type="text"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              sx={{ backgroundColor: "#fff", borderRadius: 2, width: "76%" }}
-              name="nombre"
-              value={name}
-              onChange={handleNameChange}
-            />
-          </Grid>
-          <Grid marginLeft={2} item xs={5} mb={3} mt={2}>
-            <TextField
-              disabled={true}
-              size="small"
-              variant="filled"
-              label="Apellido"
-              type="text"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              sx={{ backgroundColor: "#fff", borderRadius: 2, width: "76%" }}
-              name="apellido"
-              value={surname}
-              onChange={handleSurnameChange}
-            />
-          </Grid>
-          <Grid marginLeft={2} item xs={5} mb={3}>
-            <TextField
-              disabled={true}
-              size="small"
-              variant="filled"
-              label="Email"
-              type="text"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              sx={{ backgroundColor: "#fff", borderRadius: 2, width: "76%" }}
-              name="email"
-              value={mail}
-            />
-          </Grid>
-          <Grid marginLeft={2} item xs={5} mb={3}>
-            <TextField
-              disabled={true}
-              size="small"
-              variant="filled"
-              label="Telefono"
-              type="text"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              sx={{ backgroundColor: "white", borderRadius: 2, width: "76%" }}
-              name="telefono"
-              value={phone}
-              onChange={handlePhoneChange}
-            />
-          </Grid>
-          <Grid marginLeft={2} item xs={10} mb={3}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateField
-                variant="filled"
+        <Grid item xs={6}>
+          <Grid
+            container
+            sx={{
+              ml: "5%",
+              borderRadius: 4,
+              border: "2px solid #007aff",
+              padding: 1,
+              mt: 2,
+            }}
+          >
+            <Grid item xs={12}>
+              <Typography
+                width={"75%"}
+                variant="h3"
+                component={"h2"}
+                color={"black"}
+              >
+                Perfil
+              </Typography>
+            </Grid>
+            <Grid marginLeft={2} mt={2} item xs={5} mb={3}>
+              <TextField
                 disabled={true}
-                sx={{
-                  backgroundColor: "#white",
-                  borderRadius: 2,
-                  width: "38%",
-                }}
                 size="small"
-                label="Fecha de Nacimiento"
-                value={nacimiento}
-                onChange={handleFechaNac}
-                format="DD-MM-YYYY"
+                variant="filled"
+                label="Nombre"
+                type="text"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                sx={{ backgroundColor: "#fff", borderRadius: 2, width: "76%" }}
+                name="nombre"
+                value={name || ""}
+                onChange={handleNameChange}
               />
-            </LocalizationProvider>
-          </Grid>
-          <Grid item xs={10}></Grid>
-          <Grid xs={2}>
-            <Button
-              onClick={handleEditar}
-              size="small"
-              variant="text"
-              sx={{
-                mr: 8,
-                textTransform: "capitalize",
-                fontSize: 14,
-                color: "white",
-                backgroundColor: "#007aff",
-                "&:hover": {
-                  color: "#007aff",
-                  borderBlockColor: "#007aff",
-                  border: 1,
-                },
-              }}
-            >
-              Editar
-            </Button>
+            </Grid>
+            <Grid marginLeft={2} item xs={5} mb={3} mt={2}>
+              <TextField
+                disabled={true}
+                size="small"
+                variant="filled"
+                label="Apellido"
+                type="text"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                sx={{ backgroundColor: "#fff", borderRadius: 2, width: "76%" }}
+                name="apellido"
+                value={surname || ""}
+                onChange={handleSurnameChange}
+              />
+            </Grid>
+            <Grid marginLeft={2} item xs={5} mb={3}>
+              <TextField
+                disabled={true}
+                size="small"
+                variant="filled"
+                label="Email"
+                type="text"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                sx={{ backgroundColor: "#fff", borderRadius: 2, width: "76%" }}
+                name="email"
+                value={mail || ""}
+              />
+            </Grid>
+            <Grid marginLeft={2} item xs={5} mb={3}>
+              <TextField
+                disabled={true}
+                size="small"
+                variant="filled"
+                label="Telefono"
+                type="text"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                sx={{ backgroundColor: "white", borderRadius: 2, width: "76%" }}
+                name="telefono"
+                value={phone || ""}
+                onChange={handlePhoneChange}
+              />
+            </Grid>
+            <Grid marginLeft={2} item xs={10} mb={3}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DateField
+                  variant="filled"
+                  disabled={true}
+                  sx={{
+                    backgroundColor: "#white",
+                    borderRadius: 2,
+                    width: "38%",
+                  }}
+                  size="small"
+                  label="Fecha de Nacimiento"
+                  value={nacimiento || ""}
+                  onChange={handleFechaNac}
+                  format="DD-MM-YYYY"
+                />
+              </LocalizationProvider>
+            </Grid>
+            <Grid item xs={10}></Grid>
+            <Grid item xs={2}>
+              <Button
+                onClick={handleEditar}
+                size="small"
+                variant="text"
+                sx={{
+                  mr: 8,
+                  textTransform: "capitalize",
+                  fontSize: 14,
+                  color: "white",
+                  backgroundColor: "#007aff",
+                  "&:hover": {
+                    color: "#007aff",
+                    borderBlockColor: "#007aff",
+                    border: 1,
+                  },
+                }}
+              >
+                Editar
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
-        <Grid xs={4}></Grid>
+        <Grid item xs={4}></Grid>
       </Grid>
     </>
   );

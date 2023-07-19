@@ -350,7 +350,7 @@ const BarChart = ({ data }) => {
   return <Bar data={data} />;
 };
 
-const cantidadPorEstado = <T, V extends { estado: string }>(
+const cantidadPorEstado = <T, V extends { estado?: string }>(
   estados: T[],
   data: V[]
 ): number[] => {
